@@ -1,14 +1,17 @@
-# Welcome to your Lovable project
+# Ollie's Hub
+
+preciso que vc crie uma landing page,ela sera da seguinte maneira:
+parte inicial de welcome,ai a pessoa seleciona a opção iniciante e da 3 botoes que levam a seções distintas da pagina,e cada seção terá um numero de 10 botões a mais que abrem pequenos popups de informação ,os botoes serao nomeados de Ollies,Variais,FLip´s
 
 This project was built with [Lovable](https://lovable.dev).
 
 ## Build with Lovable
 
-Open your project in the [Lovable editor](https://lovable.dev) and keep building.
+Continue developing this project in the [Lovable editor](https://lovable.dev/projects/f0566752-426d-4304-9bcb-7978fde811ca).
 
 - **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: connect the project to GitHub and every change made in Lovable is committed straight to your repository.
-- **Full ownership**: this code is yours. Push to your repository and your changes sync back into Lovable, ready for your next prompt.
+- **Stay in sync**: every change made in Lovable is committed straight to this repository.
+- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
 
 ## Development
 
@@ -20,10 +23,3 @@ cd <repository-name>
 npm i
 npm run dev
 ```
-
-## Built with
-
-- TanStack Start
-- TypeScript
-- React
-- Tailwind CSS
