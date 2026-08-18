@@ -44,7 +44,9 @@ function Index() {
       {/* Welcome */}
       <section className="surface-asphalt relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 text-center">
         <div className="pointer-events-none absolute inset-0 opacity-[0.07] [background-image:repeating-linear-gradient(90deg,transparent_0_38px,currentColor_38px_39px)]" />
-        <p className="text-display relative text-sm text-primary">Bem-vindo ao asfalto</p>
+        <p className="text-display relative text-sm text-primary">
+          Bem-vindo à sua Wiki de Manobras
+        </p>
         <h1 className="text-display relative mt-4 text-6xl leading-[0.85] sm:text-8xl md:text-9xl">
           Skate
           <br />
