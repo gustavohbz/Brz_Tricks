@@ -1,8 +1,13 @@
+/* =========================================================
+   TIPOS
+   ========================================================= */
 export type Trick = {
   name: string;
   level: string;
   desc: string;
   steps: string[];
+  /** URL de vídeo (mp4/webm) mostrada no popup de hover. Opcional. */
+  video?: string;
 };
 
 export type Section = {
@@ -11,6 +16,7 @@ export type Section = {
   tagline: string;
   tricks: Trick[];
 };
+
 
 export const sections: Section[] = [
   {
@@ -215,3 +221,48 @@ export const sections: Section[] = [
     ],
   },
 ];
+
+/* =========================================================
+   ROADMAP — pré-requisitos de cada manobra
+   Cada item é um ponto da linha do tempo até a manobra final.
+   ========================================================= */
+export const roadmaps: Record<string, string[]> = {
+  // ---- Ollies ----
+  Ollie: ["Equilíbrio parado", "Empurrar e rolar", "Bater o tail (tic-tac)", "Ollie parado", "Ollie em movimento"],
+  Nollie: ["Ollie firme", "Peso no nose", "Fakie ollie", "Nollie parado"],
+  "Switch Ollie": ["Ollie firme", "Andar de switch", "Manual/equilíbrio switch", "Switch ollie parado"],
+  "Fakie Ollie": ["Ollie firme", "Andar de fakie", "Bater o tail de fakie"],
+  "Ollie North": ["Ollie alto", "Controle no ar", "Extensão da perna"],
+  Boneless: ["Equilíbrio em uma perna", "Pegar o shape com a mão", "Boneless parado"],
+  "Ollie no Meio-fio": ["Ollie em movimento", "Ollie por cima de linha no chão", "Ollie sobre obstáculo baixo"],
+  "Ollie 180 (Frontside)": ["Ollie em movimento", "Body varial", "180 no chão (pivô)", "FS 180 parado"],
+  "Ollie 180 (Backside)": ["Ollie em movimento", "180 no chão (pivô)", "BS 180 parado"],
+  "Ollie na Escada": ["Ollie alto e nivelado", "Ollie no meio-fio", "Ollie de 2 degraus"],
+
+  // ---- Variais ----
+  "Shove-it": ["Equilíbrio parado", "Pés nas bordas", "Shove-it parado"],
+  "Pop Shove-it": ["Ollie firme", "Shove-it", "Pop + empurrada juntos"],
+  "Frontside Shove-it": ["Shove-it", "Pop shove-it", "Empurrada com calcanhar"],
+  "Fakie Shove-it": ["Shove-it", "Andar de fakie"],
+  "Nollie Shove-it": ["Pop shove-it", "Nollie", "Peso no nose"],
+  Bigspin: ["Pop shove-it", "360 shove-it", "Body varial 180"],
+  "360 Shove-it": ["Pop shove-it", "Empurrada longa", "Pulo alto e paciente"],
+  "Body Varial": ["Equilíbrio no ar", "Pop pequeno", "180 do corpo no chão"],
+  "No Comply": ["Bater o tail", "Equilíbrio em uma perna", "No comply parado"],
+  Powerslide: ["Boa velocidade", "Peso nos calcanhares", "Slide de 45°"],
+
+  // ---- Flip's ----
+  Kickflip: ["Ollie firme e nivelado", "Ollie em movimento", "Raspada do pé (sem pular)", "Kickflip com pé no chão", "Kickflip parado", "Kickflip rolando"],
+  Heelflip: ["Ollie firme", "Posição de pé para heel", "Chute de calcanhar sem pular", "Heelflip parado"],
+  "Varial Kickflip": ["Kickflip", "Pop shove-it", "Combinar pop + raspada"],
+  "Varial Heelflip": ["Heelflip", "Frontside shove-it", "Combinar shove + chute"],
+  Hardflip: ["Kickflip", "Frontside pop shove-it", "Pop vertical", "Hardflip parado"],
+  "Inward Heelflip": ["Heelflip", "Backside pop shove-it", "Rotação simultânea"],
+  "Fakie Kickflip": ["Kickflip", "Fakie ollie", "Kickflip de fakie parado"],
+  "Nollie Flip": ["Kickflip", "Nollie", "Raspada com pé de trás"],
+  "360 Flip": ["Kickflip", "360 shove-it", "Chute diagonal no tail", "Tre flip parado"],
+  "Kickflip no Meio-fio": ["Kickflip rolando", "Ollie no meio-fio", "Kickflip sobre linha"],
+};
+
+/** Retorna o roadmap da manobra (vazio se não houver). */
+export const getRoadmap = (name: string): string[] => roadmaps[name] ?? [];
