@@ -1,4 +1,4 @@
-# 🛹 Skate Trick Guide - Landing Page
+# 🛹 Brz Tricks - Landing Page
 
 Uma landing page interativa desenvolvida para auxiliar skatistas iniciantes no aprendizado de manobras de skate. O projeto é construído com **React**, **TypeScript** e ecossistema **TanStack**, integrado e sincronizado com o **Lovable**.
 
