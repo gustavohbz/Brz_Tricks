@@ -1,8 +1,13 @@
+/* =========================================================
+   TIPOS
+   ========================================================= */
 export type Trick = {
   name: string;
   level: string;
   desc: string;
   steps: string[];
+  /** URL de vídeo (mp4/webm) mostrada no popup de hover. Opcional. */
+  video?: string;
 };
 
 export type Section = {
@@ -11,6 +16,7 @@ export type Section = {
   tagline: string;
   tricks: Trick[];
 };
+
 
 export const sections: Section[] = [
   {
