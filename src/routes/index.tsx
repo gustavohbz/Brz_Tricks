@@ -1,9 +1,25 @@
 /* =========================================================
-   IMPORTS
+   PÁGINA INICIAL  ( / )
+   ---------------------------------------------------------
+   Landing page completa da wiki de manobras.
+   Ordem do arquivo:
+     1) IMPORTS
+     2) ROUTE + SEO            → registro da rota "/" e metatags
+     3) TrickHoverPreview      → popup que abre no HOVER (com vídeo)
+     4) TrickRoadmap           → linha do tempo de pré-requisitos
+     5) Index()                → a página em si (estado + seções)
+   Todo o CONTEÚDO vem de src/data/tricks.ts — aqui só tem UI.
+   Documentação completa: DOCUMENTACAO.md
    ========================================================= */
-import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
-import { ChevronDown, PlayCircle } from "lucide-react";
+
+/* =========================================================
+   1) IMPORTS
+   ========================================================= */
+import { createFileRoute } from "@tanstack/react-router"; // registra o arquivo como rota
+import { useState } from "react"; // único hook usado nesta página
+import { ChevronDown, PlayCircle } from "lucide-react"; // ícones
+
+
 
 import { sections, getRoadmap, type Trick } from "@/data/tricks";
 import { Button } from "@/components/ui/button";
@@ -21,9 +37,12 @@ import {
 } from "@/components/ui/hover-card";
 
 /* =========================================================
-   ROUTE + SEO
+   2) ROUTE + SEO
+   O nome do arquivo define a URL: index.tsx => "/".
+   head() alimenta <title> e as metatags (Google + preview em redes).
    ========================================================= */
 export const Route = createFileRoute("/")({
+
   head: () => ({
     meta: [
       { title: "Skate do Zero — Ollies, Variais e Flip's" },
