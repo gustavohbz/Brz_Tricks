@@ -1,8 +1,11 @@
+/* =========================================================
+   IMPORTS
+   ========================================================= */
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, PlayCircle } from "lucide-react";
 
-import { sections, type Trick } from "@/data/tricks";
+import { sections, getRoadmap, type Trick } from "@/data/tricks";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,7 +14,15 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 
+/* =========================================================
+   ROUTE + SEO
+   ========================================================= */
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -26,11 +37,92 @@ export const Route = createFileRoute("/")({
         property: "og:description",
         content: "Guia iniciante de skate com 30 manobras explicadas passo a passo.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Index,
 });
 
+/* =========================================================
+   COMPONENTE: popup de HOVER (com vídeo)
+   ========================================================= */
+function TrickHoverPreview({ trick }: { trick: Trick }) {
+  return (
+    <HoverCardContent
+      side="top"
+      align="center"
+      className="w-72 border-border bg-popover p-0 overflow-hidden"
+    >
+      {/* --- área de vídeo --- */}
+      <div className="aspect-video w-full bg-secondary">
+        {trick.video ? (
+          <video
+            src={trick.video}
+            muted
+            loop
+            autoPlay
+            playsInline
+            className="size-full object-cover"
+          />
+        ) : (
+          <div className="flex size-full flex-col items-center justify-center gap-1 text-muted-foreground">
+            <PlayCircle className="size-7" />
+            <span className="text-[10px] uppercase tracking-widest">Vídeo em breve</span>
+          </div>
+        )}
+      </div>
+
+      {/* --- texto --- */}
+      <div className="p-4">
+        <span className="text-display text-xs text-primary">{trick.level}</span>
+        <p className="text-display text-xl leading-tight">{trick.name}</p>
+        <p className="mt-1 text-xs text-muted-foreground">{trick.desc}</p>
+        <p className="mt-3 text-[10px] uppercase tracking-widest text-accent">
+          Clique para ver o roadmap
+        </p>
+      </div>
+    </HoverCardContent>
+  );
+}
+
+/* =========================================================
+   COMPONENTE: ROADMAP (linha do tempo de pré-requisitos)
+   ========================================================= */
+function TrickRoadmap({ name }: { name: string }) {
+  const steps = getRoadmap(name);
+  if (steps.length === 0) return null;
+
+  return (
+    <div className="mt-6 border-t border-border pt-5">
+      <p className="text-display text-xs text-accent">Roadmap até a manobra</p>
+
+      <ol className="relative mt-4 space-y-4 pl-5">
+        {/* linha vertical */}
+        <span className="absolute left-[5px] top-2 bottom-2 w-px bg-border" />
+        {steps.map((step, i) => (
+          <li key={step} className="relative flex items-center gap-3">
+            <span
+              className={`absolute -left-5 size-[11px] rounded-full border-2 ${
+                i === steps.length - 1
+                  ? "border-primary bg-primary"
+                  : "border-muted-foreground bg-background"
+              }`}
+            />
+            <span className="text-xs text-muted-foreground">
+              {String(i + 1).padStart(2, "0")}
+            </span>
+            <span className="text-sm">{step}</span>
+          </li>
+        ))}
+      </ol>
+    </div>
+  );
+}
+
+/* =========================================================
+   PÁGINA
+   ========================================================= */
 function Index() {
   const [started, setStarted] = useState(false);
   const [trick, setTrick] = useState<Trick | null>(null);
@@ -41,7 +133,9 @@ function Index() {
 
   return (
     <main className="min-h-screen bg-background font-sans text-foreground">
-      {/* Welcome */}
+      {/* =====================================================
+          SEÇÃO 1 — WELCOME
+          ===================================================== */}
       <section className="surface-asphalt relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 text-center">
         <div className="pointer-events-none absolute inset-0 opacity-[0.07] [background-image:repeating-linear-gradient(90deg,transparent_0_38px,currentColor_38px_39px)]" />
         <p className="text-display relative text-sm text-primary">
@@ -77,7 +171,9 @@ function Index() {
 
       {started && (
         <>
-          {/* Trilha */}
+          {/* =================================================
+              SEÇÃO 2 — TRILHA (3 botões de navegação)
+              ================================================= */}
           <section id="trilha" className="border-t border-border px-6 py-24">
             <div className="mx-auto max-w-5xl">
               <p className="text-display text-sm text-accent">Trilha iniciante</p>
@@ -103,7 +199,9 @@ function Index() {
             </div>
           </section>
 
-          {/* Seções */}
+          {/* =================================================
+              SEÇÃO 3 — MANOBRAS (hover = vídeo, clique = modal)
+              ================================================= */}
           {sections.map((s) => (
             <section key={s.id} id={s.id} className="border-t border-border px-6 py-24">
               <div className="mx-auto max-w-5xl">
@@ -119,32 +217,42 @@ function Index() {
 
                 <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
                   {s.tricks.map((t, i) => (
-                    <button
-                      key={t.name}
-                      onClick={() => setTrick(t)}
-                      className="rounded-md border border-border bg-card px-4 py-5 text-left transition-all hover:border-primary hover:bg-secondary"
-                    >
-                      <span className="text-xs text-muted-foreground">
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                      <span className="text-display mt-1 block text-lg leading-tight">
-                        {t.name}
-                      </span>
-                    </button>
+                    <HoverCard key={t.name} openDelay={120} closeDelay={80}>
+                      <HoverCardTrigger asChild>
+                        <button
+                          onClick={() => setTrick(t)}
+                          className="rounded-md border border-border bg-card px-4 py-5 text-left transition-all hover:border-primary hover:bg-secondary"
+                        >
+                          <span className="text-xs text-muted-foreground">
+                            {String(i + 1).padStart(2, "0")}
+                          </span>
+                          <span className="text-display mt-1 block text-lg leading-tight">
+                            {t.name}
+                          </span>
+                        </button>
+                      </HoverCardTrigger>
+                      <TrickHoverPreview trick={t} />
+                    </HoverCard>
                   ))}
                 </div>
               </div>
             </section>
           ))}
 
+          {/* =================================================
+              FOOTER
+              ================================================= */}
           <footer className="border-t border-border px-6 py-10 text-center text-xs uppercase tracking-widest text-muted-foreground">
             Caia, levante, repita.
           </footer>
         </>
       )}
 
+      {/* =====================================================
+          MODAL — detalhes + passos + roadmap
+          ===================================================== */}
       <Dialog open={!!trick} onOpenChange={(o) => !o && setTrick(null)}>
-        <DialogContent className="border-border bg-popover">
+        <DialogContent className="max-h-[85vh] overflow-y-auto border-border bg-popover">
           {trick && (
             <>
               <DialogHeader>
@@ -154,6 +262,18 @@ function Index() {
                   {trick.desc}
                 </DialogDescription>
               </DialogHeader>
+
+              {/* --- vídeo (quando existir) --- */}
+              {trick.video && (
+                <video
+                  src={trick.video}
+                  controls
+                  playsInline
+                  className="mt-2 aspect-video w-full rounded-md bg-secondary object-cover"
+                />
+              )}
+
+              {/* --- passos --- */}
               <ol className="mt-2 space-y-2">
                 {trick.steps.map((step, i) => (
                   <li key={step} className="flex gap-3 text-sm">
@@ -162,6 +282,9 @@ function Index() {
                   </li>
                 ))}
               </ol>
+
+              {/* --- roadmap --- */}
+              <TrickRoadmap name={trick.name} />
             </>
           )}
         </DialogContent>
