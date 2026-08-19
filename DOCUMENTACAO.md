@@ -165,3 +165,32 @@ Fontes entram via `<link>` no `head` de `__root.tsx` (Bebas Neue + Barlow).
 | mudar textos do hero | seção 1 em `src/routes/index.tsx` |
 | criar nova página `/sobre` | criar `src/routes/sobre.tsx` com `createFileRoute("/sobre")` |
 | mudar nome/ícone do app instalável | `public/manifest.webmanifest` |
+
+---
+
+## 9. Guia de Sobrevivência: Mentalidade PHP para TS & React
+
+Mudar da execução linear do PHP no servidor para o modelo reativo do React exige remapear a forma como os dados, as rotas e a interface interagem.
+
+**Tabela de Equivalências Diretas**
+
+| Conceito no PHP | Equivalente no Projeto | Papel na Prática |
+| :--- | :--- | :--- |
+| `routes/web.php` / Controllers | `src/routes/index.tsx` | A URL `/` carrega direto este arquivo via TanStack Router. |
+| `layout.blade.php` | `src/routes/__root.tsx` | A estrutura base. O `<Outlet />` funciona como o `@yield('content')`. |
+| Model / Array de Mock | `src/data/tricks.ts` | Fonte de dados estática que simula retornos de banco de dados. |
+| `$_SESSION` ou Estado da View | `useState()` | Dados em memória no navegador. Alterar um estado atualiza a tela sem F5. |
+| `foreach ($items as $item)` | `items.map(item => ...)` | Método do JS para iterar arrays e devolver blocos de HTML (JSX). |
+| DTO / Type Hinting | `type Trick` / `type Section` | Contratos rígidos do TS para o editor apontar erros antes do build. |
+
+**Ciclo de Vida: Servidor vs Navegador**
+
+* **PHP Clássico:** O usuário clica $\rightarrow$ Requisição HTTP completa $\rightarrow$ Servidor executa o script do zero $\rightarrow$ Retorna HTML novo $\rightarrow$ Navegador dá F5 na página.
+* **Esta Aplicação:** O Node executa um SSR (Server-Side Rendering) inicial para entregar o HTML com SEO. Em seguida, o JavaScript assume no navegador. Qualquer clique posterior (como abrir manobra ou filtrar) apenas altera variáveis na memória local e o React substitui os elementos do DOM sem recarregar a página.
+
+**Diferenças Chave de Arquitetura**
+
+* **Lógica e HTML Unificados:** No React, controllers e views vivem no mesmo arquivo. O componente `Index()` processa estados (`started`, `trick`) e retorna a marcação visual no final.
+* **Interações Sem Requisição AJAX:** Abrir o modal não consulta nenhum endpoint `/trick?id=X`. O comando `setTrick(t)` pega o objeto `Trick` que já está no navegador e o passa para o `<Dialog>`.
+* **Tipagem Estática vs Runtime:** O PHP valida tipos na execução. O TypeScript valida enquanto você digita no VS Code. Se tentar acessar `trick.categoria` e essa propriedade não existir na `type Trick`, a aplicação nem compila.
+* **Manipulação de Variáveis na Tela:** No PHP, você altera uma variável com `$x = 10` e renderiza. No React, você **nunca** faz `started = true`. Deve-se usar a função atualizadora `setStarted(true)` para forçar o React a desenhar a alteração na tela.
