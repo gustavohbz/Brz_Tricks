@@ -1,9 +1,25 @@
 /* =========================================================
-   IMPORTS
+   PÁGINA INICIAL  ( / )
+   ---------------------------------------------------------
+   Landing page completa da wiki de manobras.
+   Ordem do arquivo:
+     1) IMPORTS
+     2) ROUTE + SEO            → registro da rota "/" e metatags
+     3) TrickHoverPreview      → popup que abre no HOVER (com vídeo)
+     4) TrickRoadmap           → linha do tempo de pré-requisitos
+     5) Index()                → a página em si (estado + seções)
+   Todo o CONTEÚDO vem de src/data/tricks.ts — aqui só tem UI.
+   Documentação completa: DOCUMENTACAO.md
    ========================================================= */
-import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
-import { ChevronDown, PlayCircle } from "lucide-react";
+
+/* =========================================================
+   1) IMPORTS
+   ========================================================= */
+import { createFileRoute } from "@tanstack/react-router"; // registra o arquivo como rota
+import { useState } from "react"; // único hook usado nesta página
+import { ChevronDown, PlayCircle } from "lucide-react"; // ícones
+
+
 
 import { sections, getRoadmap, type Trick } from "@/data/tricks";
 import { Button } from "@/components/ui/button";
@@ -21,9 +37,12 @@ import {
 } from "@/components/ui/hover-card";
 
 /* =========================================================
-   ROUTE + SEO
+   2) ROUTE + SEO
+   O nome do arquivo define a URL: index.tsx => "/".
+   head() alimenta <title> e as metatags (Google + preview em redes).
    ========================================================= */
 export const Route = createFileRoute("/")({
+
   head: () => ({
     meta: [
       { title: "Skate do Zero — Ollies, Variais e Flip's" },
@@ -45,9 +64,13 @@ export const Route = createFileRoute("/")({
 });
 
 /* =========================================================
-   COMPONENTE: popup de HOVER (com vídeo)
+   3) TrickHoverPreview — popup de HOVER (com vídeo)
+   Renderizado dentro de <HoverCard> (ver seção 3 da página).
+   Se a manobra tiver `video`, toca em loop/mudo; senão mostra
+   o placeholder "Vídeo em breve".
    ========================================================= */
 function TrickHoverPreview({ trick }: { trick: Trick }) {
+
   return (
     <HoverCardContent
       side="top"
@@ -87,11 +110,15 @@ function TrickHoverPreview({ trick }: { trick: Trick }) {
 }
 
 /* =========================================================
-   COMPONENTE: ROADMAP (linha do tempo de pré-requisitos)
+   4) TrickRoadmap — linha do tempo de pré-requisitos
+   Busca a lista em roadmaps (src/data/tricks.ts).
+   Sem roadmap cadastrado => não renderiza nada (return null).
+   O último ponto é destacado: é a manobra alvo.
    ========================================================= */
 function TrickRoadmap({ name }: { name: string }) {
-  const steps = getRoadmap(name);
+  const steps = getRoadmap(name); // ex.: Kickflip => ["Ollie firme", ...]
   if (steps.length === 0) return null;
+
 
   return (
     <div className="mt-6 border-t border-border pt-5">
@@ -121,15 +148,25 @@ function TrickRoadmap({ name }: { name: string }) {
 }
 
 /* =========================================================
-   PÁGINA
+   5) PÁGINA
+   ---------------------------------------------------------
+   ESTADO (hooks):
+   • started → false = só o hero aparece. Vira true no clique em
+     "Sou iniciante" e libera trilha + seções + footer.
+   • trick   → manobra selecionada. null = modal fechado;
+     objeto = modal aberto com aquela manobra.
+   FUNÇÃO:
+   • go(id)  → rolagem suave até a <section> com aquele id.
    ========================================================= */
 function Index() {
   const [started, setStarted] = useState(false);
   const [trick, setTrick] = useState<Trick | null>(null);
 
+  // rola suavemente até a seção pedida (usado pelo CTA e pelos 3 cards)
   const go = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
+
 
   return (
     <main className="min-h-screen bg-background font-sans text-foreground">
