@@ -22,6 +22,7 @@ import { ChevronDown, PlayCircle } from "lucide-react"; // ícones
 
 
 import { sections, getRoadmap, type Trick } from "@/data/tricks";
+import { Cronograma } from "@/components/Cronograma"; // seção de cronograma de treinos
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -233,6 +234,13 @@ function Index() {
                   </button>
                 ))}
               </div>
+              {/* atalho para o cronograma de treinos */}
+              <button
+                onClick={() => go("cronograma")}
+                className="text-display mt-6 inline-block text-sm text-accent hover:text-primary"
+              >
+                Ou monte seu cronograma de treinos →
+              </button>
             </div>
           </section>
 
@@ -275,6 +283,13 @@ function Index() {
               </div>
             </section>
           ))}
+
+          {/* =================================================
+              SEÇÃO 4 — CRONOGRAMA DE TREINOS
+              ================================================= */}
+          <section id="cronograma" className="border-t border-border px-6 py-24">
+            <Cronograma />
+          </section>
 
           {/* =================================================
               FOOTER
