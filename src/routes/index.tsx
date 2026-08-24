@@ -70,7 +70,10 @@ export const Route = createFileRoute("/")({
    Se a manobra tiver `video`, toca em loop/mudo; senão mostra
    o placeholder "Vídeo em breve".
    ========================================================= */
-function TrickHoverPreview({ trick }: { trick: Trick }) {
+function TrickHoverPreview({ trick, videoUrl }: { trick: Trick; videoUrl?: string }) {
+  // link colado pelo usuário tem prioridade sobre o do arquivo de dados
+  const src = videoUrl || trick.video;
+  const embed = src ? youtubeEmbed(src) : null;
 
   return (
     <HoverCardContent
@@ -80,15 +83,15 @@ function TrickHoverPreview({ trick }: { trick: Trick }) {
     >
       {/* --- área de vídeo --- */}
       <div className="aspect-video w-full bg-secondary">
-        {trick.video ? (
-          <video
-            src={trick.video}
-            muted
-            loop
-            autoPlay
-            playsInline
-            className="size-full object-cover"
+        {embed ? (
+          <iframe
+            src={embed}
+            title={trick.name}
+            allow="autoplay; encrypted-media"
+            className="size-full"
           />
+        ) : src ? (
+          <video src={src} muted loop autoPlay playsInline className="size-full object-cover" />
         ) : (
           <div className="flex size-full flex-col items-center justify-center gap-1 text-muted-foreground">
             <PlayCircle className="size-7" />
