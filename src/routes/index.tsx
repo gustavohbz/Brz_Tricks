@@ -16,13 +16,18 @@
    1) IMPORTS
    ========================================================= */
 import { createFileRoute } from "@tanstack/react-router"; // registra o arquivo como rota
-import { useState } from "react"; // único hook usado nesta página
+import { useEffect, useState } from "react"; // hooks usados nesta página
 import { ChevronDown, PlayCircle } from "lucide-react"; // ícones
 
 
 
 import { sections, getRoadmap, type Trick } from "@/data/tricks";
 import { Cronograma } from "@/components/Cronograma"; // seção de cronograma de treinos
+import {
+  useTrickVideos,
+  youtubeEmbed,
+  isValidVideoUrl,
+} from "@/lib/trick-videos"; // links de vídeo salvos pelo usuário
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -152,6 +157,119 @@ function TrickRoadmap({ name }: { name: string }) {
 }
 
 /* =========================================================
+   4.5) TrickVideoField — player + campo para colar o link
+   O link é salvo no navegador (localStorage) por manobra e
+   aparece também no popup de hover.
+   ========================================================= */
+function TrickVideoField({
+  trick,
+  videoUrl,
+  onSave,
+  onRemove,
+}: {
+  trick: Trick;
+  videoUrl?: string;
+  onSave: (url: string) => void;
+  onRemove: () => void;
+}) {
+  const current = videoUrl || trick.video || "";
+  const [draft, setDraft] = useState(videoUrl ?? "");
+  const [error, setError] = useState("");
+
+  // ao trocar de manobra, recarrega o campo com o link daquela manobra
+  useEffect(() => {
+    setDraft(videoUrl ?? "");
+    setError("");
+  }, [trick.name, videoUrl]);
+
+  const embed = current ? youtubeEmbed(current) : null;
+
+  const save = () => {
+    const value = draft.trim();
+    if (!value) {
+      onRemove();
+      setError("");
+      return;
+    }
+    if (!isValidVideoUrl(value)) {
+      setError("Use um link http(s) de vídeo ou do YouTube.");
+      return;
+    }
+    setError("");
+    onSave(value);
+  };
+
+  return (
+    <div className="mt-2">
+      {/* --- player --- */}
+      {current ? (
+        embed ? (
+          <iframe
+            src={embed}
+            title={trick.name}
+            allow="autoplay; encrypted-media; fullscreen"
+            className="aspect-video w-full rounded-md bg-secondary"
+          />
+        ) : (
+          <video
+            src={current}
+            controls
+            playsInline
+            className="aspect-video w-full rounded-md bg-secondary object-cover"
+          />
+        )
+      ) : (
+        <div className="flex aspect-video w-full flex-col items-center justify-center gap-1 rounded-md bg-secondary text-muted-foreground">
+          <PlayCircle className="size-7" />
+          <span className="text-[10px] uppercase tracking-widest">Sem vídeo ainda</span>
+        </div>
+      )}
+
+      {/* --- campo do link --- */}
+      <div className="mt-3 rounded-md border border-border p-3">
+        <label
+          htmlFor={`link-${trick.name}`}
+          className="text-display text-xs text-primary"
+        >
+          Link do vídeo desta manobra
+        </label>
+        <div className="mt-2 flex gap-2">
+          <input
+            id={`link-${trick.name}`}
+            value={draft}
+            onChange={(e) => setDraft(e.target.value.slice(0, 500))}
+            onKeyDown={(e) => e.key === "Enter" && save()}
+            placeholder="https://youtube.com/watch?v=... ou /videos/kickflip.mp4"
+            className="min-w-0 flex-1 rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
+          />
+          <Button onClick={save} className="text-display shrink-0">
+            Salvar
+          </Button>
+        </div>
+        {error ? (
+          <p className="mt-2 text-xs text-destructive">{error}</p>
+        ) : (
+          <p className="mt-2 text-[11px] text-muted-foreground">
+            Aceita YouTube, Shorts ou arquivo .mp4/.webm. Salvo neste navegador.
+          </p>
+        )}
+        {videoUrl && (
+          <button
+            onClick={() => {
+              setDraft("");
+              onRemove();
+            }}
+            className="mt-2 text-[11px] uppercase tracking-widest text-muted-foreground hover:text-primary"
+          >
+            Remover link
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* =========================================================
    5) PÁGINA
    ---------------------------------------------------------
    ESTADO (hooks):
@@ -165,6 +283,8 @@ function TrickRoadmap({ name }: { name: string }) {
 function Index() {
   const [started, setStarted] = useState(false);
   const [trick, setTrick] = useState<Trick | null>(null);
+  // mapa { manobra: link } salvo no navegador, editado dentro do popup
+  const { videos, setVideo, removeVideo } = useTrickVideos();
 
   // rola suavemente até a seção pedida (usado pelo CTA e pelos 3 cards)
   const go = (id: string) => {
@@ -279,7 +399,7 @@ function Index() {
                           </span>
                         </button>
                       </HoverCardTrigger>
-                      <TrickHoverPreview trick={t} />
+                      <TrickHoverPreview trick={t} videoUrl={videos[t.name]} />
                     </HoverCard>
                   ))}
                 </div>
@@ -318,15 +438,13 @@ function Index() {
                 </DialogDescription>
               </DialogHeader>
 
-              {/* --- vídeo (quando existir) --- */}
-              {trick.video && (
-                <video
-                  src={trick.video}
-                  controls
-                  playsInline
-                  className="mt-2 aspect-video w-full rounded-md bg-secondary object-cover"
-                />
-              )}
+              {/* --- vídeo + campo para colar o link --- */}
+              <TrickVideoField
+                trick={trick}
+                videoUrl={videos[trick.name]}
+                onSave={(url) => setVideo(trick.name, url)}
+                onRemove={() => removeVideo(trick.name)}
+              />
 
               {/* --- passos --- */}
               <ol className="mt-2 space-y-2">
