@@ -96,7 +96,7 @@ export function Cronograma() {
           >
             {d.label}
             {(plan[d.id]?.length ?? 0) > 0 && (
-              <span className="ml-2 text-xs opacity-70">{plan[d.id].length}</span>
+              <span className="ml-2 text-xs opacity-70">{plan[d.id]?.length}</span>
             )}
           </button>
         ))}
@@ -160,7 +160,7 @@ export function Cronograma() {
                   <p className="mt-1 text-xs text-muted-foreground">Descanso</p>
                 ) : (
                   <ul className="mt-2 flex flex-wrap gap-2">
-                    {plan[d.id].map((name) => (
+                    {(plan[d.id] ?? []).map((name) => (
                       <li
                         key={name}
                         className="flex items-center gap-2 rounded-full border border-border bg-secondary px-3 py-1 text-xs"
