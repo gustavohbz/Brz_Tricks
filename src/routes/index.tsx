@@ -327,10 +327,7 @@ function Index() {
         <div className="relative mt-10 flex flex-col items-center gap-3">
           <Button
             size="lg"
-            onClick={() => {
-              setStarted(true);
-              setTimeout(() => go("trilha"), 60);
-            }}
+            onClick={() => setStarted(true)}
             className="text-display ring-glow h-14 px-10 text-lg"
           >
             Sou iniciante
