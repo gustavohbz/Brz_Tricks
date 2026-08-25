@@ -11,6 +11,8 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { SiteHeader } from "@/components/SiteHeader";
+import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
   return (
@@ -128,8 +130,12 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      {/* Cabeçalho fixo com login de usuário (Google) */}
+      <SiteHeader />
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
+      {/* Notificações (login/logout/erros) */}
+      <Toaster />
     </QueryClientProvider>
   );
 }
