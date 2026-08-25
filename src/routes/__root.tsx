@@ -128,8 +128,12 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      {/* Cabeçalho fixo com login de usuário (Google) */}
+      <SiteHeader />
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
+      {/* Notificações (login/logout/erros) */}
+      <Toaster />
     </QueryClientProvider>
   );
 }
