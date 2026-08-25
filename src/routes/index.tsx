@@ -75,7 +75,7 @@ export const Route = createFileRoute("/")({
    Se a manobra tiver `video`, toca em loop/mudo; senão mostra
    o placeholder "Vídeo em breve".
    ========================================================= */
-function TrickHoverPreview({ trick, videoUrl }: { trick: Trick; videoUrl?: string }) {
+function TrickHoverPreview({ trick, videoUrl }: { trick: Trick; videoUrl?: string | undefined }) {
   // link colado pelo usuário tem prioridade sobre o do arquivo de dados
   const src = videoUrl || trick.video;
   const embed = src ? youtubeEmbed(src) : null;
@@ -168,7 +168,7 @@ function TrickVideoField({
   onRemove,
 }: {
   trick: Trick;
-  videoUrl?: string;
+  videoUrl?: string | undefined;
   onSave: (url: string) => void;
   onRemove: () => void;
 }) {
