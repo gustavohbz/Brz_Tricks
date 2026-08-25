@@ -288,8 +288,21 @@ function Index() {
 
   // rola suavemente até a seção pedida (usado pelo CTA e pelos 3 cards)
   const go = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+    // fallback: alguns contextos (iframe do preview) ignoram scrollIntoView
+    const top = el.getBoundingClientRect().top + window.scrollY;
+    window.scrollTo({ top, behavior: "smooth" });
   };
+
+  // ao liberar a trilha, espera a renderização antes de rolar
+  useEffect(() => {
+    if (!started) return;
+    const id = requestAnimationFrame(() => go("trilha"));
+    return () => cancelAnimationFrame(id);
+  }, [started]);
+
 
 
   return (
