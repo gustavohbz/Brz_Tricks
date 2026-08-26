@@ -104,6 +104,12 @@ export function SiteHeader() {
             <DropdownMenuContent align="end" className="w-56">
               <DropdownMenuLabel className="truncate">{user.email}</DropdownMenuLabel>
               <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link to="/perfil">
+                  <User className="mr-2 size-4" />
+                  Perfil
+                </Link>
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={signOut}>
                 <LogOut className="mr-2 size-4" />
                 Sair
