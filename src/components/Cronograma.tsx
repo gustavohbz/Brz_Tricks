@@ -206,7 +206,7 @@ export function Cronograma({
           <Button
             variant="outline"
             className="mt-5 w-full"
-            onClick={() => setPlan(emptyPlan())}
+            onClick={() => setPlan(() => emptyPlan())}
             disabled={total === 0}
           >
             <Trash2 className="mr-2 size-4" />
