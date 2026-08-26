@@ -100,12 +100,9 @@ export function Cronograma({
 
   return (
     <div className="mx-auto max-w-5xl">
-      <p className="text-display text-sm text-accent">Seu treino</p>
-      <h2 className="text-display mt-2 text-4xl sm:text-5xl">Cronograma de treinos</h2>
-      <p className="mt-3 max-w-xl text-sm text-muted-foreground">
-        Escolha um dia, adicione as manobras que quer treinar e monte sua semana. Tudo fica
-        salvo neste navegador.
-      </p>
+      <p className="text-display text-sm text-accent">{eyebrow}</p>
+      <h2 className="text-display mt-2 text-4xl sm:text-5xl">{title}</h2>
+      <p className="mt-3 max-w-xl text-sm text-muted-foreground">{description}</p>
 
       {/* --- seletor de dia --- */}
       <div className="mt-8 flex flex-wrap gap-2">
