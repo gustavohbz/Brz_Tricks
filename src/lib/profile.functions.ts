@@ -47,9 +47,14 @@ export const saveProfile = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) => saveSchema.parse(data))
   .handler(async ({ data, context }) => {
+    // remove chaves indefinidas (exactOptionalPropertyTypes)
+    const patch = Object.fromEntries(
+      Object.entries(data).filter(([, v]) => v !== undefined),
+    ) as Record<string, never>;
+
     const { data: updated, error } = await context.supabase
       .from("profiles")
-      .update(data)
+      .update(patch)
       .eq("id", context.userId)
       .select("*")
       .single();
