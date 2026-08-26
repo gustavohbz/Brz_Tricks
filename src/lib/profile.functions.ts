@@ -33,19 +33,21 @@ export const getMyProfile = createServerFn({ method: "GET" })
   });
 
 /* ---------- salvar alterações ---------- */
-const saveSchema = z.object({
-  display_name: z.string().max(80).nullable().optional(),
-  truck: z.string().max(60).nullable().optional(),
-  shape: z.string().max(60).nullable().optional(),
-  wheel: z.string().max(60).nullable().optional(),
-  bearing: z.string().max(60).nullable().optional(),
-  is_public: z.boolean().optional(),
-  plan: z.record(z.string(), z.array(z.string().max(80)).max(50)).optional(),
-});
-
 export const saveProfile = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: unknown) => saveSchema.parse(data))
+  .inputValidator((data: unknown) =>
+    z
+      .object({
+        display_name: z.string().max(80).nullable().optional(),
+        truck: z.string().max(60).nullable().optional(),
+        shape: z.string().max(60).nullable().optional(),
+        wheel: z.string().max(60).nullable().optional(),
+        bearing: z.string().max(60).nullable().optional(),
+        is_public: z.boolean().optional(),
+        plan: z.record(z.string(), z.array(z.string().max(80)).max(50)).optional(),
+      })
+      .parse(data),
+  )
   .handler(async ({ data, context }) => {
     // remove chaves indefinidas (exactOptionalPropertyTypes)
     const patch = Object.fromEntries(
