@@ -21,7 +21,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "sonner";
-import { LogOut, Loader2 } from "lucide-react";
+import { LogOut, Loader2, User } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 
 /* ---------- ícone oficial do Google (SVG inline) ---------- */
 function GoogleIcon() {
@@ -104,6 +105,12 @@ export function SiteHeader() {
             <DropdownMenuContent align="end" className="w-56">
               <DropdownMenuLabel className="truncate">{user.email}</DropdownMenuLabel>
               <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link to="/perfil">
+                  <User className="mr-2 size-4" />
+                  Perfil
+                </Link>
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={signOut}>
                 <LogOut className="mr-2 size-4" />
                 Sair

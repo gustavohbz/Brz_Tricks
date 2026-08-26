@@ -24,34 +24,59 @@ const DAYS = [
   { id: "dom", label: "Domingo" },
 ] as const;
 
-type Plan = Record<string, string[]>;
+export type Plan = Record<string, string[]>;
 
-const STORAGE_KEY = "cronograma-treinos";
-const emptyPlan = (): Plan => Object.fromEntries(DAYS.map((d) => [d.id, []]));
+export const STORAGE_KEY = "cronograma-treinos";
+export const emptyPlan = (): Plan => Object.fromEntries(DAYS.map((d) => [d.id, []]));
 
-export function Cronograma() {
-  const [plan, setPlan] = useState<Plan>(emptyPlan);
+/**
+ * Props opcionais:
+ * • value/onChange → modo controlado (plano vindo do banco, na página de perfil)
+ * • sem props       → modo local, salvando no navegador (comportamento da home)
+ */
+export function Cronograma({
+  value,
+  onChange,
+  title = "Cronograma de treinos",
+  eyebrow = "Seu treino",
+  description = "Escolha um dia, adicione as manobras que quer treinar e monte sua semana. Tudo fica salvo neste navegador.",
+}: {
+  value?: Plan;
+  onChange?: (plan: Plan) => void;
+  title?: string;
+  eyebrow?: string;
+  description?: string;
+} = {}) {
+  const controlled = value !== undefined;
+  const [localPlan, setLocalPlan] = useState<Plan>(emptyPlan);
+  const plan = controlled ? { ...emptyPlan(), ...value } : localPlan;
+  const setPlan = (updater: (p: Plan) => Plan) => {
+    if (controlled) onChange?.(updater(plan));
+    else setLocalPlan(updater);
+  };
   const [day, setDay] = useState<string>(DAYS[0].id);
   const [query, setQuery] = useState("");
 
-  /* --- carrega o que estiver salvo no navegador (só no cliente) --- */
+  /* --- carrega o que estiver salvo no navegador (só no modo local) --- */
   useEffect(() => {
+    if (controlled) return;
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) setPlan({ ...emptyPlan(), ...JSON.parse(raw) });
+      if (raw) setLocalPlan({ ...emptyPlan(), ...JSON.parse(raw) });
     } catch {
       /* ignora dados corrompidos */
     }
-  }, []);
+  }, [controlled]);
 
-  /* --- salva a cada alteração --- */
+  /* --- salva a cada alteração (só no modo local) --- */
   useEffect(() => {
+    if (controlled) return;
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(plan));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(localPlan));
     } catch {
       /* storage indisponível */
     }
-  }, [plan]);
+  }, [controlled, localPlan]);
 
   /* --- lista de manobras filtrada pela busca --- */
   const results = useMemo(() => {
@@ -75,12 +100,9 @@ export function Cronograma() {
 
   return (
     <div className="mx-auto max-w-5xl">
-      <p className="text-display text-sm text-accent">Seu treino</p>
-      <h2 className="text-display mt-2 text-4xl sm:text-5xl">Cronograma de treinos</h2>
-      <p className="mt-3 max-w-xl text-sm text-muted-foreground">
-        Escolha um dia, adicione as manobras que quer treinar e monte sua semana. Tudo fica
-        salvo neste navegador.
-      </p>
+      <p className="text-display text-sm text-accent">{eyebrow}</p>
+      <h2 className="text-display mt-2 text-4xl sm:text-5xl">{title}</h2>
+      <p className="mt-3 max-w-xl text-sm text-muted-foreground">{description}</p>
 
       {/* --- seletor de dia --- */}
       <div className="mt-8 flex flex-wrap gap-2">
@@ -184,7 +206,7 @@ export function Cronograma() {
           <Button
             variant="outline"
             className="mt-5 w-full"
-            onClick={() => setPlan(emptyPlan())}
+            onClick={() => setPlan(() => emptyPlan())}
             disabled={total === 0}
           >
             <Trash2 className="mr-2 size-4" />
