@@ -6,15 +6,16 @@
    • Compartilhamento por link + toggle público/privado
    ========================================================= */
 import { useEffect, useMemo, useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Copy, Loader2, Save } from "lucide-react";
+import { ArrowLeft, Copy, Loader2, Save } from "lucide-react";
 import { getMyProfile, saveProfile } from "@/lib/profile.functions";
 import { Cronograma, STORAGE_KEY, emptyPlan, type Plan } from "@/components/Cronograma";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
+
 
 export const Route = createFileRoute("/_authenticated/perfil")({
   head: () => ({
@@ -139,6 +140,13 @@ function PerfilPage() {
 
   return (
     <main className="mx-auto max-w-5xl px-4 pb-24 pt-24">
+      <Link to="/">
+        <Button variant="ghost" className="mb-2 -ml-2 gap-1 px-2 text-sm">
+          <ArrowLeft className="size-4" />
+          Voltar para home
+        </Button>
+      </Link>
+
       <p className="text-display text-sm text-accent">Sua conta</p>
       <h1 className="text-display mt-2 text-4xl sm:text-5xl">
         {profile?.display_name ?? "Meu perfil"}
