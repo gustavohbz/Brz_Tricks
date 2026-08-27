@@ -138,7 +138,10 @@ export function Cronograma({
             className="mt-2 w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
           />
 
-          <ul className="mt-4 max-h-80 space-y-1 overflow-y-auto pr-1">
+          <ul
+            className="mt-4 max-h-[22rem] space-y-1 overflow-y-auto overscroll-contain pr-2 [scrollbar-color:hsl(var(--primary))_transparent] [scrollbar-width:thin] [-webkit-overflow-scrolling:touch]"
+            tabIndex={0}
+          >
             {results.map((t) => {
               const added = plan[day]?.includes(t.name);
               return (
