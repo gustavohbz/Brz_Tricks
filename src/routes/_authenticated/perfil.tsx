@@ -5,16 +5,16 @@
    • Cronograma salvo na conta (migra o do navegador)
    • Compartilhamento por link + toggle público/privado
    ========================================================= */
-import { useEffect, useMemo, useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Copy, Loader2, Save } from "lucide-react";
+import { ArrowLeft, Copy, Loader2, Save } from "lucide-react";
 import { getMyProfile, saveProfile } from "@/lib/profile.functions";
 import { Cronograma, STORAGE_KEY, emptyPlan, type Plan } from "@/components/Cronograma";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
+
 
 export const Route = createFileRoute("/_authenticated/perfil")({
   head: () => ({
