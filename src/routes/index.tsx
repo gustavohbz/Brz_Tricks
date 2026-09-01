@@ -322,7 +322,9 @@ function Index() {
           <span className="text-primary">do Zero</span>
         </h1>
         <p className="relative mt-6 max-w-md text-base text-muted-foreground">
-          Trinta manobras, três famílias, um caminho. Escolha seu nível para liberar o guia.
+          Seu Aplicativo de Skatista para Skatista!
+          <br />
+          Aqui tem tudo que você precisa.
         </p>
 
         <div className="relative mt-10 flex flex-col items-center gap-3">
