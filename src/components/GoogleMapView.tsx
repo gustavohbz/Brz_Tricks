@@ -60,7 +60,6 @@ export function GoogleMapView({
           zoom,
           mapTypeControl: false,
           streetViewControl: false,
-avoidGoogleLogoOverlap: undefined,
         });
         new g.maps.Marker({ position: { lat, lng }, map, title });
       })
