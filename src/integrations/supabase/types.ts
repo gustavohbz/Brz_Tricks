@@ -14,6 +14,92 @@ export type Database = {
   }
   public: {
     Tables: {
+      pista_comentarios: {
+        Row: {
+          autor_avatar: string | null
+          autor_nome: string | null
+          created_at: string
+          id: string
+          nota: number
+          pista_id: string
+          texto: string
+          user_id: string
+        }
+        Insert: {
+          autor_avatar?: string | null
+          autor_nome?: string | null
+          created_at?: string
+          id?: string
+          nota?: number
+          pista_id: string
+          texto: string
+          user_id: string
+        }
+        Update: {
+          autor_avatar?: string | null
+          autor_nome?: string | null
+          created_at?: string
+          id?: string
+          nota?: number
+          pista_id?: string
+          texto?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pista_comentarios_pista_id_fkey"
+            columns: ["pista_id"]
+            isOneToOne: false
+            referencedRelation: "pistas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pistas: {
+        Row: {
+          cidade: string
+          created_at: string
+          descricao: string | null
+          endereco: string | null
+          estado: string
+          id: string
+          lat: number
+          lng: number
+          nivel: Database["public"]["Enums"]["pista_nivel"]
+          nome: string
+          piso: string | null
+          tamanho_m2: number | null
+        }
+        Insert: {
+          cidade: string
+          created_at?: string
+          descricao?: string | null
+          endereco?: string | null
+          estado: string
+          id?: string
+          lat: number
+          lng: number
+          nivel?: Database["public"]["Enums"]["pista_nivel"]
+          nome: string
+          piso?: string | null
+          tamanho_m2?: number | null
+        }
+        Update: {
+          cidade?: string
+          created_at?: string
+          descricao?: string | null
+          endereco?: string | null
+          estado?: string
+          id?: string
+          lat?: number
+          lng?: number
+          nivel?: Database["public"]["Enums"]["pista_nivel"]
+          nome?: string
+          piso?: string | null
+          tamanho_m2?: number | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -67,7 +153,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      pista_nivel: "iniciante" | "intermediario" | "avancado"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -194,6 +280,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      pista_nivel: ["iniciante", "intermediario", "avancado"],
+    },
   },
 } as const
