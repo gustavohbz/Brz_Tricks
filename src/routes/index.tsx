@@ -23,6 +23,7 @@ import { ChevronDown, PlayCircle } from "lucide-react"; // ícones
 
 import { sections, getRoadmap, type Trick } from "@/data/tricks";
 import { Cronograma } from "@/components/Cronograma"; // seção de cronograma de treinos
+import { Dicas } from "@/components/Dicas"; // seção de curiosidades e dicas
 import {
   useTrickVideos,
   youtubeEmbed,
@@ -374,6 +375,13 @@ function Index() {
               >
                 Ou monte seu cronograma de treinos →
               </button>
+              {/* atalho para dicas e curiosidades */}
+              <button
+                onClick={() => go("dicas")}
+                className="text-display ml-6 mt-6 inline-block text-sm text-accent hover:text-primary"
+              >
+                Curiosidades & dicas →
+              </button>
             </div>
           </section>
 
@@ -418,7 +426,14 @@ function Index() {
           ))}
 
           {/* =================================================
-              SEÇÃO 4 — CRONOGRAMA DE TREINOS
+              SEÇÃO 4 — DICAS & CURIOSIDADES
+              ================================================= */}
+          <section id="dicas" className="border-t border-border px-6 py-24">
+            <Dicas />
+          </section>
+
+          {/* =================================================
+              SEÇÃO 5 — CRONOGRAMA DE TREINOS
               ================================================= */}
           <section id="cronograma" className="border-t border-border px-6 py-24">
             <Cronograma />
