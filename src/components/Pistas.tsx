@@ -244,6 +244,7 @@ export function Pistas() {
   const [pistas, setPistas] = useState<Pista[]>([]);
   const [loading, setLoading] = useState(true);
   const [filtro, setFiltro] = useState<Nivel | "todos">("todos");
+  const [cidadeFiltro, setCidadeFiltro] = useState<string>("todas");
   const [aberta, setAberta] = useState<Pista | null>(null);
   const [session, setSession] = useState<Session | null>(null);
 
@@ -264,9 +265,19 @@ export function Pistas() {
       });
   }, []);
 
+  const cidades = useMemo(
+    () => ["todas", ...Array.from(new Set(pistas.map((p) => p.cidade))).sort((a, b) => a.localeCompare(b))],
+    [pistas],
+  );
+
   const visiveis = useMemo(
-    () => (filtro === "todos" ? pistas : pistas.filter((p) => p.nivel === filtro)),
-    [pistas, filtro],
+    () =>
+      pistas.filter((p) => {
+        const nivelOk = filtro === "todos" || p.nivel === filtro;
+        const cidadeOk = cidadeFiltro === "todas" || p.cidade === cidadeFiltro;
+        return nivelOk && cidadeOk;
+      }),
+    [pistas, filtro, cidadeFiltro],
   );
 
   return (
@@ -278,14 +289,15 @@ export function Pistas() {
         os comentários de quem já andou lá.
       </p>
 
-      {/* ---------- filtros de nível ---------- */}
-      <div className="mt-6 flex flex-wrap gap-2">
+      {/* ---------- filtros ---------- */}
+      <div className="mt-6 flex flex-wrap items-center gap-2">
+        <span className="text-display text-xs text-muted-foreground">Nível:</span>
         {NIVEIS.map((n) => (
           <button
             key={n.value}
             onClick={() => setFiltro(n.value)}
             aria-pressed={filtro === n.value}
-            className={`text-display rounded-full border px-4 py-1.5 text-xs transition-colors ${
+            className={`text-display rounded-full border px-3 py-1 text-xs transition-colors ${
               filtro === n.value
                 ? "border-primary bg-primary text-primary-foreground"
                 : "border-border text-muted-foreground hover:border-primary hover:text-primary"
@@ -296,13 +308,42 @@ export function Pistas() {
         ))}
       </div>
 
+      <div className="mt-3 flex flex-wrap items-center gap-2">
+        <span className="text-display text-xs text-muted-foreground">Cidade:</span>
+        {cidades.map((c) => (
+          <button
+            key={c}
+            onClick={() => setCidadeFiltro(c)}
+            aria-pressed={cidadeFiltro === c}
+            className={`text-display rounded-full border px-3 py-1 text-xs transition-colors ${
+              cidadeFiltro === c
+                ? "border-primary bg-primary text-primary-foreground"
+                : "border-border text-muted-foreground hover:border-primary hover:text-primary"
+            }`}
+          >
+            {c === "todas" ? "Todas" : c}
+          </button>
+        ))}
+      </div>
+
       {/* ---------- grade de pistas ---------- */}
       {loading ? (
         <p className="mt-8 text-sm text-muted-foreground">Carregando pistas...</p>
       ) : visiveis.length === 0 ? (
-        <p className="mt-8 text-sm text-muted-foreground">
-          Nenhuma pista nesse nível por enquanto.
-        </p>
+        <div className="mt-8 space-y-3">
+          <p className="text-sm text-muted-foreground">
+            Nenhuma pista encontrada com os filtros selecionados.
+          </p>
+          <button
+            onClick={() => {
+              setFiltro("todos");
+              setCidadeFiltro("todas");
+            }}
+            className="text-display rounded-md border border-border px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+          >
+            Limpar filtros
+          </button>
+        </div>
       ) : (
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {visiveis.map((p) => (
