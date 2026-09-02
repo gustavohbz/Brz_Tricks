@@ -330,9 +330,20 @@ export function Pistas() {
       {loading ? (
         <p className="mt-8 text-sm text-muted-foreground">Carregando pistas...</p>
       ) : visiveis.length === 0 ? (
-        <p className="mt-8 text-sm text-muted-foreground">
-          Nenhuma pista nesse nível por enquanto.
-        </p>
+        <div className="mt-8 space-y-3">
+          <p className="text-sm text-muted-foreground">
+            Nenhuma pista encontrada com os filtros selecionados.
+          </p>
+          <button
+            onClick={() => {
+              setFiltro("todos");
+              setCidadeFiltro("todas");
+            }}
+            className="text-display rounded-md border border-border px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+          >
+            Limpar filtros
+          </button>
+        </div>
       ) : (
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {visiveis.map((p) => (
