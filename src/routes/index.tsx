@@ -450,7 +450,7 @@ function Index() {
           </section>
 
           {/* =================================================
-              SEÇÃO 5 — CRONOGRAMA DE TREINOS
+              SEÇÃO 6 — CRONOGRAMA DE TREINOS
               ================================================= */}
           <section id="cronograma" className="border-t border-border px-6 py-24">
             <Cronograma />
