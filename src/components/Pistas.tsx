@@ -244,6 +244,7 @@ export function Pistas() {
   const [pistas, setPistas] = useState<Pista[]>([]);
   const [loading, setLoading] = useState(true);
   const [filtro, setFiltro] = useState<Nivel | "todos">("todos");
+  const [cidadeFiltro, setCidadeFiltro] = useState<string>("todas");
   const [aberta, setAberta] = useState<Pista | null>(null);
   const [session, setSession] = useState<Session | null>(null);
 
@@ -264,9 +265,19 @@ export function Pistas() {
       });
   }, []);
 
+  const cidades = useMemo(
+    () => ["todas", ...Array.from(new Set(pistas.map((p) => p.cidade))).sort((a, b) => a.localeCompare(b))],
+    [pistas],
+  );
+
   const visiveis = useMemo(
-    () => (filtro === "todos" ? pistas : pistas.filter((p) => p.nivel === filtro)),
-    [pistas, filtro],
+    () =>
+      pistas.filter((p) => {
+        const nivelOk = filtro === "todos" || p.nivel === filtro;
+        const cidadeOk = cidadeFiltro === "todas" || p.cidade === cidadeFiltro;
+        return nivelOk && cidadeOk;
+      }),
+    [pistas, filtro, cidadeFiltro],
   );
 
   return (
