@@ -436,7 +436,14 @@ function Index() {
           ))}
 
           {/* =================================================
-              SEÇÃO 4 — DICAS & CURIOSIDADES
+              SEÇÃO 4 — PISTAS DE SKATE (mapa + comentários)
+              ================================================= */}
+          <section id="pistas" className="border-t border-border px-6 py-24">
+            <Pistas />
+          </section>
+
+          {/* =================================================
+              SEÇÃO 5 — DICAS & CURIOSIDADES
               ================================================= */}
           <section id="dicas" className="border-t border-border px-6 py-24">
             <Dicas />
