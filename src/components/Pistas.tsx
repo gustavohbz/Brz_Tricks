@@ -289,20 +289,39 @@ export function Pistas() {
         os comentários de quem já andou lá.
       </p>
 
-      {/* ---------- filtros de nível ---------- */}
-      <div className="mt-6 flex flex-wrap gap-2">
+      {/* ---------- filtros ---------- */}
+      <div className="mt-6 flex flex-wrap items-center gap-2">
+        <span className="text-display text-xs text-muted-foreground">Nível:</span>
         {NIVEIS.map((n) => (
           <button
             key={n.value}
             onClick={() => setFiltro(n.value)}
             aria-pressed={filtro === n.value}
-            className={`text-display rounded-full border px-4 py-1.5 text-xs transition-colors ${
+            className={`text-display rounded-full border px-3 py-1 text-xs transition-colors ${
               filtro === n.value
                 ? "border-primary bg-primary text-primary-foreground"
                 : "border-border text-muted-foreground hover:border-primary hover:text-primary"
             }`}
           >
             {n.label}
+          </button>
+        ))}
+      </div>
+
+      <div className="mt-3 flex flex-wrap items-center gap-2">
+        <span className="text-display text-xs text-muted-foreground">Cidade:</span>
+        {cidades.map((c) => (
+          <button
+            key={c}
+            onClick={() => setCidadeFiltro(c)}
+            aria-pressed={cidadeFiltro === c}
+            className={`text-display rounded-full border px-3 py-1 text-xs transition-colors ${
+              cidadeFiltro === c
+                ? "border-primary bg-primary text-primary-foreground"
+                : "border-border text-muted-foreground hover:border-primary hover:text-primary"
+            }`}
+          >
+            {c === "todas" ? "Todas" : c}
           </button>
         ))}
       </div>
