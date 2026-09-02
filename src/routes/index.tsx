@@ -24,6 +24,7 @@ import { ChevronDown, PlayCircle } from "lucide-react"; // ícones
 import { sections, getRoadmap, type Trick } from "@/data/tricks";
 import { Cronograma } from "@/components/Cronograma"; // seção de cronograma de treinos
 import { Dicas } from "@/components/Dicas"; // seção de curiosidades e dicas
+import { Pistas } from "@/components/Pistas"; // seção de pistas de skate (mapa + comentários)
 import {
   useTrickVideos,
   youtubeEmbed,
@@ -383,6 +384,13 @@ function Index() {
                 className="text-display ml-6 mt-6 inline-block text-sm text-accent hover:text-primary"
               >
                 Curiosidades & dicas →
+              </button>
+              {/* atalho para pistas de skate */}
+              <button
+                onClick={() => go("pistas")}
+                className="text-display ml-6 mt-6 inline-block text-sm text-accent hover:text-primary"
+              >
+                Pistas de skate →
               </button>
             </div>
           </section>
