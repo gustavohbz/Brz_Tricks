@@ -7,11 +7,11 @@
    • Comentar exige login (RLS: cada um só mexe no próprio).
    ========================================================= */
 import { useEffect, useMemo, useState } from "react";
-import type { Session } from "@supabase/supabase-js";
 import { MapPin, Ruler, Star, Loader2, MessageSquare } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { GoogleMapView } from "@/components/GoogleMapView";
+import { useLocalUser } from "@/lib/local-user";
 import {
   Dialog,
   DialogContent,
@@ -98,7 +98,8 @@ function Estrelas({
 /* =========================================================
    Comentários de uma pista
    ========================================================= */
-function Comentarios({ pista, session }: { pista: Pista; session: Session | null }) {
+function Comentarios({ pista }: { pista: Pista }) {
+  const { user, displayName } = useLocalUser();
   const [lista, setLista] = useState<Comentario[]>([]);
   const [loading, setLoading] = useState(true);
   const [texto, setTexto] = useState("");
@@ -124,19 +125,17 @@ function Comentarios({ pista, session }: { pista: Pista; session: Session | null
 
   const enviar = async () => {
     const value = texto.trim();
-    if (!session?.user) {
-      toast.error("Entre com o Google para comentar.");
+    if (!user?.id) {
+      toast.error("Recarregue a página para comentar.");
       return;
     }
     if (!value) return;
     setSaving(true);
-    const meta = session.user.user_metadata as Record<string, unknown>;
     const { error } = await supabase.from("pista_comentarios").insert({
       pista_id: pista.id,
-      user_id: session.user.id,
-      autor_nome:
-        (meta["full_name"] as string | undefined) ?? session.user.email ?? "Skater",
-      autor_avatar: (meta["avatar_url"] as string | undefined) ?? null,
+      user_id: user.id,
+      autor_nome: displayName,
+      autor_avatar: user.avatar || null,
       nota,
       texto: value.slice(0, 1000),
     });
@@ -169,7 +168,12 @@ function Comentarios({ pista, session }: { pista: Pista; session: Session | null
 
       {/* ---------- formulário ---------- */}
       <div className="mt-3 rounded-md border border-border p-3">
-        {session?.user ? (
+        <>
+          {!user?.name?.trim() && (
+            <p className="mb-2 text-xs text-muted-foreground">
+              Dica: defina seu nome em “Criar meu perfil”, no topo da página.
+            </p>
+          )}
           <>
             <Estrelas nota={nota} onChange={setNota} />
             <textarea
@@ -188,11 +192,7 @@ function Comentarios({ pista, session }: { pista: Pista; session: Session | null
               Publicar
             </Button>
           </>
-        ) : (
-          <p className="text-xs text-muted-foreground">
-            Entre com o Google no topo da página para comentar nesta pista.
-          </p>
-        )}
+        </>
       </div>
 
       {/* ---------- lista ---------- */}
@@ -221,7 +221,7 @@ function Comentarios({ pista, session }: { pista: Pista; session: Session | null
               <p className="mt-2 whitespace-pre-line text-sm text-muted-foreground">
                 {c.texto}
               </p>
-              {session?.user?.id === c.user_id && (
+              {user?.id === c.user_id && (
                 <button
                   onClick={() => remover(c.id)}
                   className="mt-2 text-[11px] uppercase tracking-widest text-muted-foreground hover:text-primary"
@@ -246,13 +246,6 @@ export function Pistas() {
   const [filtro, setFiltro] = useState<Nivel | "todos">("todos");
   const [cidadeFiltro, setCidadeFiltro] = useState<string>("todas");
   const [aberta, setAberta] = useState<Pista | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
-
-  useEffect(() => {
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => setSession(s));
-    supabase.auth.getSession().then(({ data }) => setSession(data.session));
-    return () => sub.subscription.unsubscribe();
-  }, []);
 
   useEffect(() => {
     supabase
@@ -437,7 +430,7 @@ export function Pistas() {
               ) : null}
 
               {/* comentários */}
-              <Comentarios pista={aberta} session={session} />
+              <Comentarios pista={aberta} />
             </>
           )}
         </DialogContent>
