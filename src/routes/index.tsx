@@ -15,14 +15,13 @@
 /* =========================================================
    1) IMPORTS
    ========================================================= */
-import { createFileRoute } from "@tanstack/react-router"; // registra o arquivo como rota
+import { createFileRoute, Link } from "@tanstack/react-router"; // registra o arquivo como rota + links internos
 import { useEffect, useState } from "react"; // hooks usados nesta página
 import { ChevronDown, PlayCircle } from "lucide-react"; // ícones
 
 
 
 import { sections, getRoadmap, type Trick } from "@/data/tricks";
-import { Cronograma } from "@/components/Cronograma"; // seção de cronograma de treinos
 import { Dicas } from "@/components/Dicas"; // seção de curiosidades e dicas
 import { Pistas } from "@/components/Pistas"; // seção de pistas de skate (mapa + comentários)
 import {
