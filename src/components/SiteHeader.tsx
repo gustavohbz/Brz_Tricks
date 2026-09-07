@@ -12,8 +12,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { LogOut, User } from "lucide-react";
+import { CalendarDays, LogIn, LogOut, Sparkles, User } from "lucide-react";
 import { useLocalUser } from "@/lib/local-user";
+import { useAuth } from "@/lib/use-auth";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -35,6 +36,9 @@ import {
 export function SiteHeader() {
   // Identidade local reativa (id + nome + avatar)
   const { user, update, displayName } = useLocalUser();
+
+  // Conta com Google (para o cronograma na nuvem)
+  const { user: conta, signOut } = useAuth();
 
   // Controla se o popup de edição está aberto
   const [open, setOpen] = useState(false);
@@ -111,6 +115,40 @@ export function SiteHeader() {
                 <User className="mr-2 size-4" />
                 Editar nome e avatar
               </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              {/* Área de treinos na nuvem (precisa de conta) */}
+              <DropdownMenuItem asChild>
+                <Link to="/treinos">
+                  <CalendarDays className="mr-2 size-4" />
+                  Meus treinos
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/planos">
+                  <Sparkles className="mr-2 size-4" />
+                  Planos
+                </Link>
+              </DropdownMenuItem>
+              {/* Entrar ou sair da conta Google */}
+              {conta ? (
+                <DropdownMenuItem
+                  onClick={async () => {
+                    await signOut();
+                    toast.success("Você saiu da sua conta.");
+                  }}
+                >
+                  <LogOut className="mr-2 size-4" />
+                  Sair da conta
+                </DropdownMenuItem>
+              ) : (
+                <DropdownMenuItem asChild>
+                  <Link to="/entrar">
+                    <LogIn className="mr-2 size-4" />
+                    Entrar com Google
+                  </Link>
+                </DropdownMenuItem>
+              )}
+              <DropdownMenuSeparator />
               {/* Apaga nome/avatar (mantém o id) */}
               <DropdownMenuItem onClick={limpar}>
                 <LogOut className="mr-2 size-4" />
@@ -120,10 +158,19 @@ export function SiteHeader() {
           </DropdownMenu>
         ) : (
           /* -------- usuário SEM nome: botão de criar -------- */
-          <Button onClick={() => setOpen(true)} variant="secondary" className="gap-2">
-            <User className="size-4" />
-            Criar meu perfil
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button onClick={() => setOpen(true)} variant="ghost" className="gap-2">
+              <User className="size-4" />
+              Criar meu perfil
+            </Button>
+            {/* Conta com Google → cronograma na nuvem */}
+            <Button asChild variant="secondary" className="gap-2">
+              <Link to="/entrar">
+                <LogIn className="size-4" />
+                Entrar
+              </Link>
+            </Button>
+          </div>
         )}
       </div>
 
