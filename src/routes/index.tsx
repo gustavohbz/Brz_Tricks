@@ -453,7 +453,26 @@ function Index() {
               SEÇÃO 6 — CRONOGRAMA DE TREINOS
               ================================================= */}
           <section id="cronograma" className="border-t border-border px-6 py-24">
-            <Cronograma />
+            {/* Chamada para a área de treinos (cronograma salvo na conta) */}
+            <div className="mx-auto max-w-2xl text-center">
+              <p className="text-display text-xs tracking-widest text-primary">
+                Seu treino
+              </p>
+              <h2 className="text-display mt-2 text-5xl">Cronograma de treinos</h2>
+              <p className="mt-4 text-sm text-muted-foreground">
+                Monte sua semana escolhendo as manobras que quer treinar. Com uma
+                conta, o cronograma fica salvo na nuvem e você abre de qualquer
+                aparelho — os 7 primeiros dias são grátis.
+              </p>
+              <div className="mt-8 flex flex-wrap justify-center gap-3">
+                <Button asChild className="text-display">
+                  <Link to="/treinos">Montar meu cronograma</Link>
+                </Button>
+                <Button asChild variant="secondary" className="text-display">
+                  <Link to="/planos">Ver planos</Link>
+                </Button>
+              </div>
+            </div>
           </section>
 
           {/* =================================================
