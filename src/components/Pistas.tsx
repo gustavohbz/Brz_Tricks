@@ -12,7 +12,8 @@ import { MapPin, Ruler, Star, Loader2, MessageSquare } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { GoogleMapView } from "@/components/GoogleMapView";
-import { useLocalUser } from "@/lib/local-user";
+import { useAuth } from "@/lib/use-auth";
+import { Link } from "@tanstack/react-router";
 import {
   Dialog,
   DialogContent,
@@ -112,12 +113,12 @@ function Estrelas({
     Comentários de uma pista
     ---------------------------------------------------------
     Mostrado dentro do popup da pista. Lê e grava na tabela
-    `pista_comentarios`. Qualquer um pode comentar — o autor é
-    identificado pelo id da identidade local do navegador.
+    `pista_comentarios`. Só quem entrou com a conta pode comentar,
+    e cada pessoa só pode apagar o próprio comentário.
     ========================================================= */
 function Comentarios({ pista }: { pista: Pista }) {
-  // Identidade local de quem está usando a página agora
-  const { user, displayName } = useLocalUser();
+  // Conta logada (Google). Sem conta, o formulário vira convite para entrar.
+  const { user, displayName, avatarUrl } = useAuth();
 
   const [lista, setLista] = useState<Comentario[]>([]);
   const [loading, setLoading] = useState(true);
@@ -149,18 +150,18 @@ function Comentarios({ pista }: { pista: Pista }) {
   /* Publica um novo comentário no banco */
   const enviar = async () => {
     const value = texto.trim();
-    // Sem id local (ainda carregando), não dá para identificar o autor
+    // Sem conta não há como identificar o autor com segurança
     if (!user?.id) {
-      toast.error("Recarregue a página para comentar.");
+      toast.error("Entre com sua conta para comentar.");
       return;
     }
     if (!value) return; // ignora texto vazio
     setSaving(true);
     const { error } = await supabase.from("pista_comentarios").insert({
       pista_id: pista.id,
-      user_id: user.id, // dono do comentário (identidade local)
+      user_id: user.id, // dono do comentário (conta logada)
       autor_nome: displayName, // cópia do nome atual
-      autor_avatar: user.avatar || null,
+      autor_avatar: avatarUrl || null,
       nota,
       texto: value.slice(0, 1000), // limite de 1000 caracteres
     });
@@ -176,8 +177,8 @@ function Comentarios({ pista }: { pista: Pista }) {
     void carregar();
   };
 
-  /* Apaga um comentário (o botão só aparece no comentário do próprio
-     usuário, comparando o id local com o user_id do comentário) */
+  /* Apaga um comentário. O botão só aparece para o autor e o banco
+     também só permite que o autor apague. */
   const remover = async (id: string) => {
     const { error } = await supabase.from("pista_comentarios").delete().eq("id", id);
     if (error) {
@@ -197,13 +198,15 @@ function Comentarios({ pista }: { pista: Pista }) {
 
       {/* ---------- formulário de novo comentário ---------- */}
       <div className="mt-3 rounded-md border border-border p-3">
-        <>
-          {/* Se o usuário ainda não escolheu nome, sugere criar o perfil */}
-          {!user?.name?.trim() && (
-            <p className="mb-2 text-xs text-muted-foreground">
-              Dica: defina seu nome em “Criar meu perfil”, no topo da página.
-            </p>
-          )}
+        {!user ? (
+          /* Sem conta: convite para entrar */
+          <p className="text-sm text-muted-foreground">
+            <Link to="/entrar" className="text-primary underline">
+              Entre com sua conta
+            </Link>{" "}
+            para comentar sobre esta pista.
+          </p>
+        ) : (
           <>
             {/* Seletor de nota (clicável) */}
             <Estrelas nota={nota} onChange={setNota} />
@@ -224,7 +227,7 @@ function Comentarios({ pista }: { pista: Pista }) {
               Publicar
             </Button>
           </>
-        </>
+        )}
       </div>
 
       {/* ---------- lista de comentários ---------- */}
