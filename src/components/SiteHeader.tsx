@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import { CalendarDays, LogIn, LogOut, Sparkles, User } from "lucide-react";
 import { useLocalUser } from "@/lib/local-user";
 import { useAuth } from "@/lib/use-auth";
+import { NotificationBell } from "@/components/NotificationBell";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -76,10 +77,12 @@ export function SiteHeader() {
     <header className="fixed inset-x-0 top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
         {/* Logo — volta para o topo da home */}
-        <a href="#top" className="text-display text-lg tracking-wide">
+        <Link to="/" className="text-display shrink-0 text-lg tracking-wide">
           Skate <span className="text-primary">do Zero</span>
-        </a>
+        </Link>
 
+        <div className="flex min-w-0 items-center gap-1 sm:gap-2">
+        <NotificationBell />
         {temNome ? (
           /* -------- usuário COM nome: menu suspenso -------- */
           <DropdownMenu>
@@ -159,9 +162,9 @@ export function SiteHeader() {
         ) : (
           /* -------- usuário SEM nome: botão de criar -------- */
           <div className="flex items-center gap-2">
-            <Button onClick={() => setOpen(true)} variant="ghost" className="gap-2">
+            <Button onClick={() => setOpen(true)} variant="ghost" className="gap-2 px-2 sm:px-4" aria-label="Criar meu perfil" title="Criar meu perfil">
               <User className="size-4" />
-              Criar meu perfil
+              <span className="hidden sm:inline">Criar meu perfil</span>
             </Button>
             {/* Conta com Google → cronograma na nuvem */}
             <Button asChild variant="secondary" className="gap-2">
@@ -172,6 +175,7 @@ export function SiteHeader() {
             </Button>
           </div>
         )}
+        </div>
       </div>
 
       {/* ---------- popup de identidade (nome + avatar) ---------- */}
