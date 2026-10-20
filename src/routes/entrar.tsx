@@ -7,7 +7,7 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/lib/use-auth";
 import { Button } from "@/components/ui/button";
 
@@ -44,13 +44,20 @@ function EntrarPage() {
 
   const entrarComGoogle = async () => {
     setEnviando(true);
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: { redirectTo: `${window.location.origin}/treinos` },
-    });
-    if (error) {
-      setEnviando(false);
+    try {
+      const result = await lovable.auth.signInWithOAuth("google", {
+        redirect_uri: `${window.location.origin}/entrar`,
+      });
+      if (result.error) {
+        toast.error("Não deu para entrar agora. Tente de novo.");
+        return;
+      }
+      if (result.redirected) return;
+      // useAuth confirms the session before the effect navigates to /treinos.
+    } catch {
       toast.error("Não deu para entrar agora. Tente de novo.");
+    } finally {
+      setEnviando(false);
     }
   };
 

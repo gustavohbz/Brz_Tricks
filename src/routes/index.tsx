@@ -23,6 +23,7 @@ import { ChevronDown, PlayCircle } from "lucide-react"; // ícones
 
 import { sections, getRoadmap, type Trick } from "@/data/tricks";
 import { Dicas } from "@/components/Dicas"; // seção de curiosidades e dicas
+import { AdvertisingBanner } from "@/components/AdvertisingBanner";
 import { Pistas } from "@/components/Pistas"; // seção de pistas de skate (mapa + comentários)
 import {
   useTrickVideos,
@@ -307,7 +308,8 @@ function Index() {
 
 
   return (
-    <main className="min-h-screen bg-background font-sans text-foreground">
+    <main className="min-h-screen bg-background pt-14 font-sans text-foreground">
+      <AdvertisingBanner />
       {/* =====================================================
           SEÇÃO 1 — WELCOME
           ===================================================== */}
