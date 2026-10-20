@@ -1,12 +1,13 @@
-import { describe, expect, test } from "bun:test";
+import { describe, test } from "node:test";
+import { deepStrictEqual } from "node:assert";
 import { markNotificationsRead, parseReadNotifications } from "./site-messages";
 
 describe("notification read state", () => {
   test("marks only the selected notification without duplicates", () => {
-    expect(markNotificationsRead(["training"], ["profile", "training"])).toEqual(["training", "profile"]);
+    deepStrictEqual(markNotificationsRead(["training"], ["profile", "training"]), ["training", "profile"]);
   });
   test("restores saved read identifiers and recovers invalid storage", () => {
-    expect(parseReadNotifications('["training",7]')).toEqual(["training"]);
-    expect(parseReadNotifications("invalid")).toEqual([]);
+    deepStrictEqual(parseReadNotifications('["training",7]'), ["training"]);
+    deepStrictEqual(parseReadNotifications("invalid"), []);
   });
 });

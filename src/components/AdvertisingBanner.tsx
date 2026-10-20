@@ -1,5 +1,4 @@
 import { ArrowUpRight } from "lucide-react";
-import { Link } from "@tanstack/react-router";
 import { advertisingBanner } from "@/data/site-messages";
 
 export function AdvertisingBanner() {
@@ -22,7 +21,7 @@ export function AdvertisingBanner() {
       {advertisingBanner.href.startsWith("https://") ? (
         <a href={advertisingBanner.href} target="_blank" rel="noopener noreferrer sponsored" className={className}>{content}</a>
       ) : (
-        <Link to="/planos" className={className}>{content}</Link>
+        <a href={advertisingBanner.href} className={className}>{content}</a>
       )}
     </aside>
   );
