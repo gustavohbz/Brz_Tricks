@@ -13,3 +13,4 @@
 - Advertising campaign content and notification announcements live in a shared browser-safe data module so destinations and messages have one source.
 - Notification read state is browser-local and is not an account inbox; avoid adding private messages to this public announcement list.
 - Google sign-in uses the generated Lovable OAuth helper and returns to the public sign-in page; navigate to training only after the account session is available.
+- Prebundle shared Radix UI and OAuth dependencies in Vite's initial optimization pass to prevent late discovery from mixing React runtime generations in an open preview; preserve the config package's built-in React deduplication.
