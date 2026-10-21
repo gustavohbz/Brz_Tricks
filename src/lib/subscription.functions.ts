@@ -109,3 +109,32 @@ export const saveMyPlan = createServerFn({ method: "POST" })
     if (error) throw error;
     return { ok: true };
   });
+
+/**
+ * Salva as medidas do skate na conta da própria pessoa.
+ * Diferente do cronograma: isto é só anotação pessoal, então vale
+ * para qualquer conta — mesmo depois que o teste grátis termina.
+ */
+export const saveMySetup = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: { setup?: unknown }) => ({ setup: sanitizeSetup(input?.setup) }))
+  .handler(async ({ data, context }) => {
+    const { supabase, userId } = context;
+
+    // As regras de acesso só deixam cada pessoa mexer na própria ficha
+    const { error } = await supabase
+      .from("profiles")
+      .upsert(
+        {
+          id: userId,
+          truck: data.setup.truck,
+          shape: data.setup.shape,
+          wheel: data.setup.wheel,
+          bearing: data.setup.bearing,
+        },
+        { onConflict: "id" },
+      );
+
+    if (error) throw error;
+    return { ok: true };
+  });
