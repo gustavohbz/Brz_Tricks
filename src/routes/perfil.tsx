@@ -1,17 +1,28 @@
 /* =========================================================
-    /perfil — página do usuário (identidade local)
+    /perfil — página do usuário
     ---------------------------------------------------------
-    • Nome e avatar vêm da identidade local (src/lib/local-user).
-    • Setup (truck, shape, roda, rolamento) salvo no navegador.
-    • Cronograma salvo no navegador (mesma chave da home, então
-      o que a pessoa montar aqui aparece na home e vice-versa).
-    • Nada vai para o banco: é 100% localStorage.
+    • Com conta (Google): setup e cronograma ficam na conta,
+      então abrem de qualquer aparelho. Nome e foto vêm do Google.
+    • Sem conta: tudo guardado apenas neste navegador
+      (identidade local + localStorage), do jeito de antes.
+    • Ao entrar com a conta, o que estava só neste navegador é
+      aproveitado se a ficha na nuvem ainda estiver vazia.
     ========================================================= */
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
+import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { ArrowLeft, Save } from "lucide-react";
+import { useAuth } from "@/lib/use-auth";
 import { useLocalUser } from "@/lib/local-user";
+import {
+  getMyAccount,
+  saveMyPlan,
+  saveMySetup,
+  type CloudPlan,
+} from "@/lib/subscription.functions";
+import { emptySetup, sanitizeSetup, SETUP_KEY, type Setup } from "@/lib/setup";
 import { Cronograma, STORAGE_KEY, emptyPlan, type Plan } from "@/components/Cronograma";
 import { Button } from "@/components/ui/button";
 
@@ -23,12 +34,12 @@ export const Route = createFileRoute("/perfil")({
       {
         name: "description",
         content:
-          "Guarde seu setup de skate e monte o cronograma de treinos da semana neste navegador.",
+          "Guarde seu setup de skate e monte o cronograma de treinos da semana — na sua conta, para abrir de qualquer aparelho.",
       },
       { property: "og:title", content: "Meu perfil — Skate do Zero" },
       {
         property: "og:description",
-        content: "Setup do skate e cronograma de treinos, sem precisar de login.",
+        content: "Setup do skate e cronograma de treinos salvos na sua conta.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
@@ -37,15 +48,8 @@ export const Route = createFileRoute("/perfil")({
   component: PerfilPage,
 });
 
-/* Chave do localStorage onde o setup do skate fica salvo */
-const SETUP_KEY = "skate-do-zero:setup";
-
-/* Medidas do skate que o usuário anota para não esquecer */
-type Setup = { truck: string; shape: string; wheel: string; bearing: string };
-const emptySetup: Setup = { truck: "", shape: "", wheel: "", bearing: "" };
-
 /* ---------- campo de texto reutilizável ----------
-   Usado para nome, avatar e as quatro peças do setup.
+   Usado para nome e avatar quando a pessoa não tem conta.
    Recebe o valor atual e avisa o pai a cada tecla digitada. */
 function Field({
   label,
@@ -72,44 +76,102 @@ function Field({
   );
 }
 
-function PerfilPage() {
-  // Identidade local (id + nome + avatar) com nome pronto para exibir
-  const { user, update, displayName } = useLocalUser();
+/* A ficha tem alguma peça anotada? (Serve para decidir se
+   aproveita o que estava só neste navegador ao entrar na conta) */
+function fichaPreenchida(s: Setup) {
+  return Object.values(s).some((v) => v.trim() !== "");
+}
 
-  // Estados do formulário — todos começam vazios e são preenchidos
-  // a partir do localStorage depois que a página hidrata.
+/* O cronograma tem alguma manobra marcada? */
+function cronogramaPreenchido(p: Record<string, string[]>) {
+  return Object.values(p).some((lista) => Array.isArray(lista) && lista.length > 0);
+}
+
+function PerfilPage() {
+  // Conta com Google (nome e foto) e identidade local (visitantes)
+  const { user, loading, displayName, avatarUrl } = useAuth();
+  const { user: localUser, update, displayName: nomeLocal } = useLocalUser();
+
+  const buscarConta = useServerFn(getMyAccount);
+  const gravarSetup = useServerFn(saveMySetup);
+  const gravarPlano = useServerFn(saveMyPlan);
+
+  // Dados da conta: assinatura + setup + cronograma salvos na nuvem
+  const conta = useQuery({
+    queryKey: ["minha-conta", user?.id],
+    queryFn: () => buscarConta(),
+    enabled: !!user,
+  });
+
+  // Estados do formulário — preenchidos uma única vez, depois
+  // ficam livres para a pessoa editar sem serem sobrescritos.
   const [setup, setSetup] = useState<Setup>(emptySetup);
-  const [plan, setPlan] = useState<Plan>(emptyPlan);
+  const [plan, setPlan] = useState<Plan>(emptyPlan());
   const [nome, setNome] = useState("");
   const [avatar, setAvatar] = useState("");
+  const preenchido = useRef(false);
 
-  /* Carrega setup e cronograma salvos no navegador.
-     Roda só no cliente (useEffect), evitando erro no SSR,
-     onde localStorage não existe. */
+  /* Lê o que estava guardado neste navegador.
+     Roda só no cliente (useEffect): no SSR não existe localStorage. */
   useEffect(() => {
+    if (preenchido.current) return;
+
+    let localSetup = emptySetup;
+    let localPlan = emptyPlan();
     try {
       const rawSetup = localStorage.getItem(SETUP_KEY);
-      // Espalha sobre emptySetup para garantir todas as chaves
-      if (rawSetup) setSetup({ ...emptySetup, ...JSON.parse(rawSetup) });
+      if (rawSetup) localSetup = sanitizeSetup(JSON.parse(rawSetup));
       const rawPlan = localStorage.getItem(STORAGE_KEY);
-      // Mesma chave "cronograma-treinos" usada na home
-      if (rawPlan) setPlan({ ...emptyPlan(), ...JSON.parse(rawPlan) });
+      if (rawPlan) localPlan = { ...emptyPlan(), ...JSON.parse(rawPlan) };
     } catch {
       /* JSON corrompido: mantém os valores vazios */
     }
-  }, []);
 
-  /* Quando a identidade local carregar, copia nome/avatar para o
-     formulário (o usuário edita em cima do valor atual). */
-  useEffect(() => {
-    if (!user) return;
-    setNome(user.name);
-    setAvatar(user.avatar);
-  }, [user]);
+    if (user && conta.data) {
+      // A conta manda; o que estava só neste navegador entra se a
+      // ficha na nuvem ainda estiver vazia (nada se perde ao entrar).
+      setSetup(fichaPreenchida(conta.data.setup) ? conta.data.setup : localSetup);
+      setPlan(
+        cronogramaPreenchido(conta.data.planData)
+          ? { ...emptyPlan(), ...(conta.data.planData as Plan) }
+          : localPlan,
+      );
+      preenchido.current = true;
+    } else if (!user && !loading) {
+      // Visitante: trabalha em cima do que já está neste navegador.
+      setSetup(localSetup);
+      setPlan(localPlan);
+      setNome(localUser?.name ?? "");
+      setAvatar(localUser?.avatar ?? "");
+      preenchido.current = true;
+    }
+  }, [user, loading, conta.data, localUser]);
 
-  /* Botão "Salvar perfil": grava tudo de uma vez —
-     setup e cronograma no localStorage, nome/avatar na identidade. */
-  const salvar = () => {
+  /* Botão "Salvar perfil".
+     Com conta → grava na conta (e guarda uma cópia neste navegador).
+     Sem conta → grava tudo neste navegador, como antes. */
+  const salvar = async () => {
+    if (user) {
+      try {
+        await gravarSetup({ data: { setup } });
+        if (conta.data?.active) {
+          await gravarPlano({ data: { plan: plan as CloudPlan } });
+        }
+        try {
+          localStorage.setItem(SETUP_KEY, JSON.stringify(setup));
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(plan));
+        } catch {
+          /* cópia local é só segurança; a conta já guardou */
+        }
+        toast.success(
+          conta.data?.active ? "Perfil salvo na sua conta!" : "Setup salvo na sua conta!",
+        );
+      } catch {
+        toast.error("Não deu para salvar agora. Tente de novo.");
+      }
+      return;
+    }
+
     try {
       localStorage.setItem(SETUP_KEY, JSON.stringify(setup));
       localStorage.setItem(STORAGE_KEY, JSON.stringify(plan));
@@ -121,6 +183,15 @@ function PerfilPage() {
     update({ name: nome.trim(), avatar: avatar.trim() });
     toast.success("Perfil salvo!");
   };
+
+  // Enquanto a sessão não aparece, não mostra formulário pela metade
+  if (loading) {
+    return (
+      <main className="flex min-h-screen items-center justify-center pt-14">
+        <p className="text-sm text-muted-foreground">Carregando seu perfil...</p>
+      </main>
+    );
+  }
 
   return (
     <main className="mx-auto max-w-5xl px-4 pb-24 pt-24">
@@ -134,28 +205,49 @@ function PerfilPage() {
 
       {/* Cabeçalho da página com o nome de exibição */}
       <p className="text-display text-sm text-accent">Seu perfil</p>
-      <h1 className="text-display mt-2 text-4xl sm:text-5xl">{displayName}</h1>
+      <h1 className="text-display mt-2 text-4xl sm:text-5xl">
+        {user ? displayName : nomeLocal}
+      </h1>
       <p className="mt-2 text-sm text-muted-foreground">
-        Tudo aqui fica guardado apenas neste navegador — sem conta, sem senha.
+        {user
+          ? "Salvo na sua conta — você abre de qualquer aparelho."
+          : "Tudo aqui fica guardado apenas neste navegador — sem conta, sem senha."}
       </p>
 
-      {/* ---------- SEÇÃO: IDENTIDADE (nome + avatar) ---------- */}
+      {/* ---------- SEÇÃO: IDENTIDADE ---------- */}
       <section className="mt-10 rounded-lg border border-border bg-card p-5">
         <h2 className="text-display text-2xl">Quem você é</h2>
-        <div className="mt-5 grid gap-4 sm:grid-cols-2">
-          <Field
-            label="Nome"
-            value={nome}
-            onChange={setNome}
-            placeholder="Ex.: Gustavo"
-          />
-          <Field
-            label="Avatar (URL)"
-            value={avatar}
-            onChange={setAvatar}
-            placeholder="https://..."
-          />
-        </div>
+        {user ? (
+          <div className="mt-4 flex items-center gap-3">
+            {avatarUrl ? (
+              <img
+                src={avatarUrl}
+                alt=""
+                className="size-12 rounded-full border border-border object-cover"
+              />
+            ) : (
+              <span className="text-display flex size-12 items-center justify-center rounded-full border border-border text-lg">
+                {displayName.charAt(0).toUpperCase()}
+              </span>
+            )}
+            <div>
+              <p className="text-sm">{displayName}</p>
+              <p className="text-xs text-muted-foreground">
+                Nome e foto vêm da sua conta Google.
+              </p>
+            </div>
+          </div>
+        ) : (
+          <div className="mt-5 grid gap-4 sm:grid-cols-2">
+            <Field label="Nome" value={nome} onChange={setNome} placeholder="Ex.: Gustavo" />
+            <Field
+              label="Avatar (URL)"
+              value={avatar}
+              onChange={setAvatar}
+              placeholder="https://..."
+            />
+          </div>
+        )}
       </section>
 
       {/* ---------- SEÇÃO: SETUP (medidas do skate) ---------- */}
@@ -193,21 +285,43 @@ function PerfilPage() {
         </div>
       </section>
 
-      {/* ---------- SEÇÃO: CRONOGRAMA (modo controlado) ----------
-          O componente Cronograma não salva sozinho aqui: ele recebe
-          value/onChange e o botão "Salvar perfil" persiste tudo junto. */}
-      <section className="mt-10">
-        <Cronograma
-          value={plan}
-          onChange={setPlan}
-          eyebrow="Seu treino"
-          title="Meu cronograma"
-          description="Monte sua semana e clique em Salvar perfil para guardar."
-        />
-      </section>
+      {/* ---------- SEÇÃO: CRONOGRAMA ----------
+          Com conta e assinatura valendo, edita e salva na nuvem.
+          Sem conta, edita e salva neste navegador. */}
+      {user && !conta.data?.active ? (
+        <section className="mt-10 rounded-lg border border-border bg-card p-5">
+          <h2 className="text-display text-2xl">Meu cronograma</h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Seu cronograma continua guardado. Assim que a assinatura estiver
+            disponível, você volta a editar por aqui.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <Button asChild variant="secondary" className="text-display">
+              <Link to="/planos">Ver planos</Link>
+            </Button>
+            <Button asChild variant="ghost" className="text-display">
+              <Link to="/treinos">Ir para meus treinos</Link>
+            </Button>
+          </div>
+        </section>
+      ) : (
+        <section className="mt-10">
+          <Cronograma
+            value={plan}
+            onChange={setPlan}
+            eyebrow="Seu treino"
+            title="Meu cronograma"
+            description={
+              user
+                ? "Monte sua semana e clique em Salvar perfil para guardar na sua conta."
+                : "Monte sua semana e clique em Salvar perfil para guardar neste navegador."
+            }
+          />
+        </section>
+      )}
 
       {/* Botão principal: salva identidade + setup + cronograma */}
-      <Button className="mt-8 w-full sm:w-auto" onClick={salvar}>
+      <Button className="mt-8 w-full sm:w-auto" onClick={salvar} disabled={!!user && conta.isLoading}>
         <Save className="mr-2 size-4" />
         Salvar perfil
       </Button>
