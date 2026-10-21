@@ -8,6 +8,7 @@
     ========================================================= */
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { sanitizeSetup, type Setup } from "@/lib/setup";
 
 /** Formato do cronograma: dia da semana → lista de manobras */
 export type CloudPlan = Record<string, string[]>;
@@ -22,6 +23,7 @@ export type AccountInfo = {
   planData: CloudPlan;
   displayName: string | null;
   avatarUrl: string | null;
+  setup: Setup;
 };
 
 /** Diz se a assinatura vale agora (em teste válido ou ativa) */
@@ -49,7 +51,7 @@ export const getMyAccount = createServerFn({ method: "GET" })
     // Perfil guarda o cronograma na nuvem (coluna plan) + nome/foto
     const { data: profile } = await supabase
       .from("profiles")
-      .select("plan, display_name, avatar_url")
+      .select("plan, display_name, avatar_url, truck, shape, wheel, bearing")
       .eq("id", userId)
       .maybeSingle();
 
@@ -62,6 +64,12 @@ export const getMyAccount = createServerFn({ method: "GET" })
       planData: (profile?.plan as CloudPlan | null) ?? {},
       displayName: profile?.display_name ?? null,
       avatarUrl: profile?.avatar_url ?? null,
+      setup: sanitizeSetup({
+        truck: profile?.truck,
+        shape: profile?.shape,
+        wheel: profile?.wheel,
+        bearing: profile?.bearing,
+      }),
     };
   });
 
