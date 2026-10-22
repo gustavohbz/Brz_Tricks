@@ -14,4 +14,5 @@
 - Notification read state is browser-local and is not an account inbox; avoid adding private messages to this public announcement list.
 - Google sign-in uses the generated Lovable OAuth helper and returns to the public sign-in page; navigate to training only after the account session is available.
 - Account creation is delegated to Google only; there is no email/password registration page or form, so avoid adding password auth flows unless the user asks for them.
+- No paid-plan surfaces: no plans page, trial countdown, or billing UI; any signed-in account saves the schedule and setup free. Do not reintroduce plan/billing messaging unless the user asks (billing returns only when the user decides, at the recorded price in memory).
 - Prebundle shared Radix UI and OAuth dependencies in Vite's initial optimization pass to prevent late discovery from mixing React runtime generations in an open preview; preserve the config package's built-in React deduplication.

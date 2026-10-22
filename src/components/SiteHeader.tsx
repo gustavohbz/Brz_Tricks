@@ -12,7 +12,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { CalendarDays, LogIn, LogOut, Sparkles, User } from "lucide-react";
+import { CalendarDays, LogIn, LogOut, User } from "lucide-react";
 import { useLocalUser } from "@/lib/local-user";
 import { useAuth } from "@/lib/use-auth";
 import { NotificationBell } from "@/components/NotificationBell";
@@ -124,12 +124,6 @@ export function SiteHeader() {
                 <Link to="/treinos">
                   <CalendarDays className="mr-2 size-4" />
                   Meus treinos
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link to="/planos">
-                  <Sparkles className="mr-2 size-4" />
-                  Planos
                 </Link>
               </DropdownMenuItem>
               {/* Entrar ou sair da conta Google */}

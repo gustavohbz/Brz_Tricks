@@ -1,11 +1,11 @@
 /* =========================================================
     /entrar — página de entrada com a conta Google
     ---------------------------------------------------------
-    • Quem entra ganha 7 dias de teste grátis automaticamente.
-    • Depois de entrar, vai para a área de treinos.
+    • Depois de entrar, o cronograma fica salvo na nuvem e
+      a pessoa vai direto para a área de treinos.
     ========================================================= */
 import { useEffect, useState } from "react";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/lib/use-auth";
@@ -18,12 +18,12 @@ export const Route = createFileRoute("/entrar")({
       {
         name: "description",
         content:
-          "Entre com sua conta Google e ganhe 7 dias grátis para salvar seu cronograma de treinos de skate na nuvem.",
+          "Entre com sua conta Google para salvar seu cronograma de treinos de skate na nuvem.",
       },
       { property: "og:title", content: "Entrar — Skate do Zero" },
       {
         property: "og:description",
-        content: "Entre com o Google e comece seus 7 dias grátis no Skate do Zero.",
+        content: "Entre com o Google e salve seu cronograma no Skate do Zero.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -68,7 +68,7 @@ function EntrarPage() {
         <h1 className="text-display mt-2 text-4xl">Entrar no Skate do Zero</h1>
         <p className="mt-3 text-sm text-muted-foreground">
           Use sua conta Google para salvar o cronograma na nuvem e treinar de
-          qualquer aparelho. Os 7 primeiros dias são grátis.
+          qualquer aparelho.
         </p>
 
         <Button
@@ -78,13 +78,6 @@ function EntrarPage() {
         >
           {enviando ? "Abrindo..." : "Entrar com Google"}
         </Button>
-
-        <p className="mt-6 text-xs text-muted-foreground">
-          Quer só olhar antes?{" "}
-          <Link to="/planos" className="text-primary underline">
-            Ver o que está incluído
-          </Link>
-        </p>
       </div>
     </main>
   );

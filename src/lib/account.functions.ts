@@ -1,10 +1,11 @@
 /* =========================================================
-    subscription.functions — dados da conta no servidor
+    account.functions — dados da conta no servidor
     ---------------------------------------------------------
     Todas as funções daqui rodam no servidor e exigem que a
     pessoa esteja logada (middleware requireSupabaseAuth).
-    • getMyAccount  → assinatura + cronograma salvo na nuvem
-    • saveMyPlan    → salva o cronograma (só para assinantes)
+    • getMyAccount  → cronograma, setup, nome e foto da conta
+    • saveMyPlan    → salva o cronograma
+    • saveMySetup   → salva as medidas do skate
     ========================================================= */
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
@@ -13,42 +14,20 @@ import { sanitizeSetup, type Setup } from "@/lib/setup";
 /** Formato do cronograma: dia da semana → lista de manobras */
 export type CloudPlan = Record<string, string[]>;
 
-/** Assinatura como o site precisa ver */
+/** Dados da conta como o site precisa ver */
 export type AccountInfo = {
-  status: string;
-  plan: string;
-  trialEndsAt: string | null;
-  currentPeriodEnd: string | null;
-  active: boolean; // true = pode usar o cronograma
   planData: CloudPlan;
   displayName: string | null;
   avatarUrl: string | null;
   setup: Setup;
 };
 
-/** Diz se a assinatura vale agora (em teste válido ou ativa) */
-function isActive(row: { status: string; trial_ends_at: string | null } | null) {
-  if (!row) return false;
-  if (row.status === "active") return true;
-  if (row.status === "trialing" && row.trial_ends_at) {
-    return new Date(row.trial_ends_at).getTime() > Date.now();
-  }
-  return false;
-}
-
 export const getMyAccount = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<AccountInfo> => {
     const { supabase, userId } = context;
 
-    // Assinatura da pessoa (uma por conta)
-    const { data: sub } = await supabase
-      .from("subscriptions")
-      .select("status, plan, trial_ends_at, current_period_end")
-      .eq("user_id", userId)
-      .maybeSingle();
-
-    // Perfil guarda o cronograma na nuvem (coluna plan) + nome/foto
+    // Perfil guarda o cronograma na nuvem (coluna plan) + nome/foto/setup
     const { data: profile } = await supabase
       .from("profiles")
       .select("plan, display_name, avatar_url, truck, shape, wheel, bearing")
@@ -56,11 +35,6 @@ export const getMyAccount = createServerFn({ method: "GET" })
       .maybeSingle();
 
     return {
-      status: sub?.status ?? "none",
-      plan: sub?.plan ?? "pro",
-      trialEndsAt: sub?.trial_ends_at ?? null,
-      currentPeriodEnd: sub?.current_period_end ?? null,
-      active: isActive(sub ?? null),
       planData: (profile?.plan as CloudPlan | null) ?? {},
       displayName: profile?.display_name ?? null,
       avatarUrl: profile?.avatar_url ?? null,
@@ -90,17 +64,6 @@ export const saveMyPlan = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
 
-    // Confere a assinatura antes de deixar salvar
-    const { data: sub } = await supabase
-      .from("subscriptions")
-      .select("status, trial_ends_at")
-      .eq("user_id", userId)
-      .maybeSingle();
-
-    if (!isActive(sub ?? null)) {
-      throw new Error("Assinatura necessária para salvar o cronograma.");
-    }
-
     const { error } = await supabase
       .from("profiles")
       .update({ plan: data.plan })
@@ -112,8 +75,7 @@ export const saveMyPlan = createServerFn({ method: "POST" })
 
 /**
  * Salva as medidas do skate na conta da própria pessoa.
- * Diferente do cronograma: isto é só anotação pessoal, então vale
- * para qualquer conta — mesmo depois que o teste grátis termina.
+ * As regras de acesso só deixam cada pessoa mexer na própria ficha.
  */
 export const saveMySetup = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -121,7 +83,6 @@ export const saveMySetup = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
 
-    // As regras de acesso só deixam cada pessoa mexer na própria ficha
     const { error } = await supabase
       .from("profiles")
       .upsert(
