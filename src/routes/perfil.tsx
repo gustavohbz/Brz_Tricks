@@ -282,39 +282,20 @@ function PerfilPage() {
       </section>
 
       {/* ---------- SEÇÃO: CRONOGRAMA ----------
-          Com conta e assinatura valendo, edita e salva na nuvem.
-          Sem conta, edita e salva neste navegador. */}
-      {user && !conta.data?.active ? (
-        <section className="mt-10 rounded-lg border border-border bg-card p-5">
-          <h2 className="text-display text-2xl">Meu cronograma</h2>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Seu cronograma continua guardado. Assim que a assinatura estiver
-            disponível, você volta a editar por aqui.
-          </p>
-          <div className="mt-4 flex flex-wrap gap-3">
-            <Button asChild variant="secondary" className="text-display">
-              <Link to="/planos">Ver planos</Link>
-            </Button>
-            <Button asChild variant="ghost" className="text-display">
-              <Link to="/treinos">Ir para meus treinos</Link>
-            </Button>
-          </div>
-        </section>
-      ) : (
-        <section className="mt-10">
-          <Cronograma
-            value={plan}
-            onChange={setPlan}
-            eyebrow="Seu treino"
-            title="Meu cronograma"
-            description={
-              user
-                ? "Monte sua semana e clique em Salvar perfil para guardar na sua conta."
-                : "Monte sua semana e clique em Salvar perfil para guardar neste navegador."
-            }
-          />
-        </section>
-      )}
+          Editável e salvo na nuvem (com conta) ou neste navegador. */}
+      <section className="mt-10">
+        <Cronograma
+          value={plan}
+          onChange={setPlan}
+          eyebrow="Seu treino"
+          title="Meu cronograma"
+          description={
+            user
+              ? "Monte sua semana e clique em Salvar perfil para guardar na sua conta."
+              : "Monte sua semana e clique em Salvar perfil para guardar neste navegador."
+          }
+        />
+      </section>
 
       {/* Botão principal: salva identidade + setup + cronograma */}
       <Button className="mt-8 w-full sm:w-auto" onClick={salvar} disabled={!!user && conta.isLoading}>
