@@ -1,17 +1,16 @@
 /* =========================================================
     /treinos — área de quem tem conta (cronograma na nuvem)
     ---------------------------------------------------------
-    • Sem conta   → convite para entrar com o Google.
-    • Teste/ativo → cronograma salvo na nuvem (salva automático).
-    • Teste vencido → aviso e link para os planos.
+    • Sem conta → convite para entrar com o Google.
+    • Com conta → cronograma salvo na nuvem (salva automático).
     ========================================================= */
 import { useEffect, useRef, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/use-auth";
-import { getMyAccount, saveMyPlan, type CloudPlan } from "@/lib/subscription.functions";
+import { getMyAccount, saveMyPlan, type CloudPlan } from "@/lib/account.functions";
 import { Cronograma, emptyPlan, type Plan } from "@/components/Cronograma";
 import { Button } from "@/components/ui/button";
 
@@ -36,20 +35,12 @@ export const Route = createFileRoute("/treinos")({
   component: TreinosPage,
 });
 
-/** Mostra em texto simples até quando vai o teste grátis */
-function diasRestantes(fim: string | null) {
-  if (!fim) return null;
-  const ms = new Date(fim).getTime() - Date.now();
-  if (ms <= 0) return 0;
-  return Math.ceil(ms / 86_400_000);
-}
-
 function TreinosPage() {
   const { user, loading } = useAuth();
   const buscarConta = useServerFn(getMyAccount);
   const salvarPlano = useServerFn(saveMyPlan);
 
-  // Dados da conta (assinatura + cronograma da nuvem)
+  // Dados da conta (cronograma salvo na nuvem)
   const conta = useQuery({
     queryKey: ["minha-conta", user?.id],
     queryFn: () => buscarConta(),
@@ -94,7 +85,7 @@ function TreinosPage() {
           <h1 className="text-display text-4xl">Área de treinos</h1>
           <p className="mt-3 text-sm text-muted-foreground">
             Entre com sua conta Google para montar seu cronograma e deixar tudo
-            salvo na nuvem. Os 7 primeiros dias são grátis.
+            salvo na nuvem.
           </p>
           <Button asChild className="text-display mt-6 w-full">
             <Link to="/entrar">Entrar com Google</Link>
@@ -104,38 +95,14 @@ function TreinosPage() {
     );
   }
 
-  /* ---------- teste vencido ---------- */
-  if (conta.data && !conta.data.active) {
-    return (
-      <main className="flex min-h-screen items-center justify-center px-6 pt-14">
-        <div className="max-w-md rounded-xl border border-border bg-card p-8 text-center">
-          <h1 className="text-display text-4xl">Seu teste terminou</h1>
-          <p className="mt-3 text-sm text-muted-foreground">
-            Seu cronograma continua guardado. Assim que a assinatura estiver
-            disponível, você volta a editar por aqui.
-          </p>
-          <Button asChild variant="secondary" className="text-display mt-6 w-full">
-            <Link to="/planos">Ver planos</Link>
-          </Button>
-        </div>
-      </main>
-    );
-  }
-
-  const dias = diasRestantes(conta.data?.trialEndsAt ?? null);
-
-  /* ---------- assinatura válida ---------- */
+  /* ---------- com conta ---------- */
   return (
     <main className="min-h-screen px-2 pt-20">
       <div className="mx-auto max-w-6xl px-4">
         <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-primary/30 bg-card px-4 py-3">
-          <p className="text-sm">
-            {conta.data?.status === "trialing" && dias !== null
-              ? `Teste grátis — ${dias} ${dias === 1 ? "dia" : "dias"} restantes.`
-              : "Assinatura ativa."}
-          </p>
+          <p className="text-sm">Cronograma salvo na nuvem — dá para abrir de qualquer aparelho.</p>
           <span className="text-xs text-muted-foreground">
-            {gravar.isPending ? "Salvando..." : "Salvo na nuvem"}
+            {gravar.isPending ? "Salvando..." : "Tudo salvo"}
           </span>
         </div>
       </div>
