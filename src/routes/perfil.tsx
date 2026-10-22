@@ -21,7 +21,7 @@ import {
   saveMyPlan,
   saveMySetup,
   type CloudPlan,
-} from "@/lib/subscription.functions";
+} from "@/lib/account.functions";
 import { emptySetup, sanitizeSetup, SETUP_KEY, type Setup } from "@/lib/setup";
 import { Cronograma, STORAGE_KEY, emptyPlan, type Plan } from "@/components/Cronograma";
 import { Button } from "@/components/ui/button";
@@ -96,7 +96,7 @@ function PerfilPage() {
   const gravarSetup = useServerFn(saveMySetup);
   const gravarPlano = useServerFn(saveMyPlan);
 
-  // Dados da conta: assinatura + setup + cronograma salvos na nuvem
+  // Dados da conta: setup + cronograma salvos na nuvem
   const conta = useQuery({
     queryKey: ["minha-conta", user?.id],
     queryFn: () => buscarConta(),
@@ -154,18 +154,14 @@ function PerfilPage() {
     if (user) {
       try {
         await gravarSetup({ data: { setup } });
-        if (conta.data?.active) {
-          await gravarPlano({ data: { plan: plan as CloudPlan } });
-        }
+        await gravarPlano({ data: { plan: plan as CloudPlan } });
         try {
           localStorage.setItem(SETUP_KEY, JSON.stringify(setup));
           localStorage.setItem(STORAGE_KEY, JSON.stringify(plan));
         } catch {
           /* cópia local é só segurança; a conta já guardou */
         }
-        toast.success(
-          conta.data?.active ? "Perfil salvo na sua conta!" : "Setup salvo na sua conta!",
-        );
+        toast.success("Perfil salvo na sua conta!");
       } catch {
         toast.error("Não deu para salvar agora. Tente de novo.");
       }
