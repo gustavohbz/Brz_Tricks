@@ -126,12 +126,6 @@ export function SiteHeader() {
                   Meus treinos
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link to="/planos">
-                  <Sparkles className="mr-2 size-4" />
-                  Planos
-                </Link>
-              </DropdownMenuItem>
               {/* Entrar ou sair da conta Google */}
               {conta ? (
                 <DropdownMenuItem

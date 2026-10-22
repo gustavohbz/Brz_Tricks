@@ -1,9 +1,9 @@
 // Replace this campaign with the advertiser's real destination when supplied.
 export const advertisingBanner = {
-  href: "/planos",
+  href: "/treinos",
   label: "Destaque · Skate do Zero",
   title: "Seu próximo passo começa no skate.",
-  action: "Conhecer os planos",
+  action: "Montar meu cronograma",
 };
 
 export const notifications = [

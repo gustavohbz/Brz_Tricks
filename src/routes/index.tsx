@@ -463,14 +463,11 @@ function Index() {
               <p className="mt-4 text-sm text-muted-foreground">
                 Monte sua semana escolhendo as manobras que quer treinar. Com uma
                 conta, o cronograma fica salvo na nuvem e você abre de qualquer
-                aparelho — os 7 primeiros dias são grátis.
+                aparelho.
               </p>
               <div className="mt-8 flex flex-wrap justify-center gap-3">
                 <Button asChild className="text-display">
                   <Link to="/treinos">Montar meu cronograma</Link>
-                </Button>
-                <Button asChild variant="secondary" className="text-display">
-                  <Link to="/planos">Ver planos</Link>
                 </Button>
               </div>
             </div>
