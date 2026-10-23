@@ -293,6 +293,8 @@ function TrickVideoField({
 function Index() {
   const [started, setStarted] = useState(false);
   const [trick, setTrick] = useState<Trick | null>(null);
+  // filtro de categoria escolhido dentro de cada tipo (Ollies, Variais, Flip's)
+  const [filtros, setFiltros] = useState<Record<string, Categoria | "todas">>({});
   // mapa { manobra: link } salvo no navegador, editado dentro do popup
   const { videos, setVideo, removeVideo } = useTrickVideos();
 
