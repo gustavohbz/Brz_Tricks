@@ -21,7 +21,14 @@ import { ChevronDown, PlayCircle } from "lucide-react"; // ícones
 
 
 
-import { sections, getRoadmap, type Trick } from "@/data/tricks";
+import {
+  sections,
+  getRoadmap,
+  CATEGORIAS,
+  categoriaLabel,
+  type Trick,
+  type Categoria,
+} from "@/data/tricks";
 import { Dicas } from "@/components/Dicas"; // seção de curiosidades e dicas
 import { AdvertisingBanner } from "@/components/AdvertisingBanner";
 import { Pistas } from "@/components/Pistas"; // seção de pistas de skate (mapa + comentários)
