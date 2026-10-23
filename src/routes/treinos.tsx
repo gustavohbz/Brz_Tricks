@@ -11,7 +11,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/use-auth";
 import { getMyAccount, saveMyPlan, type CloudPlan } from "@/lib/account.functions";
-import { Cronograma, emptyPlan, type Plan } from "@/components/Cronograma";
+import { Cronograma, emptyPlan, STORAGE_KEY, type Plan } from "@/components/Cronograma";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/treinos")({
@@ -47,23 +47,35 @@ function TreinosPage() {
     enabled: !!user,
   });
 
-  // Cópia local do cronograma para editar sem travar a tela
+  // Cache do navegador primeiro; a nuvem é cópia de segurança.
   const [plan, setPlan] = useState<Plan | null>(null);
   useEffect(() => {
-    if (conta.data && plan === null) {
-      setPlan({ ...emptyPlan(), ...(conta.data.planData as Plan) });
+    if (!conta.data || plan !== null) return;
+    let cache: Plan | null = null;
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) cache = JSON.parse(raw) as Plan;
+    } catch {
+      cache = null;
     }
+    const temCache = cache && Object.values(cache).some((l) => l?.length);
+    setPlan({ ...emptyPlan(), ...((temCache ? cache : conta.data.planData) as Plan) });
   }, [conta.data, plan]);
 
   const gravar = useMutation({
     mutationFn: (p: CloudPlan) => salvarPlano({ data: { plan: p } }),
-    onError: () => toast.error("Não deu para salvar agora."),
+    onError: () => toast.error("Salvo no navegador; a nuvem sincroniza depois."),
   });
 
-  // Salva pouco depois de a pessoa parar de mexer (evita salvar a cada clique)
+  // Salva no navegador na hora e na nuvem pouco depois
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const alterar = (novo: Plan) => {
     setPlan(novo);
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(novo));
+    } catch {
+      /* navegador bloqueou o armazenamento */
+    }
     if (timer.current) clearTimeout(timer.current);
     timer.current = setTimeout(() => gravar.mutate(novo), 800);
   };
@@ -77,20 +89,25 @@ function TreinosPage() {
     );
   }
 
-  /* ---------- sem conta ---------- */
+  /* ---------- sem conta: salva só no navegador ---------- */
   if (!user) {
     return (
-      <main className="flex min-h-screen items-center justify-center px-6 pt-14">
-        <div className="max-w-md rounded-xl border border-border bg-card p-8 text-center">
-          <h1 className="text-display text-4xl">Área de treinos</h1>
-          <p className="mt-3 text-sm text-muted-foreground">
-            Entre com sua conta Google para montar seu cronograma e deixar tudo
-            salvo na nuvem.
-          </p>
-          <Button asChild className="text-display mt-6 w-full">
-            <Link to="/entrar">Entrar com Google</Link>
-          </Button>
+      <main className="min-h-screen px-2 pt-20">
+        <div className="mx-auto max-w-6xl px-4">
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-card px-4 py-3">
+            <p className="text-sm">
+              Salvo neste navegador. Entre com Google para ter cópia na nuvem.
+            </p>
+            <Button asChild size="sm" className="text-display">
+              <Link to="/entrar">Entrar com Google</Link>
+            </Button>
+          </div>
         </div>
+        <Cronograma
+          title="Meus treinos"
+          eyebrow="Neste aparelho"
+          description="Escolha um dia e adicione as manobras — fica salvo neste navegador."
+        />
       </main>
     );
   }
