@@ -1,9 +1,27 @@
 /* =========================================================
    TIPOS
    ========================================================= */
+/* Categorias de dificuldade usadas no filtro da seção de manobras.
+   Os valores vão no banco do dado; os rótulos bonitos ficam em categoriaLabel. */
+export type Categoria = "iniciante" | "amador" | "avancado";
+
+export const CATEGORIAS: { value: Categoria | "todas"; label: string }[] = [
+  { value: "todas", label: "Todas" },
+  { value: "iniciante", label: "Iniciante" },
+  { value: "amador", label: "Amador" },
+  { value: "avancado", label: "Avançado" },
+];
+
+export const categoriaLabel: Record<Categoria, string> = {
+  iniciante: "Iniciante",
+  amador: "Amador",
+  avancado: "Avançado",
+};
+
 export type Trick = {
   name: string;
   level: string;
+  categoria: Categoria;
   desc: string;
   steps: string[];
   /** URL de vídeo (mp4/webm) mostrada no popup de hover. Opcional. */
