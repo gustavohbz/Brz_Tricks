@@ -29,7 +29,7 @@ export function youtubeId(url: string): string | null {
   const m = url.match(
     /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{6,})/,
   );
-  return m ? m[1] : null;
+  return m?.[1] ?? null;
 }
 
 /** Converte link do YouTube em URL de embed; devolve null se não for YouTube. */
