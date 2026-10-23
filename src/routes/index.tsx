@@ -445,13 +445,6 @@ function Index() {
           ))}
 
           {/* =================================================
-              SEÇÃO 4 — VÍDEOS RECOMENDADOS (prévia + player)
-              ================================================= */}
-          <section id="videos" className="border-t border-border px-6 py-24">
-            <VideosRecomendados />
-          </section>
-
-          {/* =================================================
               SEÇÃO 5 — PISTAS DE SKATE (mapa + comentários)
               ================================================= */}
           <section id="pistas" className="border-t border-border px-6 py-24">
@@ -466,7 +459,15 @@ function Index() {
           </section>
 
           {/* =================================================
-              SEÇÃO 7 — CRONOGRAMA DE TREINOS
+              SEÇÃO 7 — VÍDEOS RECOMENDADOS (prévia + player)
+              ================================================= */}
+          <section id="videos" className="border-t border-border px-6 py-24">
+            <VideosRecomendados />
+          </section>
+
+
+          {/* =================================================
+              SEÇÃO 8 — CRONOGRAMA DE TREINOS
               ================================================= */}
           <section id="cronograma" className="border-t border-border px-6 py-24">
             {/* Chamada para a área de treinos (cronograma salvo na conta) */}

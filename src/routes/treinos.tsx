@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { useAuth } from "@/lib/use-auth";
 import { getMyAccount, saveMyPlan, type CloudPlan } from "@/lib/account.functions";
 import { Cronograma, emptyPlan, STORAGE_KEY, type Plan } from "@/components/Cronograma";
+import { VideosRecomendados } from "@/components/VideosRecomendados";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/treinos")({
@@ -108,6 +109,11 @@ function TreinosPage() {
           eyebrow="Neste aparelho"
           description="Escolha um dia e adicione as manobras — fica salvo neste navegador."
         />
+
+        {/* vídeos recomendados, no fim da página do cronograma */}
+        <section className="mx-auto max-w-6xl px-4 py-16">
+          <VideosRecomendados />
+        </section>
       </main>
     );
   }
@@ -131,6 +137,11 @@ function TreinosPage() {
         eyebrow="Sua conta"
         description="Escolha um dia, adicione as manobras e o cronograma fica salvo na sua conta — dá para abrir de qualquer aparelho."
       />
+
+      {/* vídeos recomendados, no fim da página do cronograma */}
+      <section className="mx-auto max-w-6xl px-4 py-16">
+        <VideosRecomendados />
+      </section>
     </main>
   );
 }
