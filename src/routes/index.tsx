@@ -452,21 +452,21 @@ function Index() {
           </section>
 
           {/* =================================================
-              SEÇÃO 4 — PISTAS DE SKATE (mapa + comentários)
+              SEÇÃO 5 — PISTAS DE SKATE (mapa + comentários)
               ================================================= */}
           <section id="pistas" className="border-t border-border px-6 py-24">
             <Pistas />
           </section>
 
           {/* =================================================
-              SEÇÃO 5 — DICAS & CURIOSIDADES
+              SEÇÃO 6 — DICAS & CURIOSIDADES
               ================================================= */}
           <section id="dicas" className="border-t border-border px-6 py-24">
             <Dicas />
           </section>
 
           {/* =================================================
-              SEÇÃO 6 — CRONOGRAMA DE TREINOS
+              SEÇÃO 7 — CRONOGRAMA DE TREINOS
               ================================================= */}
           <section id="cronograma" className="border-t border-border px-6 py-24">
             {/* Chamada para a área de treinos (cronograma salvo na conta) */}
