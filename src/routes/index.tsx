@@ -21,7 +21,14 @@ import { ChevronDown, PlayCircle } from "lucide-react"; // ícones
 
 
 
-import { sections, getRoadmap, type Trick } from "@/data/tricks";
+import {
+  sections,
+  getRoadmap,
+  CATEGORIAS,
+  categoriaLabel,
+  type Trick,
+  type Categoria,
+} from "@/data/tricks";
 import { Dicas } from "@/components/Dicas"; // seção de curiosidades e dicas
 import { AdvertisingBanner } from "@/components/AdvertisingBanner";
 import { Pistas } from "@/components/Pistas"; // seção de pistas de skate (mapa + comentários)
@@ -286,6 +293,8 @@ function TrickVideoField({
 function Index() {
   const [started, setStarted] = useState(false);
   const [trick, setTrick] = useState<Trick | null>(null);
+  // filtro de categoria escolhido dentro de cada tipo (Ollies, Variais, Flip's)
+  const [filtros, setFiltros] = useState<Record<string, Categoria | "todas">>({});
   // mapa { manobra: link } salvo no navegador, editado dentro do popup
   const { videos, setVideo, removeVideo } = useTrickVideos();
 
@@ -407,7 +416,13 @@ function Index() {
           {/* =================================================
               SEÇÃO 3 — MANOBRAS (hover = vídeo, clique = modal)
               ================================================= */}
-          {sections.map((s) => (
+          {sections.map((s) => {
+            const filtro = filtros[s.id] ?? "todas";
+            const visiveis =
+              filtro === "todas"
+                ? s.tricks
+                : s.tricks.filter((t) => t.categoria === filtro);
+            return (
             <section key={s.id} id={s.id} className="border-t border-border px-6 py-24">
               <div className="mx-auto max-w-5xl">
                 <div className="flex flex-wrap items-end justify-between gap-4">
@@ -416,12 +431,36 @@ function Index() {
                     <p className="mt-2 max-w-lg text-sm text-muted-foreground">{s.tagline}</p>
                   </div>
                   <span className="text-display rounded-full border border-border px-4 py-1 text-xs text-primary">
-                    10 manobras
+                    {visiveis.length} manobras
                   </span>
                 </div>
 
+                {/* ---------- filtro por categoria (mesmo estilo do das pistas) ---------- */}
+                <div className="mt-6 flex flex-wrap items-center gap-2">
+                  <span className="text-display text-xs text-muted-foreground">Nível:</span>
+                  {CATEGORIAS.map((c) => (
+                    <button
+                      key={c.value}
+                      onClick={() => setFiltros((f) => ({ ...f, [s.id]: c.value }))}
+                      aria-pressed={filtro === c.value}
+                      className={`text-display rounded-full border px-3 py-1 text-xs transition-colors ${
+                        filtro === c.value
+                          ? "border-primary bg-primary text-primary-foreground"
+                          : "border-border text-muted-foreground hover:border-primary hover:text-primary"
+                      }`}
+                    >
+                      {c.label}
+                    </button>
+                  ))}
+                </div>
+
+                {visiveis.length === 0 ? (
+                  <p className="mt-8 text-sm text-muted-foreground">
+                    Nenhuma manobra nessa categoria ainda.
+                  </p>
+                ) : (
                 <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-                  {s.tricks.map((t, i) => (
+                  {visiveis.map((t, i) => (
                     <HoverCard key={t.name} openDelay={120} closeDelay={80}>
                       <HoverCardTrigger asChild>
                         <button
@@ -434,15 +473,20 @@ function Index() {
                           <span className="text-display mt-1 block text-lg leading-tight">
                             {t.name}
                           </span>
+                          <span className="text-display mt-1 block text-[10px] uppercase tracking-widest text-accent">
+                            {categoriaLabel[t.categoria]}
+                          </span>
                         </button>
                       </HoverCardTrigger>
                       <TrickHoverPreview trick={t} videoUrl={videos[t.name]} />
                     </HoverCard>
                   ))}
                 </div>
+                )}
               </div>
             </section>
-          ))}
+            );
+          })}
 
           {/* =================================================
               SEÇÃO 5 — PISTAS DE SKATE (mapa + comentários)
