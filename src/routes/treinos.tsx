@@ -117,7 +117,7 @@ function TreinosPage() {
     <main className="min-h-screen px-2 pt-20">
       <div className="mx-auto max-w-6xl px-4">
         <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-primary/30 bg-card px-4 py-3">
-          <p className="text-sm">Cronograma salvo na nuvem — dá para abrir de qualquer aparelho.</p>
+          <p className="text-sm">Salvo no navegador e com cópia na sua conta.</p>
           <span className="text-xs text-muted-foreground">
             {gravar.isPending ? "Salvando..." : "Tudo salvo"}
           </span>
