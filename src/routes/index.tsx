@@ -25,6 +25,7 @@ import { sections, getRoadmap, type Trick } from "@/data/tricks";
 import { Dicas } from "@/components/Dicas"; // seção de curiosidades e dicas
 import { AdvertisingBanner } from "@/components/AdvertisingBanner";
 import { Pistas } from "@/components/Pistas"; // seção de pistas de skate (mapa + comentários)
+import { VideosRecomendados } from "@/components/VideosRecomendados"; // seção de vídeos recomendados
 import {
   useTrickVideos,
   youtubeEmbed,
@@ -393,6 +394,13 @@ function Index() {
               >
                 Pistas de skate →
               </button>
+              {/* atalho para vídeos recomendados */}
+              <button
+                onClick={() => go("videos")}
+                className="text-display ml-6 mt-6 inline-block text-sm text-accent hover:text-primary"
+              >
+                Vídeos recomendados →
+              </button>
             </div>
           </section>
 
@@ -437,21 +445,29 @@ function Index() {
           ))}
 
           {/* =================================================
-              SEÇÃO 4 — PISTAS DE SKATE (mapa + comentários)
+              SEÇÃO 5 — PISTAS DE SKATE (mapa + comentários)
               ================================================= */}
           <section id="pistas" className="border-t border-border px-6 py-24">
             <Pistas />
           </section>
 
           {/* =================================================
-              SEÇÃO 5 — DICAS & CURIOSIDADES
+              SEÇÃO 6 — DICAS & CURIOSIDADES
               ================================================= */}
           <section id="dicas" className="border-t border-border px-6 py-24">
             <Dicas />
           </section>
 
           {/* =================================================
-              SEÇÃO 6 — CRONOGRAMA DE TREINOS
+              SEÇÃO 7 — VÍDEOS RECOMENDADOS (prévia + player)
+              ================================================= */}
+          <section id="videos" className="border-t border-border px-6 py-24">
+            <VideosRecomendados />
+          </section>
+
+
+          {/* =================================================
+              SEÇÃO 8 — CRONOGRAMA DE TREINOS
               ================================================= */}
           <section id="cronograma" className="border-t border-border px-6 py-24">
             {/* Chamada para a área de treinos (cronograma salvo na conta) */}
