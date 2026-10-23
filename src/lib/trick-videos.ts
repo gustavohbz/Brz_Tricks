@@ -24,12 +24,24 @@ export function isValidVideoUrl(url: string): boolean {
   }
 }
 
-/** Converte link do YouTube em URL de embed; devolve null se não for YouTube. */
-export function youtubeEmbed(url: string): string | null {
+/** Extrai o código do vídeo de um link do YouTube; null se não for YouTube. */
+export function youtubeId(url: string): string | null {
   const m = url.match(
     /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{6,})/,
   );
-  return m ? `https://www.youtube.com/embed/${m[1]}` : null;
+  return m ? m[1] : null;
+}
+
+/** Converte link do YouTube em URL de embed; devolve null se não for YouTube. */
+export function youtubeEmbed(url: string): string | null {
+  const id = youtubeId(url);
+  return id ? `https://www.youtube.com/embed/${id}` : null;
+}
+
+/** URL da capa do vídeo (a "previewzinha" mostrada antes do clique). */
+export function youtubeThumb(url: string): string | null {
+  const id = youtubeId(url);
+  return id ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : null;
 }
 
 /** Hook: lê/salva os links de vídeo das manobras. */
