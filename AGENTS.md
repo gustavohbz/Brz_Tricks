@@ -15,4 +15,5 @@
 - Google sign-in uses the generated Lovable OAuth helper and returns to the public sign-in page; navigate to training only after the account session is available.
 - Account creation is delegated to Google only; there is no email/password registration page or form, so avoid adding password auth flows unless the user asks for them.
 - Account persistence uses profiles only, with no subscription dependency; preserve Google profile creation without billing records so free account saving stays independent of legacy billing structures.
+- Remembered login is a browser-local navigation preference only, never authentication; profile controls derive from the actual session, saved local identity, and that preference to avoid treating a blank auto-generated identity as a returning account.
 - Prebundle shared Radix UI and OAuth dependencies in Vite's initial optimization pass to prevent late discovery from mixing React runtime generations in an open preview; preserve the config package's built-in React deduplication.
