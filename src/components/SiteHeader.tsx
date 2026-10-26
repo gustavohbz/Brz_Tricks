@@ -70,7 +70,7 @@ export function SiteHeader() {
 
   const controls = profileControls({
     signedIn: Boolean(conta), rememberedLogin,
-    localName: user?.name, localAvatar: user?.avatar,
+    localName: user?.name ?? "", localAvatar: user?.avatar ?? "",
   });
 
   // Controla se o popup de edição está aberto
