@@ -1,5 +1,5 @@
 # Requested changes
-- [ ] Retire legacy subscription signup automation and billing access; verify free schedule/setup saving and update documentation.
+- [x] Retire legacy subscription signup automation and billing access; free account setup/schedule save and reload verified, documentation updated. Historical billing schema remains deprecated and inaccessible because destructive schema removal is blocked by platform policy.
 - [x] Add a full-width clickable advertising banner (temporary destination: Plans; advertiser URL not provided).
 - [x] Add a notification bell beside the profile control, with read state.
 - [x] Repair managed Google sign-in and verify installed dependencies and OAuth initiation.
