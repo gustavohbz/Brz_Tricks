@@ -1,4 +1,5 @@
 # Requested changes
+- [ ] Retire legacy subscription signup automation and billing access; verify free schedule/setup saving and update documentation.
 - [x] Add a full-width clickable advertising banner (temporary destination: Plans; advertiser URL not provided).
 - [x] Add a notification bell beside the profile control, with read state.
 - [x] Repair managed Google sign-in and verify installed dependencies and OAuth initiation.
