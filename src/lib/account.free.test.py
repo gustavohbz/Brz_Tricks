@@ -48,11 +48,11 @@ class FreeAccountTest(unittest.TestCase):
                 await truck.fill("139mm QA free")
                 if not had_ollie:
                     await page.get_by_placeholder("Buscar manobra...").fill("Ollie")
-                    await page.get_by_role("button", name="Ollie Ollies", exact=True).click()
+                    await page.get_by_role("button", name="OllieOllies", exact=True).click()
                 await save.click()
                 await page.get_by_text("Perfil salvo na sua conta!", exact=True).wait_for()
                 # Eliminate local copies so reload must read the account's data.
-                await page.evaluate("() => {localStorage.removeItem('cronograma-treinos'); localStorage.removeItem('skate-setup');}")
+                await page.evaluate("() => {localStorage.removeItem('cronograma-treinos'); localStorage.removeItem('skate-do-zero:setup');}")
                 await page.reload()
                 await page.wait_for_timeout(2000)
                 self.assertEqual(await truck.input_value(), "139mm QA free")
