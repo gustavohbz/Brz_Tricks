@@ -8,7 +8,7 @@ O aplicativo será **gratuito**: não haverá cobrança nem plano pago. A divulg
 
 O convite do grupo ainda precisa ser configurado no código. O conteúdo do banner está centralizado em `src/data/site-messages.ts`, no objeto `advertisingBanner`. Quando o link estiver disponível, use a URL de convite do grupo no campo `href` e ajuste o texto de chamada.
 
-> **Estado atual:** esta decisão de produto já está definida, mas o código ainda contém referências antigas a teste grátis, assinatura e à página `/planos`. O banner também ainda aponta para essa página. Essas regras e destinos precisam ser atualizados antes que o comportamento do aplicativo corresponda totalmente a este modelo gratuito. Este README documenta o objetivo; não remove essas regras do código.
+O cronograma funciona gratuitamente no navegador, mesmo sem login. Com Google, o cronograma e o setup também podem ser salvos na conta, sem assinatura ou prazo de teste. O banner atualmente leva à área de treinos.
 
 ## O que o aplicativo oferece
 
@@ -50,7 +50,7 @@ Navegador
 
 | Caminho | O que contém |
 | --- | --- |
-| `src/routes/` | Páginas: início, entrada, perfil, planos e treinos |
+| `src/routes/` | Páginas: início, entrada, perfil e treinos |
 | `src/components/` | Componentes do produto, como cronograma, pistas, dicas e cabeçalho |
 | `src/components/ui/` | Componentes visuais reutilizáveis |
 | `src/data/tricks.ts` | Manobras, passos e roadmaps |
@@ -66,7 +66,8 @@ Navegador
 - `profiles`: perfil, configuração do skate e cronograma da conta.
 - `pistas`: pistas e suas informações geográficas.
 - `pista_comentarios`: avaliações e comentários associados a uma pista.
-- `subscriptions`: estrutura antiga de teste e assinatura que ainda aparece no código e deve ser revisada conforme o produto gratuito.
+
+A estrutura histórica de assinaturas está aposentada e não participa do cadastro nem do salvamento. Ela permanece apenas por compatibilidade com o histórico de alterações; não há integração de pagamentos ativa no aplicativo.
 
 As regras de acesso ao banco ficam nas migrations. Não altere uma tabela diretamente no painel sem também registrar a mudança em uma migration.
 
@@ -119,5 +120,5 @@ O repositório está conectado ao Lovable. Alterações feitas na plataforma pod
 2. `src/routes/index.tsx`: página inicial e apresentação do guia.
 3. `src/components/Cronograma.tsx`: criação do cronograma semanal.
 4. `src/components/Pistas.tsx`: consulta de pistas, mapa e comentários.
-5. `src/lib/subscription.functions.ts`: funções de conta e salvamento no servidor; ainda contém a regra antiga de assinatura.
+5. `src/lib/account.functions.ts`: leitura da conta e salvamento gratuito do cronograma e setup.
 6. `supabase/migrations/`: estrutura do banco e permissões.
