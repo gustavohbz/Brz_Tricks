@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import { CalendarDays, LogIn, LogOut, User } from "lucide-react";
 import { useLocalUser } from "@/lib/local-user";
 import { useAuth } from "@/lib/use-auth";
+import { LOGIN_HISTORY_KEY, profileControls } from "@/lib/profile-controls";
 import { NotificationBell } from "@/components/NotificationBell";
 import { Button } from "@/components/ui/button";
 import {
@@ -39,7 +40,38 @@ export function SiteHeader() {
   const { user, update, displayName } = useLocalUser();
 
   // Conta com Google (para o cronograma na nuvem)
-  const { user: conta, signOut } = useAuth();
+  const { user: conta, signOut, loading } = useAuth();
+  const [rememberedLogin, setRememberedLogin] = useState(false);
+  const [historyReady, setHistoryReady] = useState(false);
+
+  useEffect(() => {
+    const sync = () => {
+      try {
+        setRememberedLogin(localStorage.getItem(LOGIN_HISTORY_KEY) === "true");
+      } catch {
+        // Storage may be unavailable; an active session still shows Perfil.
+      }
+      setHistoryReady(true);
+    };
+    sync();
+    window.addEventListener("storage", sync);
+    return () => window.removeEventListener("storage", sync);
+  }, []);
+
+  useEffect(() => {
+    if (!conta) return;
+    setRememberedLogin(true);
+    try {
+      localStorage.setItem(LOGIN_HISTORY_KEY, "true");
+    } catch {
+      // Remembering a visit is optional and does not grant account access.
+    }
+  }, [conta]);
+
+  const controls = profileControls({
+    signedIn: Boolean(conta), rememberedLogin,
+    localName: user?.name ?? "", localAvatar: user?.avatar ?? "",
+  });
 
   // Controla se o popup de edição está aberto
   const [open, setOpen] = useState(false);
@@ -87,7 +119,7 @@ export function SiteHeader() {
           /* -------- usuário COM nome: menu suspenso -------- */
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="gap-2 px-2">
+              <Button variant="ghost" className="gap-2 px-2" aria-label="Perfil" title="Perfil">
                 {/* Avatar redondo; se não tiver URL, usa a inicial */}
                 <Avatar className="size-7">
                   {user?.avatar ? (
@@ -99,7 +131,7 @@ export function SiteHeader() {
                 </Avatar>
                 {/* Nome (some em telas muito pequenas) */}
                 <span className="hidden max-w-[10rem] truncate text-sm sm:inline">
-                  {displayName}
+                  Perfil
                 </span>
               </Button>
             </DropdownMenuTrigger>
@@ -156,17 +188,26 @@ export function SiteHeader() {
         ) : (
           /* -------- usuário SEM nome: botão de criar -------- */
           <div className="flex items-center gap-2">
-            <Button onClick={() => setOpen(true)} variant="ghost" className="gap-2 px-2 sm:px-4" aria-label="Criar meu perfil" title="Criar meu perfil">
-              <User className="size-4" />
-              <span className="hidden sm:inline">Criar meu perfil</span>
-            </Button>
+            {controls.label === "Perfil" ? (
+              <Button asChild variant="ghost" className="gap-2 px-2 sm:px-4" aria-label="Perfil" title="Perfil">
+                <Link to="/perfil">
+                  <User className="size-4" />
+                  <span className="hidden sm:inline">Perfil</span>
+                </Link>
+              </Button>
+            ) : (
+              <Button onClick={() => setOpen(true)} variant="ghost" className="gap-2 px-2 sm:px-4" aria-label="Criar meu perfil" title="Criar meu perfil">
+                <User className="size-4" />
+                <span className="hidden sm:inline">Criar meu perfil</span>
+              </Button>
+            )}
             {/* Conta com Google → cronograma na nuvem */}
-            <Button asChild variant="secondary" className="gap-2">
+            {historyReady && !loading && controls.showSignIn && <Button asChild variant="secondary" className="gap-2">
               <Link to="/entrar">
                 <LogIn className="size-4" />
                 Entrar
               </Link>
-            </Button>
+            </Button>}
           </div>
         )}
         </div>
