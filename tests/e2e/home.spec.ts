@@ -144,31 +144,66 @@ test("mantém textos dentro dos cartões e diálogos em todos os tamanhos de tel
     page.evaluate(() => {
       const selector =
         "main h1, main h2, main h3, main h4, main p, main li, main button, main a, main [role='tab'], main dt, main dd, [role='dialog'] h1, [role='dialog'] h2, [role='dialog'] h3, [role='dialog'] p, [role='dialog'] button, [role='dialog'] a";
+      const offenders: Array<{
+        tag: string;
+        text: string;
+        overflow: string;
+      }> = [];
 
-      return Array.from(document.querySelectorAll<HTMLElement>(selector))
-        .filter((element) => {
-          const style = getComputedStyle(element);
-          const rect = element.getBoundingClientRect();
-          if (
-            style.display === "none" ||
-            style.visibility === "hidden" ||
-            rect.width < 1 ||
-            rect.height < 1
-          ) {
-            return false;
-          }
-          if (style.overflowX === "auto" || style.overflowX === "scroll") return false;
-          return element.scrollWidth > element.clientWidth + 1;
-        })
-        .map((element) => ({
-          tag: element.tagName.toLowerCase(),
-          text: (element.innerText || element.textContent || "")
-            .trim()
-            .replace(/\s+/g, " ")
-            .slice(0, 90),
-          clientWidth: element.clientWidth,
-          scrollWidth: element.scrollWidth,
-        }));
+      for (const element of document.querySelectorAll<HTMLElement>(selector)) {
+        const style = getComputedStyle(element);
+        const rect = element.getBoundingClientRect();
+        if (
+          style.display === "none" ||
+          style.visibility === "hidden" ||
+          rect.width < 1 ||
+          rect.height < 1 ||
+          style.overflowX === "auto" ||
+          style.overflowX === "scroll"
+        ) {
+          continue;
+        }
+
+        const boundary =
+          element.closest<HTMLElement>(
+            "button, a, article, section, [role='dialog'], [class*='bg-card']",
+          ) ?? element.parentElement;
+        const boundaryRect = boundary?.getBoundingClientRect();
+        const boundaryStyle = boundary ? getComputedStyle(boundary) : null;
+        const contentLeft = boundaryRect && boundaryStyle
+          ? boundaryRect.left +
+            parseFloat(boundaryStyle.borderLeftWidth) +
+            parseFloat(boundaryStyle.paddingLeft)
+          : Number.NEGATIVE_INFINITY;
+        const contentRight = boundaryRect && boundaryStyle
+          ? boundaryRect.right -
+            parseFloat(boundaryStyle.borderRightWidth) -
+            parseFloat(boundaryStyle.paddingRight)
+          : Number.POSITIVE_INFINITY;
+
+        const range = document.createRange();
+        range.selectNodeContents(element);
+        const textOutsideBoundary = Array.from(range.getClientRects()).some(
+          (textRect) =>
+            textRect.left < contentLeft - 2 || textRect.right > contentRight + 2,
+        );
+        const elementHasOverflow = element.scrollWidth > element.clientWidth + 1;
+
+        if (textOutsideBoundary || elementHasOverflow) {
+          offenders.push({
+            tag: element.tagName.toLowerCase(),
+            text: (element.innerText || element.textContent || "")
+              .trim()
+              .replace(/\s+/g, " ")
+              .slice(0, 90),
+            overflow: textOutsideBoundary
+              ? "texto ultrapassa o cartão"
+              : "conteúdo ultrapassa o próprio componente",
+          });
+        }
+      }
+
+      return offenders;
     });
 
   await page.getByRole("button", { name: "Confira" }).click();
