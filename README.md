@@ -1,6 +1,6 @@
-# 🛹 Brz Tricks — Skate do Zero
+# 🛹 Brauza Skate Co.
 
-O Brz Tricks é um guia gratuito para quem está começando no skate. Reúne instruções de manobras, um cronograma de treinos, dicas e um mapa de pistas.
+A Brauza Skate Co. é um guia gratuito para quem está começando no skate. Reúne instruções de manobras, um cronograma de treinos, dicas e um mapa de pistas.
 
 ## Modelo do produto
 
@@ -85,8 +85,8 @@ As regras de acesso ao banco ficam nas migrations. Não altere uma tabela direta
 1. Clone o repositório:
 
    ```bash
-   git clone https://github.com/gustavohbz/Brz_Tricks.git
-   cd Brz_Tricks
+   git clone <URL-do-repositorio-conectado> brauza-skate-co
+   cd brauza-skate-co
    ```
 
 2. Instale as dependências:

@@ -18,13 +18,13 @@ import { Button } from "@/components/ui/button";
 export const Route = createFileRoute("/treinos")({
   head: () => ({
     meta: [
-      { title: "Meus treinos — Skate do Zero" },
+      { title: "Meus treinos — Brauza Skate Co." },
       {
         name: "description",
         content:
           "Monte seu cronograma semanal de treinos de skate e deixe salvo na nuvem para treinar de qualquer aparelho.",
       },
-      { property: "og:title", content: "Meus treinos — Skate do Zero" },
+      { property: "og:title", content: "Meus treinos — Brauza Skate Co." },
       {
         property: "og:description",
         content: "Seu cronograma de treinos de skate salvo na nuvem.",

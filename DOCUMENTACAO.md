@@ -1,4 +1,4 @@
-# 📘 Documentação do Código — Brz Tricks / Skate do Zero
+# 📘 Documentação do Código — Brauza Skate Co.
 
 Guia de leitura do projeto: o que cada arquivo faz, o que cada hook faz e como as
 partes se conectam. Feito para você abrir no VS Code e se localizar rápido.
