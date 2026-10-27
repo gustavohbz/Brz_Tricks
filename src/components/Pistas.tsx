@@ -381,7 +381,7 @@ export function Pistas() {
               setFiltro("todos");
               setCidadeFiltro("todas");
             }}
-            className="text-display rounded-md border border-border px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+            className="text-display min-h-11 rounded-md border border-border px-3 py-2 text-xs text-muted-foreground transition-colors hover:border-primary hover:text-primary"
           >
             Limpar filtros
           </button>
@@ -436,7 +436,7 @@ export function Pistas() {
                 <span className="text-display text-xs text-primary">
                   {nivelLabel[aberta.nivel]}
                 </span>
-                <DialogTitle className="text-display break-words pr-8 text-3xl">{aberta.nome}</DialogTitle>
+                <DialogTitle className="text-display break-words pr-12 text-3xl">{aberta.nome}</DialogTitle>
                 <DialogDescription className="break-words text-muted-foreground">
                   {aberta.endereco ?? `${aberta.cidade} — ${aberta.estado}`}
                 </DialogDescription>
