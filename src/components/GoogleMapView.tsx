@@ -84,7 +84,7 @@ export function GoogleMapView({
         href={mapsLink}
         target="_blank"
         rel="noreferrer"
-        className="text-display mt-2 inline-block text-xs text-accent hover:text-primary"
+        className="text-display mt-2 inline-flex min-h-11 items-center text-xs text-accent hover:text-primary"
       >
         Abrir no Google Maps →
       </a>
