@@ -57,7 +57,7 @@ export function TrickCategoryTabs({
                   {section.tagline}
                 </span>
                 <span className="text-display mt-auto block w-full whitespace-normal break-words pt-2 text-[10px] leading-tight text-primary sm:pt-4 sm:text-xs">
-                  Ver 10 manobras →
+                  Ver {section.tricks.length} manobras →
                 </span>
               </TabsTrigger>
             ))}
