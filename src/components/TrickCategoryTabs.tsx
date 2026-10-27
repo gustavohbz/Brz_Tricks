@@ -101,7 +101,7 @@ export function TrickCategoryTabs({
 
         return (
           <TabsContent key={section.id} value={section.id} className="mt-0">
-            <section id={section.id} className="border-t border-border px-6 py-24">
+            <section id={section.id} className="border-t border-border px-4 py-16 sm:px-6 sm:py-24">
               <div className="mx-auto max-w-5xl">
                 <div className="flex min-w-0 flex-wrap items-end justify-between gap-4">
                   <div className="min-w-0">
