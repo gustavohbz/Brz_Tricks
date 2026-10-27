@@ -70,7 +70,10 @@ export function Fundamentos() {
           onClick={() => setExpanded((current) => !current)}
           className="flex min-h-16 w-full min-w-0 items-center justify-between gap-4 rounded-lg border border-border bg-card px-5 py-4 text-left transition-colors hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-reduce:transition-none"
         >
-          <span className="min-w-0">
+          <span className="text-display shrink-0 text-3xl text-primary sm:text-5xl">
+            01
+          </span>
+          <span className="min-w-0 flex-1">
             <span className="text-display block text-sm text-accent">Comece do zero</span>
             <span className="text-display mt-1 block break-words text-3xl sm:text-4xl">
               Fundamentos
