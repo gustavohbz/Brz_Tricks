@@ -175,7 +175,7 @@ export function Dicas() {
               onClick={() => setAberta(open ? null : d.titulo)}
               aria-expanded={open}
               className={cn(
-                "shadow-street group rounded-lg border bg-card p-5 text-left transition-all hover:-translate-y-0.5",
+                "shadow-street group min-w-0 rounded-lg border bg-card p-5 text-left transition-all hover:-translate-y-0.5",
                 open ? "border-primary" : "border-border hover:border-primary",
               )}
             >
@@ -187,8 +187,8 @@ export function Dicas() {
                   <span className="text-display text-[0.65rem] uppercase tracking-widest text-accent">
                     {d.categoria}
                   </span>
-                  <h3 className="text-display mt-0.5 text-xl leading-tight">{d.titulo}</h3>
-                  <p className="mt-1 text-sm text-muted-foreground">{d.resumo}</p>
+                  <h3 className="text-display mt-0.5 break-words text-xl leading-tight">{d.titulo}</h3>
+                  <p className="mt-1 min-w-0 break-words text-sm text-muted-foreground">{d.resumo}</p>
                 </div>
                 <ChevronDown
                   className={cn(
@@ -205,7 +205,7 @@ export function Dicas() {
                   open ? "mt-3 grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0",
                 )}
               >
-                <p className="overflow-hidden border-l-2 border-primary pl-3 text-sm leading-relaxed text-foreground/90">
+                <p className="min-w-0 break-words overflow-hidden border-l-2 border-primary pl-3 text-sm leading-relaxed text-foreground/90">
                   {d.detalhe}
                 </p>
               </div>
