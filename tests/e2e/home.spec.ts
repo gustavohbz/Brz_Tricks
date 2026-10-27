@@ -72,7 +72,13 @@ test("permite criar identidade local pelo cabeçalho", async ({ page }) => {
   await page.getByRole("button", { name: "Criar meu perfil" }).click();
   const dialog = page.getByRole("dialog");
   await expect(dialog.getByRole("heading", { name: "Sua identidade" })).toBeVisible();
-  await dialog.getByPlaceholder("Ex.: Gustavo").fill("Skatista de teste");
+  const nome = dialog.getByLabel("Nome");
+  await expect(dialog.getByText("Avatar (URL)")).toHaveCount(0);
+  await nome.fill("João123! Silva");
+  await expect(nome).toHaveValue("João Silva");
+  await nome.fill("abcdefghijklmnopqrstuvwxy");
+  await expect(nome).toHaveValue("abcdefghijklmnopqrstuvw");
+  await nome.fill("Skatista de teste");
   await dialog.getByRole("button", { name: "Salvar" }).click();
   await expect(page.getByRole("button", { name: "Perfil" })).toBeVisible();
   await page.getByRole("button", { name: "Perfil" }).click();
