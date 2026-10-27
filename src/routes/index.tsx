@@ -26,6 +26,7 @@ import { TrickCategoryTabs } from "@/components/TrickCategoryTabs";
 import { Dicas } from "@/components/Dicas"; // seção de curiosidades e dicas
 import { AdvertisingBanner } from "@/components/AdvertisingBanner";
 import { Fundamentos } from "@/components/Fundamentos";
+import { Feedback } from "@/components/Feedback";
 import { Pistas } from "@/components/Pistas"; // seção de pistas de skate (mapa + comentários)
 import { VideosRecomendados } from "@/components/VideosRecomendados"; // seção de vídeos recomendados
 import {
@@ -426,8 +427,11 @@ function Index() {
           {/* =================================================
               FOOTER
               ================================================= */}
-          <footer className="border-t border-border px-4 py-8 sm:px-6 sm:py-10 text-center text-xs uppercase tracking-widest text-muted-foreground">
-            Caia, levante, repita.
+          <footer className="border-t border-border px-4 py-8 sm:px-6 sm:py-10">
+            <Feedback />
+            <p className="mt-8 text-center text-xs uppercase tracking-widest text-muted-foreground">
+              Caia, levante, repita.
+            </p>
           </footer>
         </>
       )}
