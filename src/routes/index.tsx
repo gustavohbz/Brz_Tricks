@@ -244,7 +244,7 @@ function TrickVideoField({
             onChange={(e) => setDraft(e.target.value.slice(0, 500))}
             onKeyDown={(e) => e.key === "Enter" && save()}
             placeholder="https://youtube.com/watch?v=... ou /videos/kickflip.mp4"
-            className="min-w-0 flex-1 rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
+            className="min-w-0 flex-1 rounded-md border border-border bg-background px-3 py-2 text-base outline-none focus:border-primary sm:text-sm"
           />
           <Button onClick={save} className="text-display shrink-0">
             Salvar
@@ -315,7 +315,7 @@ function Index() {
       {/* =====================================================
           SEÇÃO 1 — WELCOME
           ===================================================== */}
-      <section className="surface-asphalt relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 text-center">
+      <section className="surface-asphalt relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 text-center sm:px-6">
         <div className="pointer-events-none absolute inset-0 opacity-[0.07] [background-image:repeating-linear-gradient(90deg,transparent_0_38px,currentColor_38px_39px)]" />
         <p className="text-display relative text-sm text-primary">
           Bem-vindo à sua Wiki de Manobras
@@ -356,7 +356,7 @@ function Index() {
                 <HoverCardTrigger asChild>
                   <button
                     onClick={() => setTrick(t)}
-                    className="rounded-md border border-border bg-card px-4 py-5 text-left transition-all hover:border-primary hover:bg-secondary"
+                    className="min-w-0 break-words rounded-md border border-border bg-card px-4 py-5 text-left transition-all hover:border-primary hover:bg-secondary"
                   >
                     <span className="text-xs text-muted-foreground">
                       {String(i + 1).padStart(2, "0")}
@@ -377,21 +377,21 @@ function Index() {
           {/* =================================================
               SEÇÃO 5 — PISTAS DE SKATE (mapa + comentários)
               ================================================= */}
-          <section id="pistas" className="border-t border-border px-6 py-24">
+          <section id="pistas" className="border-t border-border px-4 py-16 sm:px-6 sm:py-24">
             <Pistas />
           </section>
 
           {/* =================================================
               SEÇÃO 6 — DICAS & CURIOSIDADES
               ================================================= */}
-          <section id="dicas" className="border-t border-border px-6 py-24">
+          <section id="dicas" className="border-t border-border px-4 py-16 sm:px-6 sm:py-24">
             <Dicas />
           </section>
 
           {/* =================================================
               SEÇÃO 7 — VÍDEOS RECOMENDADOS (prévia + player)
               ================================================= */}
-          <section id="videos" className="border-t border-border px-6 py-24">
+          <section id="videos" className="border-t border-border px-4 py-16 sm:px-6 sm:py-24">
             <VideosRecomendados />
           </section>
 
@@ -399,7 +399,7 @@ function Index() {
           {/* =================================================
               SEÇÃO 8 — CRONOGRAMA DE TREINOS
               ================================================= */}
-          <section id="cronograma" className="border-t border-border px-6 py-24">
+          <section id="cronograma" className="border-t border-border px-4 py-16 sm:px-6 sm:py-24">
             {/* Chamada para a área de treinos (cronograma salvo na conta) */}
             <div className="mx-auto max-w-2xl text-center">
               <p className="text-display text-xs tracking-widest text-primary">
@@ -422,7 +422,7 @@ function Index() {
           {/* =================================================
               FOOTER
               ================================================= */}
-          <footer className="border-t border-border px-6 py-10 text-center text-xs uppercase tracking-widest text-muted-foreground">
+          <footer className="border-t border-border px-4 py-8 sm:px-6 sm:py-10 text-center text-xs uppercase tracking-widest text-muted-foreground">
             Caia, levante, repita.
           </footer>
         </>
@@ -437,8 +437,8 @@ function Index() {
             <>
               <DialogHeader>
                 <span className="text-display text-xs text-primary">{trick.level}</span>
-                <DialogTitle className="text-display text-3xl">{trick.name}</DialogTitle>
-                <DialogDescription className="text-muted-foreground">
+                <DialogTitle className="text-display break-words pr-12 text-3xl">{trick.name}</DialogTitle>
+                <DialogDescription className="break-words text-muted-foreground">
                   {trick.desc}
                 </DialogDescription>
               </DialogHeader>
@@ -454,9 +454,9 @@ function Index() {
               {/* --- passos --- */}
               <ol className="mt-2 space-y-2">
                 {trick.steps.map((step, i) => (
-                  <li key={step} className="flex gap-3 text-sm">
+                  <li key={step} className="flex min-w-0 gap-3 text-sm">
                     <span className="text-display text-primary">{i + 1}</span>
-                    <span>{step}</span>
+                    <span className="min-w-0 break-words">{step}</span>
                   </li>
                 ))}
               </ol>

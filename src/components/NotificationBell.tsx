@@ -33,21 +33,21 @@ export function NotificationBell() {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button variant="ghost" size="icon" className="relative shrink-0" aria-label={unread ? `Notificações, ${unread} não lidas` : "Notificações"} title="Notificações">
+        <Button variant="ghost" size="icon" className="relative size-11 shrink-0" aria-label={unread ? `Notificações, ${unread} não lidas` : "Notificações"} title="Notificações">
           <Bell />
           {unread > 0 && <span className="absolute right-0 top-0 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] font-semibold text-primary-foreground" aria-hidden="true">{unread}</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent align="end" className="w-80 max-w-[calc(100vw-2rem)] p-0" aria-label="Notificações">
-        <div className="flex items-center justify-between border-b border-border px-4 py-3">
+        <div className="flex min-w-0 items-center justify-between gap-2 border-b border-border px-4 py-3">
           <h2 className="font-display text-xl">Notificações</h2>
           <Button variant="ghost" size="icon" disabled={!unread} onClick={() => markRead(notifications.map((item) => item.id))} aria-label="Marcar todas como lidas" title="Marcar todas como lidas"><CheckCheck /></Button>
         </div>
         <div className="divide-y divide-border">
           {notifications.map((item) => (
-            <Link key={item.id} to={item.href} onClick={() => { markRead([item.id]); setOpen(false); }} className="flex items-start gap-3 px-4 py-4 transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+            <Link key={item.id} to={item.href} onClick={() => { markRead([item.id]); setOpen(false); }} className="flex min-h-11 min-w-0 items-start gap-3 px-4 py-4 transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
               <span className={`mt-1.5 size-2 shrink-0 rounded-full ${ready && !read.includes(item.id) ? "bg-primary" : "bg-border"}`} />
-              <div><p className="text-sm font-semibold">{item.title}</p><p className="mt-1 text-xs leading-relaxed text-muted-foreground">{item.description}</p></div>
+              <div className="min-w-0"><p className="break-words text-sm font-semibold">{item.title}</p><p className="mt-1 break-words text-xs leading-relaxed text-muted-foreground">{item.description}</p></div>
             </Link>
           ))}
         </div>

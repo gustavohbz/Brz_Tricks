@@ -99,6 +99,17 @@ test("não cria rolagem horizontal e mantém controles tocáveis no viewport", a
   expect(box).not.toBeNull();
   expect(box!.width).toBeLessThanOrEqual(dimensions.viewport);
 
+  const header = page.locator("header");
+  for (const target of [
+    header.getByRole("button", { name: /Notificações/ }),
+    header.getByRole("button", { name: /Criar meu perfil/ }),
+  ]) {
+    const targetBox = await target.boundingBox();
+    expect(targetBox).not.toBeNull();
+    expect(targetBox!.width).toBeGreaterThanOrEqual(44);
+    expect(targetBox!.height).toBeGreaterThanOrEqual(44);
+  }
+
   for (const tab of await tabs.getByRole("tab").all()) {
     const tabBox = await tab.boundingBox();
     expect(tabBox).not.toBeNull();
@@ -136,4 +147,116 @@ test("filtra uma tentativa de script JavaScript no nome", async ({ page }) => {
   const identidade = await page.evaluate(() => localStorage.getItem("skate-do-zero:user"));
   expect(identidade).toContain("scriptalertscript");
   expect(identidade).not.toContain("<script>");
+});
+
+
+test("mantém textos dentro dos cartões e diálogos em todos os tamanhos de tela", async ({ page }) => {
+  const findOverflowingText = () =>
+    page.evaluate(() => {
+      const selector =
+        "main h1, main h2, main h3, main h4, main p, main li, main button, main a, main [role='tab'], main dt, main dd, [role='dialog'] h1, [role='dialog'] h2, [role='dialog'] h3, [role='dialog'] p, [role='dialog'] button, [role='dialog'] a";
+      const offenders: Array<{
+        tag: string;
+        text: string;
+        overflow: string;
+      }> = [];
+
+      for (const element of document.querySelectorAll<HTMLElement>(selector)) {
+        const style = getComputedStyle(element);
+        const rect = element.getBoundingClientRect();
+        if (
+          style.display === "none" ||
+          style.visibility === "hidden" ||
+          rect.width < 1 ||
+          rect.height < 1 ||
+          style.overflowX === "auto" ||
+          style.overflowX === "scroll"
+        ) {
+          continue;
+        }
+
+        const boundary =
+          element.closest<HTMLElement>(
+            "button, a, article, section, [role='dialog'], [class*='bg-card']",
+          ) ?? element.parentElement;
+        const boundaryRect = boundary?.getBoundingClientRect();
+        const boundaryStyle = boundary ? getComputedStyle(boundary) : null;
+        const contentLeft = boundaryRect && boundaryStyle
+          ? boundaryRect.left +
+            parseFloat(boundaryStyle.borderLeftWidth) +
+            parseFloat(boundaryStyle.paddingLeft)
+          : Number.NEGATIVE_INFINITY;
+        const contentRight = boundaryRect && boundaryStyle
+          ? boundaryRect.right -
+            parseFloat(boundaryStyle.borderRightWidth) -
+            parseFloat(boundaryStyle.paddingRight)
+          : Number.POSITIVE_INFINITY;
+
+        const range = document.createRange();
+        range.selectNodeContents(element);
+        const textOutsideBoundary = Array.from(range.getClientRects()).some(
+          (textRect) =>
+            textRect.left < contentLeft - 2 || textRect.right > contentRight + 2,
+        );
+        const elementHasOverflow = element.scrollWidth > element.clientWidth + 1;
+
+        if (textOutsideBoundary || elementHasOverflow) {
+          offenders.push({
+            tag: element.tagName.toLowerCase(),
+            text: (element.innerText || element.textContent || "")
+              .trim()
+              .replace(/\s+/g, " ")
+              .slice(0, 90),
+            overflow: textOutsideBoundary
+              ? "texto ultrapassa o cartão"
+              : "conteúdo ultrapassa o próprio componente",
+          });
+        }
+      }
+
+      return offenders;
+    });
+
+  await page.getByRole("button", { name: "Confira" }).click();
+  const tabs = page.getByRole("tablist", { name: "Categorias de manobras" });
+  for (const tab of await tabs.getByRole("tab").all()) {
+    await tab.click();
+    await expect(tab).toHaveAttribute("aria-selected", "true");
+    const overflows = await findOverflowingText();
+    expect(overflows, JSON.stringify(overflows)).toEqual([]);
+  }
+
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  const sectionOverflows = await findOverflowingText();
+  expect(sectionOverflows, JSON.stringify(sectionOverflows)).toEqual([]);
+
+  await page.getByRole("button", { name: "Criar meu perfil" }).click();
+  const profileDialog = page.getByRole("dialog");
+  await profileDialog.getByLabel("Nome").fill("WWWWWWWWWWWWWWWWWWWWWWW");
+  await expect(profileDialog.getByLabel("Nome")).toHaveValue("WWWWWWWWWWWWWWWWWWWWWWW");
+  const dialogOverflows = await findOverflowingText();
+  expect(dialogOverflows, JSON.stringify(dialogOverflows)).toEqual([]);
+  await profileDialog.getByRole("button", { name: "Salvar" }).click();
+  const profileMenu = page.getByRole("button", { name: "Perfil" });
+  await expect(profileMenu).toBeVisible();
+  await profileMenu.click();
+  await page.getByRole("menuitem", { name: "Perfil", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "WWWWWWWWWWWWWWWWWWWWWWW" })).toBeVisible();
+  const profileOverflows = await findOverflowingText();
+  expect(profileOverflows, JSON.stringify(profileOverflows)).toEqual([]);
+
+  for (const path of ["/treinos", "/entrar"]) {
+    await page.goto(path);
+    const routeOverflows = await findOverflowingText();
+    expect(routeOverflows, `${path}: ${JSON.stringify(routeOverflows)}`).toEqual([]);
+
+    if (await page.evaluate(() => window.innerWidth) < 640) {
+      const inputFontSizes = await page.locator("main input, main textarea").evaluateAll((fields) =>
+        fields.map((field) => Number.parseFloat(getComputedStyle(field).fontSize)),
+      );
+      for (const fontSize of inputFontSizes) {
+        expect(fontSize, `${path} input font size`).toBeGreaterThanOrEqual(16);
+      }
+    }
+  }
 });

@@ -215,7 +215,7 @@ function Comentarios({ pista }: { pista: Pista }) {
               onChange={(e) => setTexto(e.target.value.slice(0, 1000))}
               placeholder="Como é a pista? Piso, movimento, dicas..."
               rows={3}
-              className="mt-2 w-full resize-none rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
+              className="mt-2 w-full resize-none rounded-md border border-border bg-background px-3 py-2 text-base outline-none focus:border-primary sm:text-sm"
             />
             {/* Desabilitado enquanto salva ou se o texto está vazio */}
             <Button
@@ -337,7 +337,7 @@ export function Pistas() {
             key={n.value}
             onClick={() => setFiltro(n.value)}
             aria-pressed={filtro === n.value}
-            className={`text-display rounded-full border px-3 py-1 text-xs transition-colors ${
+            className={`text-display min-h-11 rounded-full border px-3 py-2 text-xs transition-colors ${
               filtro === n.value
                 ? "border-primary bg-primary text-primary-foreground" // selecionado
                 : "border-border text-muted-foreground hover:border-primary hover:text-primary"
@@ -356,7 +356,7 @@ export function Pistas() {
             key={c}
             onClick={() => setCidadeFiltro(c)}
             aria-pressed={cidadeFiltro === c}
-            className={`text-display rounded-full border px-3 py-1 text-xs transition-colors ${
+            className={`text-display min-h-11 rounded-full border px-3 py-2 text-xs transition-colors ${
               cidadeFiltro === c
                 ? "border-primary bg-primary text-primary-foreground"
                 : "border-border text-muted-foreground hover:border-primary hover:text-primary"
@@ -381,7 +381,7 @@ export function Pistas() {
               setFiltro("todos");
               setCidadeFiltro("todas");
             }}
-            className="text-display rounded-md border border-border px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+            className="text-display min-h-11 rounded-md border border-border px-3 py-2 text-xs text-muted-foreground transition-colors hover:border-primary hover:text-primary"
           >
             Limpar filtros
           </button>
@@ -393,32 +393,32 @@ export function Pistas() {
             <button
               key={p.id}
               onClick={() => setAberta(p)}
-              className="shadow-street group rounded-lg border border-border bg-card p-5 text-left transition-all hover:-translate-y-1 hover:border-primary"
+              className="shadow-street group w-full min-w-0 rounded-lg border border-border bg-card p-5 text-left transition-all hover:-translate-y-1 hover:border-primary"
             >
               <span className="text-display text-xs text-primary">
                 {nivelLabel[p.nivel]}
               </span>
-              <h3 className="text-display mt-1 text-2xl leading-tight">{p.nome}</h3>
+              <h3 className="text-display mt-1 break-words text-2xl leading-tight">{p.nome}</h3>
               {/* Cidade e estado */}
-              <p className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
-                <MapPin className="size-3.5" />
+              <p className="mt-1 flex min-w-0 items-center gap-1.5 text-xs text-muted-foreground">
+                <MapPin className="size-3.5 shrink-0" />
                 {p.cidade} — {p.estado}
               </p>
               {/* Tamanho e tipo de piso (se houver) */}
               {p.tamanho_m2 ? (
                 <p className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
-                  <Ruler className="size-3.5" />
+                  <Ruler className="size-3.5 shrink-0" />
                   {p.tamanho_m2.toLocaleString("pt-BR")} m²
                   {p.piso ? ` • ${p.piso}` : ""}
                 </p>
               ) : null}
               {/* Descrição curta (no máximo 3 linhas) */}
               {p.descricao ? (
-                <p className="mt-3 line-clamp-3 text-sm text-muted-foreground">
+                <p className="mt-3 min-w-0 break-words line-clamp-3 text-sm text-muted-foreground">
                   {p.descricao}
                 </p>
               ) : null}
-              <span className="text-display mt-4 inline-block text-xs text-accent transition-colors group-hover:text-primary">
+              <span className="text-display mt-4 block max-w-full whitespace-normal break-words text-xs text-accent transition-colors group-hover:text-primary">
                 Ver mapa e comentários →
               </span>
             </button>
@@ -436,8 +436,8 @@ export function Pistas() {
                 <span className="text-display text-xs text-primary">
                   {nivelLabel[aberta.nivel]}
                 </span>
-                <DialogTitle className="text-display text-3xl">{aberta.nome}</DialogTitle>
-                <DialogDescription className="text-muted-foreground">
+                <DialogTitle className="text-display break-words pr-12 text-3xl">{aberta.nome}</DialogTitle>
+                <DialogDescription className="break-words text-muted-foreground">
                   {aberta.endereco ?? `${aberta.cidade} — ${aberta.estado}`}
                 </DialogDescription>
               </DialogHeader>
@@ -446,7 +446,7 @@ export function Pistas() {
               <GoogleMapView lat={aberta.lat} lng={aberta.lng} title={aberta.nome} />
 
               {/* Ficha técnica: tamanho, piso, nível e cidade */}
-              <dl className="mt-4 grid grid-cols-2 gap-3 text-sm">
+              <dl className="mt-4 grid grid-cols-1 gap-3 text-sm min-[375px]:grid-cols-2">
                 <div>
                   <dt className="text-[11px] uppercase tracking-widest text-muted-foreground">
                     Tamanho
@@ -461,7 +461,7 @@ export function Pistas() {
                   <dt className="text-[11px] uppercase tracking-widest text-muted-foreground">
                     Piso
                   </dt>
-                  <dd>{aberta.piso ?? "Não informado"}</dd>
+                  <dd className="break-words">{aberta.piso ?? "Não informado"}</dd>
                 </div>
                 <div>
                   <dt className="text-[11px] uppercase tracking-widest text-muted-foreground">

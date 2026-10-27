@@ -63,7 +63,7 @@ function EntrarPage() {
 
   return (
     <main className="flex min-h-screen items-center justify-center px-6 pt-14">
-      <div className="w-full max-w-md rounded-xl border border-border bg-card p-8 text-center">
+      <div className="w-full max-w-md rounded-xl border border-border bg-card p-6 text-center sm:p-8">
         <p className="text-display text-xs tracking-widest text-primary">Sua conta</p>
         <h1 className="text-display mt-2 text-4xl">Entrar na Brauza Skate Co.</h1>
         <p className="mt-3 text-sm text-muted-foreground">

@@ -30,7 +30,7 @@ export function TrickCategoryTabs({
 
   return (
     <Tabs value={activeSection} onValueChange={setActiveSection}>
-      <section id="trilha" className="border-t border-border px-6 py-24">
+      <section id="trilha" className="border-t border-border px-4 py-16 sm:px-6 sm:py-24">
         <div className="mx-auto max-w-5xl">
           <p className="text-display text-sm text-accent">Trilha iniciante</p>
           <h2 className="text-display mt-2 text-4xl sm:text-5xl">
@@ -45,7 +45,7 @@ export function TrickCategoryTabs({
               <TabsTrigger
                 key={section.id}
                 value={section.id}
-                className="shadow-street group min-h-24 min-w-0 flex-col items-start justify-start rounded-lg border border-border bg-card p-3 text-left transition-all hover:-translate-y-1 hover:border-primary data-[state=active]:border-primary data-[state=active]:bg-secondary data-[state=active]:text-foreground sm:min-h-40 sm:p-6"
+                className="shadow-street group min-h-24 min-w-0 flex-col items-start justify-start whitespace-normal break-words rounded-lg border border-border bg-card p-3 text-left transition-all hover:-translate-y-1 hover:border-primary data-[state=active]:border-primary data-[state=active]:bg-secondary data-[state=active]:text-foreground sm:min-h-40 sm:p-6"
               >
                 <span className="text-display text-2xl text-muted-foreground transition-colors group-data-[state=active]:text-primary sm:text-5xl">
                   0{index + 1}
@@ -56,7 +56,7 @@ export function TrickCategoryTabs({
                 <span className="mt-2 hidden text-sm text-muted-foreground sm:block">
                   {section.tagline}
                 </span>
-                <span className="text-display mt-auto pt-2 text-[10px] text-primary sm:pt-4 sm:text-xs">
+                <span className="text-display mt-auto block w-full whitespace-normal break-words pt-2 text-[10px] leading-tight text-primary sm:pt-4 sm:text-xs">
                   Ver 10 manobras →
                 </span>
               </TabsTrigger>
@@ -66,7 +66,7 @@ export function TrickCategoryTabs({
           <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2">
             <button
               onClick={() => onNavigate("cronograma")}
-              className="text-display text-sm text-accent hover:text-primary"
+              className="text-display inline-flex min-h-11 items-center text-sm text-accent hover:text-primary"
             >
               Ou monte seu cronograma de treinos →
             </button>
@@ -101,18 +101,18 @@ export function TrickCategoryTabs({
 
         return (
           <TabsContent key={section.id} value={section.id} className="mt-0">
-            <section id={section.id} className="border-t border-border px-6 py-24">
+            <section id={section.id} className="border-t border-border px-4 py-16 sm:px-6 sm:py-24">
               <div className="mx-auto max-w-5xl">
-                <div className="flex flex-wrap items-end justify-between gap-4">
-                  <div>
-                    <h2 className="text-display text-4xl sm:text-6xl">
+                <div className="flex min-w-0 flex-wrap items-end justify-between gap-4">
+                  <div className="min-w-0">
+                    <h2 className="text-display break-words text-4xl sm:text-6xl">
                       {section.title}
                     </h2>
                     <p className="mt-2 max-w-lg text-sm text-muted-foreground">
                       {section.tagline}
                     </p>
                   </div>
-                  <span className="text-display rounded-full border border-border px-4 py-1 text-xs text-primary">
+                  <span className="text-display max-w-full whitespace-normal break-words rounded-full border border-border px-4 py-1 text-center text-xs text-primary">
                     {visibleTricks.length} manobras
                   </span>
                 </div>
@@ -131,7 +131,7 @@ export function TrickCategoryTabs({
                         }))
                       }
                       aria-pressed={filter === category.value}
-                      className={`text-display rounded-full border px-3 py-1 text-xs transition-colors ${
+                      className={`text-display min-h-11 rounded-full border px-3 py-2 text-xs transition-colors ${
                         filter === category.value
                           ? "border-primary bg-primary text-primary-foreground"
                           : "border-border text-muted-foreground hover:border-primary hover:text-primary"
