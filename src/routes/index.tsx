@@ -437,7 +437,7 @@ function Index() {
             <>
               <DialogHeader>
                 <span className="text-display text-xs text-primary">{trick.level}</span>
-                <DialogTitle className="text-display break-words pr-8 text-3xl">{trick.name}</DialogTitle>
+                <DialogTitle className="text-display break-words pr-12 text-3xl">{trick.name}</DialogTitle>
                 <DialogDescription className="break-words text-muted-foreground">
                   {trick.desc}
                 </DialogDescription>
