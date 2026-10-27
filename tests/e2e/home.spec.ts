@@ -31,7 +31,7 @@ test("apresenta os quatro fundamentos antes da trilha em grade mobile-first", as
   await expect(fundamentos.getByTestId("fundamentos-grid")).toBeHidden();
   await fundamentosToggle.click();
   await expect(fundamentos.getByRole("button", { name: "Recolher Fundamentos" })).toHaveAttribute("aria-expanded", "true");
-  await expect(fundamentos.getByRole("heading", { level: 2, name: "Fundamentos" })).toBeVisible();
+  await expect(fundamentos.locator("#fundamentos-title")).toHaveText("Fundamentos");
 
   for (const title of [
     "Base & stance",
