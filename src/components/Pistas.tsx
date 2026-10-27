@@ -393,32 +393,32 @@ export function Pistas() {
             <button
               key={p.id}
               onClick={() => setAberta(p)}
-              className="shadow-street group rounded-lg border border-border bg-card p-5 text-left transition-all hover:-translate-y-1 hover:border-primary"
+              className="shadow-street group min-w-0 rounded-lg border border-border bg-card p-5 text-left transition-all hover:-translate-y-1 hover:border-primary"
             >
               <span className="text-display text-xs text-primary">
                 {nivelLabel[p.nivel]}
               </span>
-              <h3 className="text-display mt-1 text-2xl leading-tight">{p.nome}</h3>
+              <h3 className="text-display mt-1 break-words text-2xl leading-tight">{p.nome}</h3>
               {/* Cidade e estado */}
-              <p className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
-                <MapPin className="size-3.5" />
+              <p className="mt-1 flex min-w-0 items-center gap-1.5 text-xs text-muted-foreground">
+                <MapPin className="size-3.5 shrink-0" />
                 {p.cidade} — {p.estado}
               </p>
               {/* Tamanho e tipo de piso (se houver) */}
               {p.tamanho_m2 ? (
                 <p className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
-                  <Ruler className="size-3.5" />
+                  <Ruler className="size-3.5 shrink-0" />
                   {p.tamanho_m2.toLocaleString("pt-BR")} m²
                   {p.piso ? ` • ${p.piso}` : ""}
                 </p>
               ) : null}
               {/* Descrição curta (no máximo 3 linhas) */}
               {p.descricao ? (
-                <p className="mt-3 line-clamp-3 text-sm text-muted-foreground">
+                <p className="mt-3 line-clamp-3 min-w-0 break-words text-sm text-muted-foreground">
                   {p.descricao}
                 </p>
               ) : null}
-              <span className="text-display mt-4 inline-block text-xs text-accent transition-colors group-hover:text-primary">
+              <span className="text-display mt-4 inline-block max-w-full whitespace-normal break-words text-xs text-accent transition-colors group-hover:text-primary">
                 Ver mapa e comentários →
               </span>
             </button>
@@ -436,8 +436,8 @@ export function Pistas() {
                 <span className="text-display text-xs text-primary">
                   {nivelLabel[aberta.nivel]}
                 </span>
-                <DialogTitle className="text-display text-3xl">{aberta.nome}</DialogTitle>
-                <DialogDescription className="text-muted-foreground">
+                <DialogTitle className="break-words pr-8 text-display text-3xl">{aberta.nome}</DialogTitle>
+                <DialogDescription className="break-words text-muted-foreground">
                   {aberta.endereco ?? `${aberta.cidade} — ${aberta.estado}`}
                 </DialogDescription>
               </DialogHeader>
@@ -461,7 +461,7 @@ export function Pistas() {
                   <dt className="text-[11px] uppercase tracking-widest text-muted-foreground">
                     Piso
                   </dt>
-                  <dd>{aberta.piso ?? "Não informado"}</dd>
+                  <dd className="break-words">{aberta.piso ?? "Não informado"}</dd>
                 </div>
                 <div>
                   <dt className="text-[11px] uppercase tracking-widest text-muted-foreground">
