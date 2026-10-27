@@ -99,7 +99,7 @@ export function Cronograma({
   const total = Object.values(plan).reduce((acc, list) => acc + list.length, 0);
 
   return (
-    <div className="mx-auto max-w-5xl">
+    <div className="mx-auto max-w-5xl px-2 sm:px-0">
       <p className="text-display text-sm text-accent">{eyebrow}</p>
       <h2 className="text-display mt-2 text-4xl sm:text-5xl">{title}</h2>
       <p className="mt-3 max-w-xl text-sm text-muted-foreground">{description}</p>
@@ -110,7 +110,7 @@ export function Cronograma({
           <button
             key={d.id}
             onClick={() => setDay(d.id)}
-            className={`text-display rounded-full border px-4 py-1.5 text-sm transition-colors ${
+            className={`text-display min-h-11 rounded-full border px-4 py-2 text-sm transition-colors ${
               day === d.id
                 ? "border-primary bg-primary text-primary-foreground"
                 : "border-border bg-card text-muted-foreground hover:border-primary"
@@ -135,7 +135,7 @@ export function Cronograma({
             value={query}
             onChange={(e) => setQuery(e.target.value.slice(0, 60))}
             placeholder="Buscar manobra..."
-            className="mt-2 w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
+            className="mt-2 w-full rounded-md border border-border bg-background px-3 py-2 text-base outline-none focus:border-primary sm:text-sm"
           />
 
           <ul
@@ -149,7 +149,7 @@ export function Cronograma({
                   <button
                     onClick={() => add(t.name)}
                     disabled={added}
-                    className="flex min-w-0 w-full items-center justify-between gap-3 rounded-md border border-transparent px-3 py-2 text-left transition-colors hover:border-border hover:bg-secondary disabled:opacity-40"
+                    className="flex min-h-11 min-w-0 w-full items-center justify-between gap-3 rounded-md border border-transparent px-3 py-2 text-left transition-colors hover:border-border hover:bg-secondary disabled:opacity-40"
                   >
                     <span className="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 break-words">
                       <span className="min-w-0 break-words text-sm">{t.name}</span>
