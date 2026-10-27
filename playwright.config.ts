@@ -20,9 +20,10 @@ export default defineConfig({
     { name: "mobile-landscape", use: { ...devices["iPhone 13"], defaultBrowserType: "chromium", viewport: { width: 844, height: 390 }, isMobile: false } },
   ],
   webServer: {
-    command: "pnpm dev --host 127.0.0.1 --port 4173",
+    command: "bun run dev --host 127.0.0.1 --port 4173",
     url: "http://127.0.0.1:4173",
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
   },
 });
+
