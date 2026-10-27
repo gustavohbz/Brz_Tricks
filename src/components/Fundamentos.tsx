@@ -59,6 +59,7 @@ export function Fundamentos() {
       className="scroll-mt-14 border-t border-border px-4 py-16 sm:px-6 sm:py-20"
     >
       <div className="mx-auto max-w-5xl">
+        <h2 id="fundamentos-title" className="sr-only">Fundamentos</h2>
         <button
           type="button"
           aria-expanded={expanded}
@@ -69,7 +70,7 @@ export function Fundamentos() {
         >
           <span className="min-w-0">
             <span className="text-display block text-sm text-accent">Comece do zero</span>
-            <span id="fundamentos-title" role="heading" aria-level={2} className="text-display mt-1 block break-words text-3xl sm:text-4xl">
+            <span className="text-display mt-1 block break-words text-3xl sm:text-4xl">
               Fundamentos
             </span>
             <span className="mt-2 block text-sm leading-relaxed text-muted-foreground">
