@@ -77,7 +77,7 @@ export function VideosRecomendados() {
                     href={video.url}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-display inline-flex max-w-full flex-wrap items-center gap-1 break-words text-xs text-primary"
+                    className="text-display inline-flex min-h-11 max-w-full flex-wrap items-center gap-1 break-words text-xs text-primary"
                   >
                     Abrir no YouTube <ExternalLink className="size-3" />
                   </a>
