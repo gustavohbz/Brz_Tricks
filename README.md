@@ -122,3 +122,18 @@ O repositório está conectado ao Lovable. Alterações feitas na plataforma pod
 4. `src/components/Pistas.tsx`: consulta de pistas, mapa e comentários.
 5. `src/lib/account.functions.ts`: leitura da conta e salvamento gratuito do cronograma e setup.
 6. `supabase/migrations/`: estrutura do banco e permissões.
+
+## Executar testes
+
+Os testes de lógica são executados com `bun test`. Os testes de interface usam
+Playwright e cobrem os fluxos principais da página inicial em desktop, tablet,
+celular, celular estreito e orientação paisagem.
+
+```bash
+bun install
+bun run test
+bun run test:e2e
+```
+
+Na primeira execução do Playwright, instale o Chromium com `bunx playwright install chromium`.
+Para executar os testes de lógica e interface em sequência, use `bun run test:all`.
