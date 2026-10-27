@@ -72,7 +72,13 @@ test("permite criar identidade local pelo cabeçalho", async ({ page }) => {
   await page.getByRole("button", { name: "Criar meu perfil" }).click();
   const dialog = page.getByRole("dialog");
   await expect(dialog.getByRole("heading", { name: "Sua identidade" })).toBeVisible();
-  await dialog.getByPlaceholder("Ex.: Gustavo").fill("Skatista de teste");
+  const nome = dialog.getByLabel("Nome");
+  await expect(dialog.getByText("Avatar (URL)")).toHaveCount(0);
+  await nome.fill("João123! Silva");
+  await expect(nome).toHaveValue("João Silva");
+  await nome.fill("abcdefghijklmnopqrstuvwxy");
+  await expect(nome).toHaveValue("abcdefghijklmnopqrstuvw");
+  await nome.fill("Skatista de teste");
   await dialog.getByRole("button", { name: "Salvar" }).click();
   await expect(page.getByRole("button", { name: "Perfil" })).toBeVisible();
   await page.getByRole("button", { name: "Perfil" }).click();
@@ -105,4 +111,29 @@ test("não cria rolagem horizontal e mantém controles tocáveis no viewport", a
     await card.hover();
     await expect(page.getByText("Clique para ver o roadmap")).toBeVisible();
   }
+});
+
+test("filtra uma tentativa de script JavaScript no nome", async ({ page }) => {
+  let alertaExecutado = false;
+  page.on("dialog", async (dialog) => {
+    alertaExecutado = true;
+    await dialog.dismiss();
+  });
+
+  await page.getByRole("button", { name: "Criar meu perfil" }).click();
+  const dialog = page.getByRole("dialog");
+  const nome = dialog.getByLabel("Nome");
+  await nome.fill("<script>alert(1)</script>");
+  await expect(nome).toHaveValue("scriptalertscript");
+  await dialog.getByRole("button", { name: "Salvar" }).click();
+
+  await expect(page.getByRole("button", { name: "Perfil" })).toBeVisible();
+  await page.getByRole("button", { name: "Perfil" }).click();
+  await expect(page.getByRole("menuitem", { name: /Entrar com Google/ })).toHaveCount(0);
+  await expect(page.getByText("scriptalertscript")).toBeVisible();
+  expect(alertaExecutado).toBe(false);
+
+  const identidade = await page.evaluate(() => localStorage.getItem("skate-do-zero:user"));
+  expect(identidade).toContain("scriptalertscript");
+  expect(identidade).not.toContain("<script>");
 });
