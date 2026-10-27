@@ -206,7 +206,7 @@ export function SiteHeader() {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="border-border bg-popover">
           <DialogHeader>
-            <DialogTitle className="text-display text-3xl">Sua identidade</DialogTitle>
+            <DialogTitle className="text-display break-words pr-8 text-3xl">Sua identidade</DialogTitle>
             <DialogDescription>
               Use até 23 letras e espaços. Seu nome fica salvo neste navegador.
             </DialogDescription>
