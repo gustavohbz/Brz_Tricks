@@ -75,12 +75,21 @@ export function Feedback() {
           <span id="feedback-count" className="text-xs text-muted-foreground">
             {message.length}/{MAX_FEEDBACK_LENGTH}
           </span>
-          <Button type="submit" disabled={sending || !message.trim()} className="text-display min-h-11">
+          <Button
+            type="submit"
+            disabled={sending || !message.trim()}
+            className="text-display min-h-11"
+          >
             <Send className="mr-2 size-4" aria-hidden="true" />
             {sending ? "Enviando..." : "Enviar feedback"}
           </Button>
         </div>
-        <p id="feedback-status" role="status" aria-live="polite" className="mt-3 min-h-5 text-sm text-muted-foreground">
+        <p
+          id="feedback-status"
+          role="status"
+          aria-live="polite"
+          className="mt-3 min-h-5 text-sm text-muted-foreground"
+        >
           {status}
         </p>
       </form>
