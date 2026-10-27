@@ -1,4 +1,5 @@
 # Requested changes
+- [ ] Restore package installation and preview startup, then verify the app opens without runtime errors.
 - [x] Rename the app to Brauza Skate Co. across pages, announcements, metadata, installable-app name and documentation, preserving existing browser data; six related unit tests pass.
 - [ ] Visually verify the renamed app: preview startup is blocked by package-download DNS failures (Vite unavailable).
 - [x] Retire legacy subscription signup automation and billing access; free account setup/schedule save and reload verified, documentation updated. Historical billing schema remains deprecated and inaccessible because destructive schema removal is blocked by platform policy.
