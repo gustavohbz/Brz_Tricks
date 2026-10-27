@@ -25,6 +25,7 @@ import { getRoadmap, categoriaLabel, type Trick } from "@/data/tricks";
 import { TrickCategoryTabs } from "@/components/TrickCategoryTabs";
 import { Dicas } from "@/components/Dicas"; // seção de curiosidades e dicas
 import { AdvertisingBanner } from "@/components/AdvertisingBanner";
+import { Fundamentos } from "@/components/Fundamentos";
 import { Pistas } from "@/components/Pistas"; // seção de pistas de skate (mapa + comentários)
 import { VideosRecomendados } from "@/components/VideosRecomendados"; // seção de vídeos recomendados
 import {
@@ -278,7 +279,7 @@ function TrickVideoField({
    ---------------------------------------------------------
    ESTADO (hooks):
    • started → false = só o hero aparece. Vira true no clique em
-     "Confira" e libera trilha + seções + footer.
+     "Confira" e libera fundamentos + trilha + seções + footer.
    • trick   → manobra selecionada. null = modal fechado;
      objeto = modal aberto com aquela manobra.
    FUNÇÃO:
@@ -303,7 +304,7 @@ function Index() {
   // ao liberar a trilha, espera a renderização antes de rolar
   useEffect(() => {
     if (!started) return;
-    const id = requestAnimationFrame(() => go("trilha"));
+    const id = requestAnimationFrame(() => go("fundamentos"));
     return () => cancelAnimationFrame(id);
   }, [started]);
 
@@ -349,6 +350,7 @@ function Index() {
 
       {started && (
         <>
+          <Fundamentos />
           <TrickCategoryTabs
             onNavigate={go}
             renderTrick={(t, i) => (

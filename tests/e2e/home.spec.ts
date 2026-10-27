@@ -22,6 +22,43 @@ test("inicia a experiência e apresenta a categoria inicial acessível", async (
   await expect(page.locator("#flips")).toHaveCount(0);
 });
 
+test("apresenta os quatro fundamentos antes da trilha em grade mobile-first", async ({ page }) => {
+  await page.getByRole("button", { name: "Confira" }).click();
+
+  const fundamentos = page.locator("#fundamentos");
+  await expect(fundamentos.getByRole("heading", { level: 2, name: "Fundamentos" })).toBeVisible();
+
+  for (const title of [
+    "Base & stance",
+    "Postura & equilíbrio",
+    "Remada correta",
+    "Curvas & frenagem básica",
+  ]) {
+    await expect(fundamentos.getByRole("heading", { level: 3, name: title })).toBeVisible();
+  }
+
+  const orderIsCorrect = await page.evaluate(() => {
+    const fundamentosSection = document.querySelector("#fundamentos");
+    const trailSection = document.querySelector("#trilha");
+    return Boolean(
+      fundamentosSection &&
+        trailSection &&
+        (fundamentosSection.compareDocumentPosition(trailSection) &
+          Node.DOCUMENT_POSITION_FOLLOWING),
+    );
+  });
+  expect(orderIsCorrect).toBe(true);
+
+  const columns = await fundamentos
+    .getByTestId("fundamentos-grid")
+    .evaluate((grid) => getComputedStyle(grid).gridTemplateColumns.split(" ").length);
+  expect(columns).toBe((page.viewportSize()?.width ?? 390) < 768 ? 1 : 2);
+
+  await fundamentos.getByRole("link", { name: /Ir para a trilha de manobras/ }).click();
+  await expect(page).toHaveURL(/#trilha$/);
+  await expect(page.locator("#trilha")).toBeInViewport();
+});
+
 test("permite trocar categorias por clique e teclado", async ({ page }) => {
   await page.getByRole("button", { name: "Confira" }).click();
   const tabs = page.getByRole("tablist", { name: "Categorias de manobras" });
