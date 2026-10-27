@@ -1,4 +1,5 @@
-import { ArrowRight } from "lucide-react";
+import { useState } from "react";
+import { ArrowRight, ChevronDown } from "lucide-react";
 
 const fundamentals = [
   {
@@ -49,6 +50,8 @@ const fundamentals = [
 ] as const;
 
 export function Fundamentos() {
+  const [expanded, setExpanded] = useState(false);
+
   return (
     <section
       id="fundamentos"
@@ -56,16 +59,37 @@ export function Fundamentos() {
       className="scroll-mt-14 border-t border-border px-4 py-16 sm:px-6 sm:py-20"
     >
       <div className="mx-auto max-w-5xl">
-        <p className="text-display text-sm text-accent">Comece do zero</p>
-        <h2 id="fundamentos-title" className="text-display mt-2 text-4xl sm:text-5xl">
-          Fundamentos
-        </h2>
-        <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-          Antes das manobras, construa confiança no skate. Vá no seu ritmo, pratique
-          em um lugar seguro e volte a estes passos sempre que precisar.
-        </p>
+        <button
+          type="button"
+          aria-expanded={expanded}
+          aria-controls="fundamentos-content"
+          aria-label={`${expanded ? "Recolher" : "Expandir"} Fundamentos`}
+          onClick={() => setExpanded((current) => !current)}
+          className="flex min-h-16 w-full min-w-0 items-center justify-between gap-4 rounded-lg border border-border bg-card px-5 py-4 text-left transition-colors hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-reduce:transition-none"
+        >
+          <span className="min-w-0">
+            <span className="text-display block text-sm text-accent">Comece do zero</span>
+            <span id="fundamentos-title" role="heading" aria-level={2} className="text-display mt-1 block break-words text-3xl sm:text-4xl">
+              Fundamentos
+            </span>
+            <span className="mt-2 block text-sm leading-relaxed text-muted-foreground">
+              Toque para {expanded ? "recolher" : "conhecer"} os passos essenciais antes das manobras.
+            </span>
+          </span>
+          <ChevronDown
+            aria-hidden="true"
+            className={`size-6 shrink-0 text-primary transition-transform duration-200 motion-reduce:transition-none ${expanded ? "rotate-180" : ""}`}
+          />
+        </button>
 
-        <div data-testid="fundamentos-grid" className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2">
+        {expanded && (
+          <div id="fundamentos-content" className="mt-6">
+            <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">
+              Antes das manobras, construa confiança no skate. Vá no seu ritmo, pratique
+              em um lugar seguro e volte a estes passos sempre que precisar.
+            </p>
+
+            <div data-testid="fundamentos-grid" className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
           {fundamentals.map((item) => (
             <article
               key={item.title}
@@ -102,15 +126,17 @@ export function Fundamentos() {
               </div>
             </article>
           ))}
-        </div>
+            </div>
 
-        <a
-          href="#trilha"
-          className="text-display mt-8 inline-flex min-h-11 max-w-full items-center gap-2 rounded-md border border-border px-4 py-2 text-sm text-accent transition-colors hover:border-primary hover:text-primary"
-        >
-          Ir para a trilha de manobras
-          <ArrowRight className="size-4 shrink-0" aria-hidden="true" />
-        </a>
+            <a
+              href="#trilha"
+              className="text-display mt-6 inline-flex min-h-11 max-w-full items-center gap-2 rounded-md border border-border px-4 py-2 text-sm text-accent transition-colors hover:border-primary hover:text-primary"
+            >
+              Ir para a trilha de manobras
+              <ArrowRight className="size-4 shrink-0" aria-hidden="true" />
+            </a>
+          </div>
+        )}
       </div>
     </section>
   );
