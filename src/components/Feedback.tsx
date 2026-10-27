@@ -72,7 +72,7 @@ export function Feedback() {
           className="mt-2 w-full resize-y rounded-md border border-border bg-background px-3 py-2 text-base leading-relaxed outline-none focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary"
         />
         <div className="mt-2 flex flex-wrap items-center justify-between gap-3">
-          <span id="feedback-count" className="text-xs text-muted-foreground" aria-live="polite">
+          <span id="feedback-count" className="text-xs text-muted-foreground">
             {message.length}/{MAX_FEEDBACK_LENGTH}
           </span>
           <Button type="submit" disabled={sending || !message.trim()} className="text-display min-h-11">
