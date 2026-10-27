@@ -110,7 +110,7 @@ export function SiteHeader() {
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
         {/* Logo — volta para o topo da home */}
         <Link to="/" className="text-display shrink-0 text-lg tracking-wide">
-          Skate <span className="text-primary">do Zero</span>
+          Brauza <span className="text-primary">Skate Co.</span>
         </Link>
 
         <div className="flex min-w-0 items-center gap-1 sm:gap-2">

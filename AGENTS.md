@@ -10,6 +10,8 @@
 <!-- LOVABLE:END -->
 
 ## App rules
+- Use the official npm registry for package installation so an unavailable package-cache mirror cannot prevent preview startup; retain the release-age guard.
+- Preserve existing browser-storage identifiers during branding changes so saved profiles, login history, setup and notification state remain available.
 - Advertising campaign content and notification announcements live in a shared browser-safe data module so destinations and messages have one source.
 - Notification read state is browser-local and is not an account inbox; avoid adding private messages to this public announcement list.
 - Google sign-in uses the generated Lovable OAuth helper and returns to the public sign-in page; navigate to training only after the account session is available.

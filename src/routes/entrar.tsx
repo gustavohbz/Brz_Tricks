@@ -14,16 +14,16 @@ import { Button } from "@/components/ui/button";
 export const Route = createFileRoute("/entrar")({
   head: () => ({
     meta: [
-      { title: "Entrar — Skate do Zero" },
+      { title: "Entrar — Brauza Skate Co." },
       {
         name: "description",
         content:
           "Entre com sua conta Google para salvar seu cronograma de treinos de skate na nuvem.",
       },
-      { property: "og:title", content: "Entrar — Skate do Zero" },
+      { property: "og:title", content: "Entrar — Brauza Skate Co." },
       {
         property: "og:description",
-        content: "Entre com o Google e salve seu cronograma no Skate do Zero.",
+        content: "Entre com o Google e salve seu cronograma na Brauza Skate Co.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -65,7 +65,7 @@ function EntrarPage() {
     <main className="flex min-h-screen items-center justify-center px-6 pt-14">
       <div className="w-full max-w-md rounded-xl border border-border bg-card p-8 text-center">
         <p className="text-display text-xs tracking-widest text-primary">Sua conta</p>
-        <h1 className="text-display mt-2 text-4xl">Entrar no Skate do Zero</h1>
+        <h1 className="text-display mt-2 text-4xl">Entrar na Brauza Skate Co.</h1>
         <p className="mt-3 text-sm text-muted-foreground">
           Use sua conta Google para salvar o cronograma na nuvem e treinar de
           qualquer aparelho.

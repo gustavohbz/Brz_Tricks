@@ -80,14 +80,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Skate do Zero — Guia de Manobras" },
+      { title: "Brauza Skate Co. — Guia de Manobras" },
       { name: "description", content: "Guia visual de manobras de skate para iniciantes." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "theme-color", content: "#1a1c20" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
-      { name: "apple-mobile-web-app-title", content: "Skate do Zero" },
+      { name: "apple-mobile-web-app-title", content: "Brauza Skate Co." },
     ],
     links: [
       {

@@ -61,13 +61,13 @@ export const Route = createFileRoute("/")({
 
   head: () => ({
     meta: [
-      { title: "Skate do Zero — Ollies, Variais e Flip's" },
+      { title: "Brauza Skate Co. — Ollies, Variais e Flip's" },
       {
         name: "description",
         content:
           "Comece no skate pelo caminho certo: 30 manobras explicadas passo a passo em Ollies, Variais e Flip's.",
       },
-      { property: "og:title", content: "Skate do Zero — Ollies, Variais e Flip's" },
+      { property: "og:title", content: "Brauza Skate Co. — Ollies, Variais e Flip's" },
       {
         property: "og:description",
         content: "Guia iniciante de skate com 30 manobras explicadas passo a passo.",
@@ -328,10 +328,10 @@ function Index() {
         <p className="text-display relative text-sm text-primary">
           Bem-vindo à sua Wiki de Manobras
         </p>
-        <h1 className="text-display relative mt-4 text-6xl leading-[0.85] sm:text-8xl md:text-9xl">
-          Skate
+        <h1 className="text-display relative mt-4 text-5xl leading-[0.95] sm:text-8xl md:text-9xl">
+          Brauza
           <br />
-          <span className="text-primary">do Zero</span>
+          <span className="text-primary">Skate Co.</span>
         </h1>
         <p className="relative mt-6 max-w-md text-base text-muted-foreground">
           Seu Aplicativo de Skatista para Skatista!

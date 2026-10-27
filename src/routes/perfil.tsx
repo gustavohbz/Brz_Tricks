@@ -30,13 +30,13 @@ export const Route = createFileRoute("/perfil")({
   // Metadados da aba do navegador e de compartilhamento (SEO/social)
   head: () => ({
     meta: [
-      { title: "Meu perfil — Skate do Zero" },
+      { title: "Meu perfil — Brauza Skate Co." },
       {
         name: "description",
         content:
           "Guarde seu setup de skate e monte o cronograma de treinos da semana — na sua conta, para abrir de qualquer aparelho.",
       },
-      { property: "og:title", content: "Meu perfil — Skate do Zero" },
+      { property: "og:title", content: "Meu perfil — Brauza Skate Co." },
       {
         property: "og:description",
         content: "Setup do skate e cronograma de treinos salvos na sua conta.",
