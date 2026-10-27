@@ -43,7 +43,7 @@ test("filtra por nível, mantém o filtro por categoria e expande a lista", asyn
 
   await expect(content.getByRole("button", { name: /Ver mais/ })).toBeVisible();
   await content.getByRole("button", { name: /Ver mais/ }).click();
-  await expect(cards).toHaveCount(10);
+  await expect(cards).toHaveCount(8);
   await content.getByRole("button", { name: "Ver menos" }).click();
   await expect(cards).toHaveCount(5);
 
@@ -55,6 +55,9 @@ test("filtra por nível, mantém o filtro por categoria e expande a lista", asyn
   await page.getByRole("tab", { name: /Variais/ }).click();
   await page.getByRole("tab", { name: /Ollies/ }).click();
   await expect(content.getByRole("button", { name: "Iniciante" })).toHaveAttribute("aria-pressed", "true");
+  await content.getByRole("button", { name: "Avançado" }).click();
+  await expect(content.getByText("Nenhuma manobra nessa categoria ainda.")).toBeVisible();
+  await expect(cards).toHaveCount(0);
 });
 
 test("abre detalhes da manobra e fecha com Escape", async ({ page }) => {
