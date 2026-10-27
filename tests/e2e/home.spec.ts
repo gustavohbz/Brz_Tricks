@@ -75,6 +75,8 @@ test("permite criar identidade local pelo cabeçalho", async ({ page }) => {
   await dialog.getByPlaceholder("Ex.: Gustavo").fill("Skatista de teste");
   await dialog.getByRole("button", { name: "Salvar" }).click();
   await expect(page.getByRole("button", { name: "Perfil" })).toBeVisible();
+  await page.getByRole("button", { name: "Perfil" }).click();
+  await expect(page.getByRole("menuitem", { name: /Entrar com Google/ })).toHaveCount(0);
   await expect.poll(() => page.evaluate(() => localStorage.getItem("skate-do-zero:user"))).toContain("Skatista de teste");
 });
 
