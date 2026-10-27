@@ -26,7 +26,12 @@ test("apresenta os quatro fundamentos antes da trilha em grade mobile-first", as
   await page.getByRole("button", { name: "Confira" }).click();
 
   const fundamentos = page.locator("#fundamentos");
-  await expect(fundamentos.getByRole("heading", { level: 2, name: "Fundamentos" })).toBeVisible();
+  const fundamentosToggle = fundamentos.getByRole("button", { name: "Expandir Fundamentos" });
+  await expect(fundamentosToggle).toHaveAttribute("aria-expanded", "false");
+  await expect(fundamentos.getByTestId("fundamentos-grid")).toBeHidden();
+  await fundamentosToggle.click();
+  await expect(fundamentos.getByRole("button", { name: "Recolher Fundamentos" })).toHaveAttribute("aria-expanded", "true");
+  await expect(fundamentos.locator("#fundamentos-title")).toHaveText("Fundamentos");
 
   for (const title of [
     "Base & stance",
@@ -258,6 +263,7 @@ test("mantém textos dentro dos cartões e diálogos em todos os tamanhos de tel
     });
 
   await page.getByRole("button", { name: "Confira" }).click();
+  await page.getByRole("button", { name: "Expandir Fundamentos" }).click();
   const tabs = page.getByRole("tablist", { name: "Categorias de manobras" });
   for (const tab of await tabs.getByRole("tab").all()) {
     await tab.click();
