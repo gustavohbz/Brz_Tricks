@@ -121,7 +121,7 @@ export function SiteHeader() {
           /* -------- usuário COM nome: menu suspenso -------- */
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="gap-2 px-2" aria-label="Perfil" title="Perfil">
+              <Button variant="ghost" className="min-h-11 min-w-11 gap-2 px-2" aria-label="Perfil" title="Perfil">
                 {/* Avatar redondo; se não tiver URL, usa a inicial */}
                 <Avatar className="size-7">
                   {user?.avatar ? (
@@ -137,7 +137,7 @@ export function SiteHeader() {
                 </span>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuContent align="end" className="w-56 max-w-[calc(100vw-1rem)]">
               <DropdownMenuLabel className="truncate">{displayName}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               {/* Vai para a página /perfil */}
@@ -184,14 +184,14 @@ export function SiteHeader() {
           /* -------- usuário SEM nome: botão de criar -------- */
           <div className="flex items-center gap-2">
             {controls.label === "Perfil" ? (
-              <Button asChild variant="ghost" className="gap-2 px-2 sm:px-4" aria-label="Perfil" title="Perfil">
+              <Button asChild variant="ghost" className="min-h-11 min-w-11 gap-2 px-2 sm:px-4" aria-label="Perfil" title="Perfil">
                 <Link to="/perfil">
                   <User className="size-4" />
                   <span className="hidden sm:inline">Perfil</span>
                 </Link>
               </Button>
             ) : (
-              <Button onClick={() => setOpen(true)} variant="ghost" className="gap-2 px-2 sm:px-4" aria-label="Criar meu perfil" title="Criar meu perfil">
+              <Button onClick={() => setOpen(true)} variant="ghost" className="min-h-11 min-w-11 gap-2 px-2 sm:px-4" aria-label="Criar meu perfil" title="Criar meu perfil">
                 <User className="size-4" />
                 <span className="hidden sm:inline">Criar meu perfil</span>
               </Button>
@@ -219,7 +219,7 @@ export function SiteHeader() {
               value={nome}
               onChange={(e) => setNome(sanitizeName(e.target.value))}
               placeholder="Ex.: Gustavo"
-              className="mt-2 w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
+              className="mt-2 w-full rounded-md border border-border bg-background px-3 py-2 text-base outline-none focus:border-primary sm:text-sm"
             />
           </label>
 
