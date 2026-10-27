@@ -1,7 +1,6 @@
 import { useState, type ReactNode } from "react";
 import {
   CATEGORIAS,
-  categoriaLabel,
   sections,
   type Categoria,
   type Trick,
