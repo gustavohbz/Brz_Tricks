@@ -295,6 +295,8 @@ function Index() {
   const [trick, setTrick] = useState<Trick | null>(null);
   // filtro de categoria escolhido dentro de cada tipo (Ollies, Variais, Flip's)
   const [filtros, setFiltros] = useState<Record<string, Categoria | "todas">>({});
+  // seções com a lista completa aberta ("Ver mais"); ausente/false = mostra só a 1ª linha
+  const [expandidos, setExpandidos] = useState<Record<string, boolean>>({});
   // mapa { manobra: link } salvo no navegador, editado dentro do popup
   const { videos, setVideo, removeVideo } = useTrickVideos();
 
@@ -422,6 +424,10 @@ function Index() {
               filtro === "todas"
                 ? s.tricks
                 : s.tricks.filter((t) => t.categoria === filtro);
+            // mostra só a primeira linha até a pessoa clicar em "Ver mais"
+            const limite = 5;
+            const aberto = !!expandidos[s.id];
+            const mostrados = aberto ? visiveis : visiveis.slice(0, limite);
             return (
             <section key={s.id} id={s.id} className="border-t border-border px-6 py-24">
               <div className="mx-auto max-w-5xl">
@@ -460,7 +466,7 @@ function Index() {
                   </p>
                 ) : (
                 <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-                  {visiveis.map((t, i) => (
+                  {mostrados.map((t, i) => (
                     <HoverCard key={t.name} openDelay={120} closeDelay={80}>
                       <HoverCardTrigger asChild>
                         <button
@@ -482,6 +488,18 @@ function Index() {
                     </HoverCard>
                   ))}
                 </div>
+                )}
+
+                {visiveis.length > limite && (
+                  <div className="mt-6 flex justify-center">
+                    <Button
+                      variant="outline"
+                      onClick={() => setExpandidos((e) => ({ ...e, [s.id]: !aberto }))}
+                      className="text-display"
+                    >
+                      {aberto ? "Ver menos" : `Ver mais (${visiveis.length - limite})`}
+                    </Button>
+                  </div>
                 )}
               </div>
             </section>
