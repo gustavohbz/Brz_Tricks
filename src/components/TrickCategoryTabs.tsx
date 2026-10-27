@@ -139,60 +139,60 @@ export function TrickCategoryTabs({
                 )}
 
                 <div id={section.id === "ollies" ? "ollies-content" : undefined} hidden={section.id === "ollies" && olliesCollapsed}>
-                <div className="mt-6 flex flex-wrap items-center gap-2">
-                  <span className="text-display text-xs text-muted-foreground">
-                    Nível:
-                  </span>
-                  {CATEGORIAS.map((category) => (
-                    <button
-                      key={category.value}
-                      onClick={() =>
-                        setFilters((current) => ({
-                          ...current,
-                          [section.id]: category.value,
-                        }))
-                      }
-                      aria-pressed={filter === category.value}
-                      className={`text-display min-h-11 rounded-full border px-3 py-2 text-xs transition-colors ${
-                        filter === category.value
-                          ? "border-primary bg-primary text-primary-foreground"
-                          : "border-border text-muted-foreground hover:border-primary hover:text-primary"
-                      }`}
-                    >
-                      {category.label}
-                    </button>
-                  ))}
-                </div>
-
-                {visibleTricks.length === 0 ? (
-                  <p className="mt-8 text-sm text-muted-foreground">
-                    Nenhuma manobra nessa categoria ainda.
-                  </p>
-                ) : (
-                  <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-                    {shownTricks.map((trick, index) => renderTrick(trick, index))}
+                  <div className="mt-6 flex flex-wrap items-center gap-2">
+                    <span className="text-display text-xs text-muted-foreground">
+                      Nível:
+                    </span>
+                    {CATEGORIAS.map((category) => (
+                      <button
+                        key={category.value}
+                        onClick={() =>
+                          setFilters((current) => ({
+                            ...current,
+                            [section.id]: category.value,
+                          }))
+                        }
+                        aria-pressed={filter === category.value}
+                        className={`text-display min-h-11 rounded-full border px-3 py-2 text-xs transition-colors ${
+                          filter === category.value
+                            ? "border-primary bg-primary text-primary-foreground"
+                            : "border-border text-muted-foreground hover:border-primary hover:text-primary"
+                        }`}
+                      >
+                        {category.label}
+                      </button>
+                    ))}
                   </div>
-                )}
-
-                {visibleTricks.length > limit && (
-                  <div className="mt-6 flex justify-center">
-                    <Button
-                      variant="outline"
-                      onClick={() =>
-                        setExpandedSections((current) => ({
-                          ...current,
-                          [section.id]: !expanded,
-                        }))
-                      }
-                      className="text-display"
-                    >
-                      {expanded
-                        ? "Ver menos"
-                        : `Ver mais (${visibleTricks.length - limit})`}
-                    </Button>
+  
+                  {visibleTricks.length === 0 ? (
+                    <p className="mt-8 text-sm text-muted-foreground">
+                      Nenhuma manobra nessa categoria ainda.
+                    </p>
+                  ) : (
+                    <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+                      {shownTricks.map((trick, index) => renderTrick(trick, index))}
+                    </div>
+                  )}
+  
+                  {visibleTricks.length > limit && (
+                    <div className="mt-6 flex justify-center">
+                      <Button
+                        variant="outline"
+                        onClick={() =>
+                          setExpandedSections((current) => ({
+                            ...current,
+                            [section.id]: !expanded,
+                          }))
+                        }
+                        className="text-display"
+                      >
+                        {expanded
+                          ? "Ver menos"
+                          : `Ver mais (${visibleTricks.length - limit})`}
+                      </Button>
+                    </div>
+                  )}
                   </div>
-                )}
-                </div>
               </div>
             </section>
           </TabsContent>
