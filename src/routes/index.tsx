@@ -356,12 +356,12 @@ function Index() {
                 <HoverCardTrigger asChild>
                   <button
                     onClick={() => setTrick(t)}
-                    className="rounded-md border border-border bg-card px-4 py-5 text-left transition-all hover:border-primary hover:bg-secondary"
+                    className="min-w-0 break-words rounded-md border border-border bg-card px-4 py-5 text-left transition-all hover:border-primary hover:bg-secondary"
                   >
                     <span className="text-xs text-muted-foreground">
                       {String(i + 1).padStart(2, "0")}
                     </span>
-                    <span className="text-display mt-1 block text-lg leading-tight">
+                    <span className="text-display mt-1 block break-words text-lg leading-tight">
                       {t.name}
                     </span>
                     <span className="text-display mt-1 block text-[10px] uppercase tracking-widest text-accent">
@@ -437,8 +437,8 @@ function Index() {
             <>
               <DialogHeader>
                 <span className="text-display text-xs text-primary">{trick.level}</span>
-                <DialogTitle className="text-display text-3xl">{trick.name}</DialogTitle>
-                <DialogDescription className="text-muted-foreground">
+                <DialogTitle className="break-words pr-8 text-display text-3xl">{trick.name}</DialogTitle>
+                <DialogDescription className="break-words text-muted-foreground">
                   {trick.desc}
                 </DialogDescription>
               </DialogHeader>
@@ -454,9 +454,9 @@ function Index() {
               {/* --- passos --- */}
               <ol className="mt-2 space-y-2">
                 {trick.steps.map((step, i) => (
-                  <li key={step} className="flex gap-3 text-sm">
+                  <li key={step} className="flex min-w-0 gap-3 text-sm">
                     <span className="text-display text-primary">{i + 1}</span>
-                    <span>{step}</span>
+                    <span className="min-w-0 break-words">{step}</span>
                   </li>
                 ))}
               </ol>
