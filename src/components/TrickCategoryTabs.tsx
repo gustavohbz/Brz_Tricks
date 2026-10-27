@@ -1,4 +1,5 @@
 import { useState, type ReactNode } from "react";
+import { ChevronDown } from "lucide-react";
 import {
   CATEGORIAS,
   sections,
@@ -27,6 +28,7 @@ export function TrickCategoryTabs({
   const [activeSection, setActiveSection] = useState<string>(DEFAULT_TRICK_SECTION_ID);
   const [filters, setFilters] = useState<Record<string, Categoria | "todas">>({});
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({});
+  const [olliesCollapsed, setOlliesCollapsed] = useState(false);
 
   return (
     <Tabs value={activeSection} onValueChange={setActiveSection}>
@@ -48,7 +50,7 @@ export function TrickCategoryTabs({
                 className="shadow-street group min-h-24 min-w-0 flex-col items-start justify-start whitespace-normal break-words rounded-lg border border-border bg-card p-3 text-left transition-all hover:-translate-y-1 hover:border-primary data-[state=active]:border-primary data-[state=active]:bg-secondary data-[state=active]:text-foreground sm:min-h-40 sm:p-6"
               >
                 <span className="text-display text-2xl text-muted-foreground transition-colors group-data-[state=active]:text-primary sm:text-5xl">
-                  0{index + 1}
+                  {String(index + 2).padStart(2, "0")}
                 </span>
                 <span className="text-display mt-1 text-sm leading-tight sm:mt-3 sm:text-2xl">
                   {section.title}
@@ -117,6 +119,26 @@ export function TrickCategoryTabs({
                   </span>
                 </div>
 
+                {section.id === "ollies" && (
+                  <div className="mt-4 flex justify-end">
+                    <button
+                      type="button"
+                      aria-expanded={!olliesCollapsed}
+                      aria-controls="ollies-content"
+                      aria-label={`${olliesCollapsed ? "Expandir" : "Recolher"} Ollies`}
+                      onClick={() => setOlliesCollapsed((current) => !current)}
+                      className="text-display inline-flex min-h-11 items-center gap-2 rounded-md border border-border px-3 py-2 text-sm text-accent transition-colors hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                    >
+                      {olliesCollapsed ? "Expandir Ollies" : "Recolher Ollies"}
+                      <ChevronDown
+                        aria-hidden="true"
+                        className={`size-4 transition-transform motion-reduce:transition-none ${olliesCollapsed ? "" : "rotate-180"}`}
+                      />
+                    </button>
+                  </div>
+                )}
+
+                <div id={section.id === "ollies" ? "ollies-content" : undefined} hidden={section.id === "ollies" && olliesCollapsed}>
                 <div className="mt-6 flex flex-wrap items-center gap-2">
                   <span className="text-display text-xs text-muted-foreground">
                     Nível:
@@ -170,6 +192,7 @@ export function TrickCategoryTabs({
                     </Button>
                   </div>
                 )}
+                </div>
               </div>
             </section>
           </TabsContent>
