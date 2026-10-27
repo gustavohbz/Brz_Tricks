@@ -59,7 +59,9 @@ export function Fundamentos() {
       className="scroll-mt-14 border-t border-border px-4 py-16 sm:px-6 sm:py-20"
     >
       <div className="mx-auto max-w-5xl">
-        <h2 id="fundamentos-title" className="sr-only">Fundamentos</h2>
+        <h2 id="fundamentos-title" className="sr-only">
+          Fundamentos
+        </h2>
         <button
           type="button"
           aria-expanded={expanded}
@@ -89,40 +91,43 @@ export function Fundamentos() {
               em um lugar seguro e volte a estes passos sempre que precisar.
             </p>
 
-            <div data-testid="fundamentos-grid" className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
-          {fundamentals.map((item) => (
-            <article
-              key={item.title}
-              className="group min-w-0 rounded-lg border border-border bg-card p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary motion-reduce:transition-none"
+            <div
+              data-testid="fundamentos-grid"
+              className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2"
             >
-              <div className="flex min-w-0 flex-wrap items-start justify-between gap-3">
-                <h3 className="text-display min-w-0 break-words text-xl leading-tight sm:text-2xl">
-                  {item.title}
-                </h3>
-                <span className="text-display max-w-full rounded-full border border-primary/40 bg-secondary px-3 py-1 text-xs text-primary">
-                  {item.focus}
-                </span>
-              </div>
-
-              <p className="mt-3 break-words text-sm leading-relaxed text-muted-foreground">
-                {item.description}
-              </p>
-
-              <div className="mt-5 rounded-md border-l-2 border-primary bg-secondary/50 p-4 transition-colors group-hover:bg-secondary/80">
-                <p className="text-display text-xs text-primary">Experimente</p>
-                <ul className="mt-3 space-y-3">
-                  {item.steps.map((step) => (
-                    <li key={step} className="flex min-w-0 items-start gap-3">
-                      <span
-                        aria-hidden="true"
-                        className="mt-2 size-1.5 shrink-0 rounded-full bg-primary"
-                      />
-                      <p className="min-w-0 break-words text-sm leading-relaxed">
-                        {step}
-                      </p>
-                    </li>
-                  ))}
-                </ul>
+              {fundamentals.map((item) => (
+                <article
+                  key={item.title}
+                  className="group min-w-0 rounded-lg border border-border bg-card p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary motion-reduce:transition-none"
+                >
+                  <div className="flex min-w-0 flex-wrap items-start justify-between gap-3">
+                    <h3 className="text-display min-w-0 break-words text-xl leading-tight sm:text-2xl">
+                      {item.title}
+                    </h3>
+                    <span className="text-display max-w-full rounded-full border border-primary/40 bg-secondary px-3 py-1 text-xs text-primary">
+                      {item.focus}
+                    </span>
+                  </div>
+    
+                  <p className="mt-3 break-words text-sm leading-relaxed text-muted-foreground">
+                    {item.description}
+                  </p>
+    
+                  <div className="mt-5 rounded-md border-l-2 border-primary bg-secondary/50 p-4 transition-colors group-hover:bg-secondary/80">
+                    <p className="text-display text-xs text-primary">Experimente</p>
+                    <ul className="mt-3 space-y-3">
+                      {item.steps.map((step) => (
+                        <li key={step} className="flex min-w-0 items-start gap-3">
+                          <span
+                            aria-hidden="true"
+                            className="mt-2 size-1.5 shrink-0 rounded-full bg-primary"
+                          />
+                          <p className="min-w-0 break-words text-sm leading-relaxed">
+                            {step}
+                          </p>
+                        </li>
+                      ))}
+                    </ul>
               </div>
             </article>
           ))}
