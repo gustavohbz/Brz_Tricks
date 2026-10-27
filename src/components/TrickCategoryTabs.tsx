@@ -30,7 +30,7 @@ export function TrickCategoryTabs({
 
   return (
     <Tabs value={activeSection} onValueChange={setActiveSection}>
-      <section id="trilha" className="border-t border-border px-4 py-16 sm:px-6 sm:py-24">
+      <section id="trilha" className="scroll-mt-14 border-t border-border px-4 py-16 sm:px-6 sm:py-24">
         <div className="mx-auto max-w-5xl">
           <p className="text-display text-sm text-accent">Trilha iniciante</p>
           <h2 className="text-display mt-2 text-4xl sm:text-5xl">
