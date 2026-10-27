@@ -40,9 +40,8 @@ export function SiteHeader() {
   const { user, update, displayName } = useLocalUser();
 
   // Conta com Google (para o cronograma na nuvem)
-  const { user: conta, signOut, loading } = useAuth();
+  const { user: conta, signOut } = useAuth();
   const [rememberedLogin, setRememberedLogin] = useState(false);
-  const [historyReady, setHistoryReady] = useState(false);
 
   useEffect(() => {
     const sync = () => {
@@ -51,7 +50,6 @@ export function SiteHeader() {
       } catch {
         // Storage may be unavailable; an active session still shows Perfil.
       }
-      setHistoryReady(true);
     };
     sync();
     window.addEventListener("storage", sync);
@@ -201,13 +199,7 @@ export function SiteHeader() {
                 <span className="hidden sm:inline">Criar meu perfil</span>
               </Button>
             )}
-            {/* Conta com Google → cronograma na nuvem */}
-            {historyReady && !loading && controls.showSignIn && <Button asChild variant="secondary" className="gap-2">
-              <Link to="/entrar">
-                <LogIn className="size-4" />
-                Entrar
-              </Link>
-            </Button>}
+
           </div>
         )}
         </div>
