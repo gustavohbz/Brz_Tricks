@@ -70,7 +70,7 @@ function Field({
         // Limita cada campo a 60 caracteres
         onChange={(e) => onChange(e.target.value.slice(0, 60))}
         placeholder={placeholder}
-        className="mt-2 w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
+        className="mt-2 w-full rounded-md border border-border bg-background px-3 py-2 text-base outline-none focus:border-primary sm:text-sm"
       />
     </label>
   );
@@ -211,7 +211,7 @@ function PerfilPage() {
       </p>
 
       {/* ---------- SEÇÃO: IDENTIDADE ---------- */}
-      <section className="mt-10 rounded-lg border border-border bg-card p-5">
+      <section className="mt-10 rounded-lg border border-border bg-card p-4 sm:p-5">
         <h2 className="text-display text-2xl">Quem você é</h2>
         {user ? (
           <div className="mt-4 flex items-center gap-3">
