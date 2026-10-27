@@ -244,7 +244,7 @@ function TrickVideoField({
             onChange={(e) => setDraft(e.target.value.slice(0, 500))}
             onKeyDown={(e) => e.key === "Enter" && save()}
             placeholder="https://youtube.com/watch?v=... ou /videos/kickflip.mp4"
-            className="min-w-0 flex-1 rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
+            className="min-w-0 flex-1 rounded-md border border-border bg-background px-3 py-2 text-base outline-none focus:border-primary sm:text-sm"
           />
           <Button onClick={save} className="text-display shrink-0">
             Salvar
@@ -315,7 +315,7 @@ function Index() {
       {/* =====================================================
           SEÇÃO 1 — WELCOME
           ===================================================== */}
-      <section className="surface-asphalt relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 text-center">
+      <section className="surface-asphalt relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 text-center sm:px-6">
         <div className="pointer-events-none absolute inset-0 opacity-[0.07] [background-image:repeating-linear-gradient(90deg,transparent_0_38px,currentColor_38px_39px)]" />
         <p className="text-display relative text-sm text-primary">
           Bem-vindo à sua Wiki de Manobras
@@ -356,7 +356,7 @@ function Index() {
                 <HoverCardTrigger asChild>
                   <button
                     onClick={() => setTrick(t)}
-                    className="rounded-md border border-border bg-card px-4 py-5 text-left transition-all hover:border-primary hover:bg-secondary"
+                    className="min-w-0 break-words rounded-md border border-border bg-card px-4 py-5 text-left transition-all hover:border-primary hover:bg-secondary"
                   >
                     <span className="text-xs text-muted-foreground">
                       {String(i + 1).padStart(2, "0")}
@@ -377,7 +377,7 @@ function Index() {
           {/* =================================================
               SEÇÃO 5 — PISTAS DE SKATE (mapa + comentários)
               ================================================= */}
-          <section id="pistas" className="border-t border-border px-6 py-24">
+          <section id="pistas" className="border-t border-border px-4 py-16 sm:px-6 sm:py-24">
             <Pistas />
           </section>
 
@@ -422,7 +422,7 @@ function Index() {
           {/* =================================================
               FOOTER
               ================================================= */}
-          <footer className="border-t border-border px-6 py-10 text-center text-xs uppercase tracking-widest text-muted-foreground">
+          <footer className="border-t border-border px-4 py-8 sm:px-6 sm:py-10 text-center text-xs uppercase tracking-widest text-muted-foreground">
             Caia, levante, repita.
           </footer>
         </>
