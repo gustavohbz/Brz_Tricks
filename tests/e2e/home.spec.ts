@@ -99,6 +99,17 @@ test("não cria rolagem horizontal e mantém controles tocáveis no viewport", a
   expect(box).not.toBeNull();
   expect(box!.width).toBeLessThanOrEqual(dimensions.viewport);
 
+  const header = page.locator("header");
+  for (const target of [
+    header.getByRole("button", { name: /Notificações/ }),
+    header.getByRole("button", { name: /Criar meu perfil/ }),
+  ]) {
+    const targetBox = await target.boundingBox();
+    expect(targetBox).not.toBeNull();
+    expect(targetBox!.width).toBeGreaterThanOrEqual(44);
+    expect(targetBox!.height).toBeGreaterThanOrEqual(44);
+  }
+
   for (const tab of await tabs.getByRole("tab").all()) {
     const tabBox = await tab.boundingBox();
     expect(tabBox).not.toBeNull();
@@ -222,4 +233,19 @@ test("mantém textos dentro dos cartões e diálogos em todos os tamanhos de tel
   await page.getByRole("button", { name: "Criar meu perfil" }).click();
   const dialogOverflows = await findOverflowingText();
   expect(dialogOverflows, JSON.stringify(dialogOverflows)).toEqual([]);
+
+  for (const path of ["/perfil", "/treinos", "/entrar"]) {
+    await page.goto(path);
+    const routeOverflows = await findOverflowingText();
+    expect(routeOverflows, `${path}: ${JSON.stringify(routeOverflows)}`).toEqual([]);
+
+    if (await page.evaluate(() => window.innerWidth) < 640) {
+      const inputFontSizes = await page.locator("main input, main textarea").evaluateAll((fields) =>
+        fields.map((field) => Number.parseFloat(getComputedStyle(field).fontSize)),
+      );
+      for (const fontSize of inputFontSizes) {
+        expect(fontSize, `${path} input font size`).toBeGreaterThanOrEqual(16);
+      }
+    }
+  }
 });
