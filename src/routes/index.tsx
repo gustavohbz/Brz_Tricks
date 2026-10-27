@@ -350,6 +350,7 @@ function Index() {
       {started && (
         <>
           <TrickCategoryTabs
+            onNavigate={go}
             renderTrick={(t, i) => (
               <HoverCard key={t.name} openDelay={120} closeDelay={80}>
                 <HoverCardTrigger asChild>
