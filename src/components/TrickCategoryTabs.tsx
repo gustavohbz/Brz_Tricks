@@ -138,7 +138,10 @@ export function TrickCategoryTabs({
                   </div>
                 )}
 
-                <div id={section.id === "ollies" ? "ollies-content" : undefined} hidden={section.id === "ollies" && olliesCollapsed}>
+                <div
+                  id={section.id === "ollies" ? "ollies-content" : undefined}
+                  hidden={section.id === "ollies" && olliesCollapsed}
+                >
                   <div className="mt-6 flex flex-wrap items-center gap-2">
                     <span className="text-display text-xs text-muted-foreground">
                       Nível:
