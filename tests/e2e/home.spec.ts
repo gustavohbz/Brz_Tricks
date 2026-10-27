@@ -237,9 +237,15 @@ test("mantém textos dentro dos cartões e diálogos em todos os tamanhos de tel
   const dialogOverflows = await findOverflowingText();
   expect(dialogOverflows, JSON.stringify(dialogOverflows)).toEqual([]);
   await profileDialog.getByRole("button", { name: "Salvar" }).click();
-  await expect(page.getByRole("button", { name: "Perfil" })).toBeVisible();
+  const profileMenu = page.getByRole("button", { name: "Perfil" });
+  await expect(profileMenu).toBeVisible();
+  await profileMenu.click();
+  await page.getByRole("menuitem", { name: "Perfil", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "WWWWWWWWWWWWWWWWWWWWWWW" })).toBeVisible();
+  const profileOverflows = await findOverflowingText();
+  expect(profileOverflows, JSON.stringify(profileOverflows)).toEqual([]);
 
-  for (const path of ["/perfil", "/treinos", "/entrar"]) {
+  for (const path of ["/treinos", "/entrar"]) {
     await page.goto(path);
     const routeOverflows = await findOverflowingText();
     expect(routeOverflows, `${path}: ${JSON.stringify(routeOverflows)}`).toEqual([]);
