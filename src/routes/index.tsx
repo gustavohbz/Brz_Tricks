@@ -284,7 +284,7 @@ function TrickVideoField({
    ---------------------------------------------------------
    ESTADO (hooks):
    • started → false = só o hero aparece. Vira true no clique em
-     "Sou iniciante" e libera trilha + seções + footer.
+     "Confira" e libera trilha + seções + footer.
    • trick   → manobra selecionada. null = modal fechado;
      objeto = modal aberto com aquela manobra.
    FUNÇÃO:
@@ -345,7 +345,7 @@ function Index() {
             onClick={() => setStarted(true)}
             className="text-display ring-glow h-14 px-10 text-lg"
           >
-            Sou iniciante
+            Confira
           </Button>
           <span className="text-xs uppercase tracking-widest text-muted-foreground">
             Outros níveis em breve
