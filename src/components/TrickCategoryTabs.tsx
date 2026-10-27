@@ -192,7 +192,7 @@ export function TrickCategoryTabs({
                       </Button>
                     </div>
                   )}
-                  </div>
+                </div>
               </div>
             </section>
           </TabsContent>
