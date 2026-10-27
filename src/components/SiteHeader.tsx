@@ -12,7 +12,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { CalendarDays, LogIn, LogOut, User } from "lucide-react";
+import { CalendarDays, LogOut, User } from "lucide-react";
 import { useLocalUser } from "@/lib/local-user";
 import { useAuth } from "@/lib/use-auth";
 import { LOGIN_HISTORY_KEY, profileControls } from "@/lib/profile-controls";
@@ -40,9 +40,8 @@ export function SiteHeader() {
   const { user, update, displayName } = useLocalUser();
 
   // Conta com Google (para o cronograma na nuvem)
-  const { user: conta, signOut, loading } = useAuth();
+  const { user: conta, signOut } = useAuth();
   const [rememberedLogin, setRememberedLogin] = useState(false);
-  const [historyReady, setHistoryReady] = useState(false);
 
   useEffect(() => {
     const sync = () => {
@@ -51,7 +50,6 @@ export function SiteHeader() {
       } catch {
         // Storage may be unavailable; an active session still shows Perfil.
       }
-      setHistoryReady(true);
     };
     sync();
     window.addEventListener("storage", sync);
@@ -158,8 +156,8 @@ export function SiteHeader() {
                   Meus treinos
                 </Link>
               </DropdownMenuItem>
-              {/* Entrar ou sair da conta Google */}
-              {conta ? (
+              {/* Sair da conta Google */}
+              {conta && (
                 <DropdownMenuItem
                   onClick={async () => {
                     await signOut();
@@ -168,13 +166,6 @@ export function SiteHeader() {
                 >
                   <LogOut className="mr-2 size-4" />
                   Sair da conta
-                </DropdownMenuItem>
-              ) : (
-                <DropdownMenuItem asChild>
-                  <Link to="/entrar">
-                    <LogIn className="mr-2 size-4" />
-                    Entrar com Google
-                  </Link>
                 </DropdownMenuItem>
               )}
               <DropdownMenuSeparator />
@@ -201,13 +192,7 @@ export function SiteHeader() {
                 <span className="hidden sm:inline">Criar meu perfil</span>
               </Button>
             )}
-            {/* Conta com Google → cronograma na nuvem */}
-            {historyReady && !loading && controls.showSignIn && <Button asChild variant="secondary" className="gap-2">
-              <Link to="/entrar">
-                <LogIn className="size-4" />
-                Entrar
-              </Link>
-            </Button>}
+
           </div>
         )}
         </div>

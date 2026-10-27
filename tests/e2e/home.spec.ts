@@ -68,12 +68,15 @@ test("abre detalhes da manobra e fecha com Escape", async ({ page }) => {
 });
 
 test("permite criar identidade local pelo cabeçalho", async ({ page }) => {
+  await expect(page.getByRole("button", { name: "Entrar", exact: true })).toHaveCount(0);
   await page.getByRole("button", { name: "Criar meu perfil" }).click();
   const dialog = page.getByRole("dialog");
   await expect(dialog.getByRole("heading", { name: "Sua identidade" })).toBeVisible();
   await dialog.getByPlaceholder("Ex.: Gustavo").fill("Skatista de teste");
   await dialog.getByRole("button", { name: "Salvar" }).click();
   await expect(page.getByRole("button", { name: "Perfil" })).toBeVisible();
+  await page.getByRole("button", { name: "Perfil" }).click();
+  await expect(page.getByRole("menuitem", { name: /Entrar com Google/ })).toHaveCount(0);
   await expect.poll(() => page.evaluate(() => localStorage.getItem("skate-do-zero:user"))).toContain("Skatista de teste");
 });
 
