@@ -137,3 +137,42 @@ test("filtra uma tentativa de script JavaScript no nome", async ({ page }) => {
   expect(identidade).toContain("scriptalertscript");
   expect(identidade).not.toContain("<script>");
 });
+
+
+test("mantém textos dentro dos cartões e diálogos em todos os tamanhos de tela", async ({ page }) => {
+  const findOverflowingText = () =>
+    page.evaluate(() => {
+      const selector = "main h1, main h2, main h3, main h4, main p, main li, main button, main a, main [role='tab'], main dt, main dd, [role='dialog'] h1, [role='dialog'] h2, [role='dialog'] h3, [role='dialog'] p, [role='dialog'] button, [role='dialog'] a";
+      return Array.from(document.querySelectorAll<HTMLElement>(selector))
+        .filter((element) => {
+          const style = getComputedStyle(element);
+          const rect = element.getBoundingClientRect();
+          if (style.display === "none" || style.visibility === "hidden" || rect.width < 1 || rect.height < 1) return false;
+          if (style.overflowX === "auto" || style.overflowX === "scroll") return false;
+          return element.scrollWidth > element.clientWidth + 1;
+        })
+        .map((element) => ({
+          tag: element.tagName.toLowerCase(),
+          text: (element.innerText || element.textContent || "").trim().replace(/\\s+/g, " ").slice(0, 90),
+          clientWidth: element.clientWidth,
+          scrollWidth: element.scrollWidth,
+        }));
+    });
+
+  await page.getByRole("button", { name: "Confira" }).click();
+  const tabs = page.getByRole("tablist", { name: "Categorias de manobras" });
+  for (const tab of await tabs.getByRole("tab").all()) {
+    await tab.click();
+    await expect(tab).toHaveAttribute("aria-selected", "true");
+    const overflows = await findOverflowingText();
+    expect(overflows, JSON.stringify(overflows)).toEqual([]);
+  }
+
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  const sectionOverflows = await findOverflowingText();
+  expect(sectionOverflows, JSON.stringify(sectionOverflows)).toEqual([]);
+
+  await page.getByRole("button", { name: "Criar meu perfil" }).click();
+  const dialogOverflows = await findOverflowingText();
+  expect(dialogOverflows, JSON.stringify(dialogOverflows)).toEqual([]);
+});
