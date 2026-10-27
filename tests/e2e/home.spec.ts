@@ -64,6 +64,20 @@ test("apresenta os quatro fundamentos antes da trilha em grade mobile-first", as
   await expect(page.locator("#trilha")).toBeInViewport();
 });
 
+test("coloca o cronograma logo após a seção de manobras", async ({ page }) => {
+  await page.getByRole("button", { name: "Confira" }).click();
+
+  const previousVisibleSection = await page.evaluate(() => {
+    const visibleSections = Array.from(document.querySelectorAll<HTMLElement>("main section[id]"))
+      .filter((section) => section.getClientRects().length > 0);
+    const scheduleIndex = visibleSections.findIndex((section) => section.id === "cronograma");
+    return scheduleIndex > 0 ? visibleSections[scheduleIndex - 1]?.id : null;
+  });
+
+  expect(previousVisibleSection).toBe("ollies");
+  await expect(page.locator("#cronograma")).toContainText("Cronograma de treinos");
+});
+
 test("permite trocar categorias por clique e teclado", async ({ page }) => {
   await page.getByRole("button", { name: "Confira" }).click();
   const tabs = page.getByRole("tablist", { name: "Categorias de manobras" });
