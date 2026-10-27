@@ -66,7 +66,6 @@ test("apresenta os quatro fundamentos antes da trilha em grade mobile-first", as
 
 test("permite trocar categorias por clique e teclado", async ({ page }) => {
   await page.getByRole("button", { name: "Confira" }).click();
-  await page.getByRole("button", { name: "Expandir Fundamentos" }).click();
   const tabs = page.getByRole("tablist", { name: "Categorias de manobras" });
   const variais = tabs.getByRole("tab", { name: /Variais/ });
   await variais.click();
@@ -264,6 +263,7 @@ test("mantém textos dentro dos cartões e diálogos em todos os tamanhos de tel
     });
 
   await page.getByRole("button", { name: "Confira" }).click();
+  await page.getByRole("button", { name: "Expandir Fundamentos" }).click();
   const tabs = page.getByRole("tablist", { name: "Categorias de manobras" });
   for (const tab of await tabs.getByRole("tab").all()) {
     await tab.click();
