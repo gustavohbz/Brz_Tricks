@@ -71,14 +71,14 @@ Estado e funções:
 
 | Nome | Tipo | Papel |
 | --- | --- | --- |
-| `started` | `useState<boolean>` | `false` = só o welcome aparece. Vira `true` no clique em "Sou iniciante" e libera trilha + seções + footer. |
+| `started` | `useState<boolean>` | `false` = só o welcome aparece. Vira `true` no clique em "Confira" e libera trilha + seções + footer. |
 | `trick` | `useState<Trick \| null>` | manobra selecionada. `null` = modal fechado; qualquer objeto = modal aberto com aquela manobra. |
 | `go(id)` | função | `document.getElementById(id).scrollIntoView({ behavior: "smooth" })` — rolagem suave até uma seção. |
 
 Fluxo de interação:
 
 ```text
-[Sou iniciante] → setStarted(true) → setTimeout(60ms) → go("trilha")
+[Confira] → setStarted(true) → setTimeout(60ms) → go("trilha")
        (o timeout existe para o React renderizar a seção antes de rolar até ela)
 
 [card da trilha] → go("ollies" | "variais" | "flips")
