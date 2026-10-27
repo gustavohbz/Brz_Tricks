@@ -35,6 +35,12 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
+function sanitizeName(value: string) {
+  return Array.from(
+    value.normalize("NFC").replace(/[^\p{L} ]/gu, ""),
+  ).slice(0, 23).join("");
+}
+
 export function SiteHeader() {
   // Identidade local reativa (id + nome + avatar)
   const { user, update, displayName } = useLocalUser();
@@ -76,19 +82,17 @@ export function SiteHeader() {
 
   // Campos do formulário do popup (editáveis antes de salvar)
   const [nome, setNome] = useState("");
-  const [avatar, setAvatar] = useState("");
 
   // Quando a identidade carregar (ou mudar), preenche o formulário
   // com os valores atuais para o usuário editar em cima deles.
   useEffect(() => {
     if (!user) return;
-    setNome(user.name);
-    setAvatar(user.avatar);
+    setNome(sanitizeName(user.name));
   }, [user]);
 
   // Salva nome/avatar digitados na identidade local e fecha o popup
   const salvar = () => {
-    update({ name: nome.trim(), avatar: avatar.trim() });
+    update({ name: sanitizeName(nome).trim() });
     setOpen(false);
     toast.success("Identidade salva neste navegador!");
   };
@@ -146,7 +150,7 @@ export function SiteHeader() {
               {/* Abre o popup de edição rápida */}
               <DropdownMenuItem onClick={() => setOpen(true)}>
                 <User className="mr-2 size-4" />
-                Editar nome e avatar
+                Editar nome
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               {/* Área de treinos na nuvem (precisa de conta) */}
@@ -204,41 +208,24 @@ export function SiteHeader() {
           <DialogHeader>
             <DialogTitle className="text-display text-3xl">Sua identidade</DialogTitle>
             <DialogDescription>
-              Só um nome e um avatar, guardados neste navegador. Sem senha, sem e-mail.
+              Use até 23 letras e espaços. Seu nome fica salvo neste navegador.
             </DialogDescription>
           </DialogHeader>
 
-          {/* Campo: nome de exibição (limite de 40 caracteres) */}
+          {/* Campo: nome com no máximo 23 letras e espaços */}
           <label className="block">
             <span className="text-display text-xs text-primary">Nome</span>
             <input
               value={nome}
-              onChange={(e) => setNome(e.target.value.slice(0, 40))}
+              onChange={(e) => setNome(sanitizeName(e.target.value))}
+              maxLength={23}
               placeholder="Ex.: Gustavo"
               className="mt-2 w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
             />
           </label>
 
-          {/* Campo: URL da imagem de avatar (limite de 500 caracteres) */}
-          <label className="mt-2 block">
-            <span className="text-display text-xs text-primary">Avatar (URL)</span>
-            <input
-              value={avatar}
-              onChange={(e) => setAvatar(e.target.value.slice(0, 500))}
-              placeholder="https://..."
-              className="mt-2 w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
-            />
-          </label>
-
-          {/* Prévia do avatar + botão salvar */}
-          <div className="mt-4 flex items-center gap-3">
-            <Avatar className="size-10">
-              {avatar ? <AvatarImage src={avatar} alt="Prévia do avatar" /> : null}
-              <AvatarFallback>
-                {(nome.trim() || "S").charAt(0).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-            {/* Só deixa salvar se tiver algum nome digitado */}
+          {/* Só deixa salvar se tiver algum nome digitado */}
+          <div className="mt-4 flex justify-end">
             <Button onClick={salvar} disabled={!nome.trim()} className="text-display">
               Salvar
             </Button>
