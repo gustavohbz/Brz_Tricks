@@ -12,7 +12,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { CalendarDays, LogIn, LogOut, User } from "lucide-react";
+import { CalendarDays, LogOut, User } from "lucide-react";
 import { useLocalUser } from "@/lib/local-user";
 import { useAuth } from "@/lib/use-auth";
 import { LOGIN_HISTORY_KEY, profileControls } from "@/lib/profile-controls";
@@ -156,8 +156,8 @@ export function SiteHeader() {
                   Meus treinos
                 </Link>
               </DropdownMenuItem>
-              {/* Entrar ou sair da conta Google */}
-              {conta ? (
+              {/* Sair da conta Google */}
+              {conta && (
                 <DropdownMenuItem
                   onClick={async () => {
                     await signOut();
@@ -166,13 +166,6 @@ export function SiteHeader() {
                 >
                   <LogOut className="mr-2 size-4" />
                   Sair da conta
-                </DropdownMenuItem>
-              ) : (
-                <DropdownMenuItem asChild>
-                  <Link to="/entrar">
-                    <LogIn className="mr-2 size-4" />
-                    Entrar com Google
-                  </Link>
                 </DropdownMenuItem>
               )}
               <DropdownMenuSeparator />
