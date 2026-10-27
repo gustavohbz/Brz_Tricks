@@ -82,8 +82,7 @@ export function Fundamentos() {
           />
         </button>
 
-        {expanded && (
-          <div id="fundamentos-content" className="mt-6">
+        <div id="fundamentos-content" hidden={!expanded} className="mt-6">
             <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">
               Antes das manobras, construa confiança no skate. Vá no seu ritmo, pratique
               em um lugar seguro e volte a estes passos sempre que precisar.
@@ -135,8 +134,7 @@ export function Fundamentos() {
               Ir para a trilha de manobras
               <ArrowRight className="size-4 shrink-0" aria-hidden="true" />
             </a>
-          </div>
-        )}
+        </div>
       </div>
     </section>
   );
