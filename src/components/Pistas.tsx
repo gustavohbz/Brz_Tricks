@@ -215,7 +215,7 @@ function Comentarios({ pista }: { pista: Pista }) {
               onChange={(e) => setTexto(e.target.value.slice(0, 1000))}
               placeholder="Como é a pista? Piso, movimento, dicas..."
               rows={3}
-              className="mt-2 w-full resize-none rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
+              className="mt-2 w-full resize-none rounded-md border border-border bg-background px-3 py-2 text-base outline-none focus:border-primary sm:text-sm"
             />
             {/* Desabilitado enquanto salva ou se o texto está vazio */}
             <Button
@@ -337,7 +337,7 @@ export function Pistas() {
             key={n.value}
             onClick={() => setFiltro(n.value)}
             aria-pressed={filtro === n.value}
-            className={`text-display rounded-full border px-3 py-1 text-xs transition-colors ${
+            className={`text-display min-h-11 rounded-full border px-3 py-2 text-xs transition-colors ${
               filtro === n.value
                 ? "border-primary bg-primary text-primary-foreground" // selecionado
                 : "border-border text-muted-foreground hover:border-primary hover:text-primary"
@@ -446,7 +446,7 @@ export function Pistas() {
               <GoogleMapView lat={aberta.lat} lng={aberta.lng} title={aberta.nome} />
 
               {/* Ficha técnica: tamanho, piso, nível e cidade */}
-              <dl className="mt-4 grid grid-cols-2 gap-3 text-sm">
+              <dl className="mt-4 grid grid-cols-1 gap-3 text-sm min-[375px]:grid-cols-2">
                 <div>
                   <dt className="text-[11px] uppercase tracking-widest text-muted-foreground">
                     Tamanho
