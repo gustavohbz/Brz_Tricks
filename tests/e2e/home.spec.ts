@@ -68,6 +68,7 @@ test("abre detalhes da manobra e fecha com Escape", async ({ page }) => {
 });
 
 test("permite criar identidade local pelo cabeçalho", async ({ page }) => {
+  await expect(page.getByRole("button", { name: "Entrar", exact: true })).toHaveCount(0);
   await page.getByRole("button", { name: "Criar meu perfil" }).click();
   const dialog = page.getByRole("dialog");
   await expect(dialog.getByRole("heading", { name: "Sua identidade" })).toBeVisible();
