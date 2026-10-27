@@ -21,14 +21,8 @@ import { ChevronDown, PlayCircle } from "lucide-react"; // ícones
 
 
 
-import {
-  sections,
-  getRoadmap,
-  CATEGORIAS,
-  categoriaLabel,
-  type Trick,
-  type Categoria,
-} from "@/data/tricks";
+import { getRoadmap, categoriaLabel, type Trick } from "@/data/tricks";
+import { TrickCategoryTabs } from "@/components/TrickCategoryTabs";
 import { Dicas } from "@/components/Dicas"; // seção de curiosidades e dicas
 import { AdvertisingBanner } from "@/components/AdvertisingBanner";
 import { Pistas } from "@/components/Pistas"; // seção de pistas de skate (mapa + comentários)
@@ -293,10 +287,6 @@ function TrickVideoField({
 function Index() {
   const [started, setStarted] = useState(false);
   const [trick, setTrick] = useState<Trick | null>(null);
-  // filtro de categoria escolhido dentro de cada tipo (Ollies, Variais, Flip's)
-  const [filtros, setFiltros] = useState<Record<string, Categoria | "todas">>({});
-  // seções com a lista completa aberta ("Ver mais"); ausente/false = mostra só a 1ª linha
-  const [expandidos, setExpandidos] = useState<Record<string, boolean>>({});
   // mapa { manobra: link } salvo no navegador, editado dentro do popup
   const { videos, setVideo, removeVideo } = useTrickVideos();
 
@@ -359,152 +349,29 @@ function Index() {
 
       {started && (
         <>
-          {/* =================================================
-              SEÇÃO 2 — TRILHA (3 botões de navegação)
-              ================================================= */}
-          <section id="trilha" className="border-t border-border px-6 py-24">
-            <div className="mx-auto max-w-5xl">
-              <p className="text-display text-sm text-accent">Trilha iniciante</p>
-              <h2 className="text-display mt-2 text-4xl sm:text-5xl">Escolha por onde começar</h2>
-              <div className="mt-10 grid gap-4 md:grid-cols-3">
-                {sections.map((s, i) => (
+          <TrickCategoryTabs
+            renderTrick={(t, i) => (
+              <HoverCard key={t.name} openDelay={120} closeDelay={80}>
+                <HoverCardTrigger asChild>
                   <button
-                    key={s.id}
-                    onClick={() => go(s.id)}
-                    className="shadow-street group rounded-lg border border-border bg-card p-6 text-left transition-all hover:-translate-y-1 hover:border-primary"
+                    onClick={() => setTrick(t)}
+                    className="rounded-md border border-border bg-card px-4 py-5 text-left transition-all hover:border-primary hover:bg-secondary"
                   >
-                    <span className="text-display text-5xl text-muted-foreground transition-colors group-hover:text-primary">
-                      0{i + 1}
+                    <span className="text-xs text-muted-foreground">
+                      {String(i + 1).padStart(2, "0")}
                     </span>
-                    <h3 className="text-display mt-3 text-2xl">{s.title}</h3>
-                    <p className="mt-2 text-sm text-muted-foreground">{s.tagline}</p>
-                    <span className="text-display mt-4 inline-block text-xs text-primary">
-                      Ver 10 manobras →
+                    <span className="text-display mt-1 block text-lg leading-tight">
+                      {t.name}
+                    </span>
+                    <span className="text-display mt-1 block text-[10px] uppercase tracking-widest text-accent">
+                      {categoriaLabel[t.categoria]}
                     </span>
                   </button>
-                ))}
-              </div>
-              {/* atalho para o cronograma de treinos */}
-              <button
-                onClick={() => go("cronograma")}
-                className="text-display mt-6 inline-block text-sm text-accent hover:text-primary"
-              >
-                Ou monte seu cronograma de treinos →
-              </button>
-              {/* atalho para dicas e curiosidades */}
-              <button
-                onClick={() => go("dicas")}
-                className="text-display ml-6 mt-6 inline-block text-sm text-accent hover:text-primary"
-              >
-                Curiosidades & dicas →
-              </button>
-              {/* atalho para pistas de skate */}
-              <button
-                onClick={() => go("pistas")}
-                className="text-display ml-6 mt-6 inline-block text-sm text-accent hover:text-primary"
-              >
-                Pistas de skate →
-              </button>
-              {/* atalho para vídeos recomendados */}
-              <button
-                onClick={() => go("videos")}
-                className="text-display ml-6 mt-6 inline-block text-sm text-accent hover:text-primary"
-              >
-                Vídeos recomendados →
-              </button>
-            </div>
-          </section>
-
-          {/* =================================================
-              SEÇÃO 3 — MANOBRAS (hover = vídeo, clique = modal)
-              ================================================= */}
-          {sections.map((s) => {
-            const filtro = filtros[s.id] ?? "todas";
-            const visiveis =
-              filtro === "todas"
-                ? s.tricks
-                : s.tricks.filter((t) => t.categoria === filtro);
-            // mostra só a primeira linha até a pessoa clicar em "Ver mais"
-            const limite = 5;
-            const aberto = !!expandidos[s.id];
-            const mostrados = aberto ? visiveis : visiveis.slice(0, limite);
-            return (
-            <section key={s.id} id={s.id} className="border-t border-border px-6 py-24">
-              <div className="mx-auto max-w-5xl">
-                <div className="flex flex-wrap items-end justify-between gap-4">
-                  <div>
-                    <h2 className="text-display text-4xl sm:text-6xl">{s.title}</h2>
-                    <p className="mt-2 max-w-lg text-sm text-muted-foreground">{s.tagline}</p>
-                  </div>
-                  <span className="text-display rounded-full border border-border px-4 py-1 text-xs text-primary">
-                    {visiveis.length} manobras
-                  </span>
-                </div>
-
-                {/* ---------- filtro por categoria (mesmo estilo do das pistas) ---------- */}
-                <div className="mt-6 flex flex-wrap items-center gap-2">
-                  <span className="text-display text-xs text-muted-foreground">Nível:</span>
-                  {CATEGORIAS.map((c) => (
-                    <button
-                      key={c.value}
-                      onClick={() => setFiltros((f) => ({ ...f, [s.id]: c.value }))}
-                      aria-pressed={filtro === c.value}
-                      className={`text-display rounded-full border px-3 py-1 text-xs transition-colors ${
-                        filtro === c.value
-                          ? "border-primary bg-primary text-primary-foreground"
-                          : "border-border text-muted-foreground hover:border-primary hover:text-primary"
-                      }`}
-                    >
-                      {c.label}
-                    </button>
-                  ))}
-                </div>
-
-                {visiveis.length === 0 ? (
-                  <p className="mt-8 text-sm text-muted-foreground">
-                    Nenhuma manobra nessa categoria ainda.
-                  </p>
-                ) : (
-                <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-                  {mostrados.map((t, i) => (
-                    <HoverCard key={t.name} openDelay={120} closeDelay={80}>
-                      <HoverCardTrigger asChild>
-                        <button
-                          onClick={() => setTrick(t)}
-                          className="rounded-md border border-border bg-card px-4 py-5 text-left transition-all hover:border-primary hover:bg-secondary"
-                        >
-                          <span className="text-xs text-muted-foreground">
-                            {String(i + 1).padStart(2, "0")}
-                          </span>
-                          <span className="text-display mt-1 block text-lg leading-tight">
-                            {t.name}
-                          </span>
-                          <span className="text-display mt-1 block text-[10px] uppercase tracking-widest text-accent">
-                            {categoriaLabel[t.categoria]}
-                          </span>
-                        </button>
-                      </HoverCardTrigger>
-                      <TrickHoverPreview trick={t} videoUrl={videos[t.name]} />
-                    </HoverCard>
-                  ))}
-                </div>
-                )}
-
-                {visiveis.length > limite && (
-                  <div className="mt-6 flex justify-center">
-                    <Button
-                      variant="outline"
-                      onClick={() => setExpandidos((e) => ({ ...e, [s.id]: !aberto }))}
-                      className="text-display"
-                    >
-                      {aberto ? "Ver menos" : `Ver mais (${visiveis.length - limite})`}
-                    </Button>
-                  </div>
-                )}
-              </div>
-            </section>
-            );
-          })}
+                </HoverCardTrigger>
+                <TrickHoverPreview trick={t} videoUrl={videos[t.name]} />
+              </HoverCard>
+            )}
+          />
 
           {/* =================================================
               SEÇÃO 5 — PISTAS DE SKATE (mapa + comentários)
