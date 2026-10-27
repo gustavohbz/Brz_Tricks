@@ -19,8 +19,10 @@ import {
 
 export function TrickCategoryTabs({
   renderTrick,
+  onNavigate,
 }: {
   renderTrick: (trick: Trick, index: number) => ReactNode;
+  onNavigate: (id: string) => void;
 }) {
   const [activeSection, setActiveSection] = useState<string>(DEFAULT_TRICK_SECTION_ID);
   const [filters, setFilters] = useState<Record<string, Categoria | "todas">>({});
@@ -63,25 +65,25 @@ export function TrickCategoryTabs({
 
           <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2">
             <button
-              onClick={() => document.getElementById("cronograma")?.scrollIntoView({ behavior: "smooth", block: "start" })}
+              onClick={() => onNavigate("cronograma")}
               className="text-display text-sm text-accent hover:text-primary"
             >
               Ou monte seu cronograma de treinos →
             </button>
             <button
-              onClick={() => document.getElementById("dicas")?.scrollIntoView({ behavior: "smooth", block: "start" })}
+              onClick={() => onNavigate("dicas")}
               className="text-display text-sm text-accent hover:text-primary"
             >
               Curiosidades & dicas →
             </button>
             <button
-              onClick={() => document.getElementById("pistas")?.scrollIntoView({ behavior: "smooth", block: "start" })}
+              onClick={() => onNavigate("pistas")}
               className="text-display text-sm text-accent hover:text-primary"
             >
               Pistas de skate →
             </button>
             <button
-              onClick={() => document.getElementById("videos")?.scrollIntoView({ behavior: "smooth", block: "start" })}
+              onClick={() => onNavigate("videos")}
               className="text-display text-sm text-accent hover:text-primary"
             >
               Vídeos recomendados →
