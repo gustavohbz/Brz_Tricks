@@ -356,7 +356,7 @@ export function Pistas() {
             key={c}
             onClick={() => setCidadeFiltro(c)}
             aria-pressed={cidadeFiltro === c}
-            className={`text-display rounded-full border px-3 py-1 text-xs transition-colors ${
+            className={`text-display min-h-11 rounded-full border px-3 py-2 text-xs transition-colors ${
               cidadeFiltro === c
                 ? "border-primary bg-primary text-primary-foreground"
                 : "border-border text-muted-foreground hover:border-primary hover:text-primary"
