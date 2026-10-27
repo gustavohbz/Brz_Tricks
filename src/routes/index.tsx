@@ -377,29 +377,7 @@ function Index() {
           />
 
           {/* =================================================
-              SEÇÃO 5 — PISTAS DE SKATE (mapa + comentários)
-              ================================================= */}
-          <section id="pistas" className="border-t border-border px-4 py-16 sm:px-6 sm:py-24">
-            <Pistas />
-          </section>
-
-          {/* =================================================
-              SEÇÃO 6 — DICAS & CURIOSIDADES
-              ================================================= */}
-          <section id="dicas" className="border-t border-border px-4 py-16 sm:px-6 sm:py-24">
-            <Dicas />
-          </section>
-
-          {/* =================================================
-              SEÇÃO 7 — VÍDEOS RECOMENDADOS (prévia + player)
-              ================================================= */}
-          <section id="videos" className="border-t border-border px-4 py-16 sm:px-6 sm:py-24">
-            <VideosRecomendados />
-          </section>
-
-
-          {/* =================================================
-              SEÇÃO 8 — CRONOGRAMA DE TREINOS
+              SEÇÃO 5 — CRONOGRAMA DE TREINOS
               ================================================= */}
           <section id="cronograma" className="border-t border-border px-4 py-16 sm:px-6 sm:py-24">
             {/* Chamada para a área de treinos (cronograma salvo na conta) */}
@@ -420,6 +398,30 @@ function Index() {
               </div>
             </div>
           </section>
+
+          {/* =================================================
+              SEÇÃO 6 — PISTAS DE SKATE (mapa + comentários)
+              ================================================= */}
+          <section id="pistas" className="border-t border-border px-4 py-16 sm:px-6 sm:py-24">
+            <Pistas />
+          </section>
+
+          {/* =================================================
+              SEÇÃO 7 — DICAS & CURIOSIDADES
+              ================================================= */}
+          <section id="dicas" className="border-t border-border px-4 py-16 sm:px-6 sm:py-24">
+            <Dicas />
+          </section>
+
+          {/* =================================================
+              SEÇÃO 8 — VÍDEOS RECOMENDADOS (prévia + player)
+              ================================================= */}
+          <section id="videos" className="border-t border-border px-4 py-16 sm:px-6 sm:py-24">
+            <VideosRecomendados />
+          </section>
+
+
+
 
           {/* =================================================
               FOOTER
