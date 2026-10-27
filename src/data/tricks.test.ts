@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import { ok, strictEqual, deepStrictEqual } from "node:assert";
-import { sections, CATEGORIAS, categoriaLabel, type Categoria } from "./tricks";
+import { sections, CATEGORIAS, categoriaLabel, roadmaps, type Categoria } from "./tricks";
 
 /* As três categorias que o usuário pediu para filtrar */
 const VALIDAS: Categoria[] = ["iniciante", "amador", "avancado"];
@@ -13,12 +13,28 @@ test("toda manobra tem uma das três categorias", () => {
   }
 });
 
-test("cada tipo (Ollies, Variais, Flip's) tem as três categorias para filtrar", () => {
-  for (const s of sections) {
-    const tem = new Set(s.tricks.map((t) => t.categoria));
-    for (const c of VALIDAS) {
-      strictEqual(tem.has(c), true);
-    }
+test("o catálogo mantém opções nas três categorias para filtrar", () => {
+  const categoriasDisponiveis = new Set(
+    sections.flatMap((section) => section.tricks.map((trick) => trick.categoria)),
+  );
+  for (const categoria of VALIDAS) {
+    strictEqual(categoriasDisponiveis.has(categoria), true);
+  }
+});
+
+test("não exibe as manobras removidas nem mantém seus roadmaps", () => {
+  const removidas = [
+    "Ollie no Meio-fio",
+    "Ollie na Escada",
+    "Body Varial",
+    "Powerslide",
+    "Kickflip no Meio-fio",
+  ];
+  const nomes = new Set(sections.flatMap((section) => section.tricks.map((trick) => trick.name)));
+
+  for (const nome of removidas) {
+    strictEqual(nomes.has(nome), false);
+    strictEqual(roadmaps[nome], undefined);
   }
 });
 

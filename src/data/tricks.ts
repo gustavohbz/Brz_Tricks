@@ -85,13 +85,6 @@ export const sections: Section[] = [
         steps: ["Tire o pé da frente", "Segure a borda do shape", "Empurre o chão e suba", "Recoloque o pé"],
       },
       {
-        name: "Ollie no Meio-fio",
-        level: "Obstáculo",
-        categoria: "iniciante",
-        desc: "Primeiro obstáculo real: subir e descer o meio-fio.",
-        steps: ["Chegue reto e com velocidade", "Ollie antes da quina", "Olhe para o pouso", "Absorva com as pernas"],
-      },
-      {
         name: "Ollie 180 (Frontside)",
         level: "Rotação",
         categoria: "amador",
@@ -104,13 +97,6 @@ export const sections: Section[] = [
         categoria: "amador",
         desc: "Ollie 180° girando de costas — o clássico BS 180.",
         steps: ["Ombros pré-carregados", "Bata o tail e gire", "Olhe por cima do ombro", "Caia nos parafusos"],
-      },
-      {
-        name: "Ollie na Escada",
-        level: "Avançado do básico",
-        categoria: "avancado",
-        desc: "Quando o ollie já é firme, encare 2 ou 3 degraus.",
-        steps: ["Comece com 2 degraus", "Velocidade constante", "Ollie forte e nivelado", "Joelhos flexionados no impacto"],
       },
     ],
   },
@@ -169,25 +155,11 @@ export const sections: Section[] = [
         steps: ["Empurrada longa no tail", "Pulo alto e paciente", "Deixe completar 360", "Pise firme"],
       },
       {
-        name: "Body Varial",
-        level: "Iniciante",
-        categoria: "iniciante",
-        desc: "Só o corpo gira 180°, o skate segue reto.",
-        steps: ["Pop pequeno", "Gire quadril e ombros", "Skate permanece alinhado", "Volte a pisar"],
-      },
-      {
         name: "No Comply",
         level: "Iniciante",
         categoria: "amador",
         desc: "Pé no chão, joelho empurra o shape em 180.",
         steps: ["Deixe o pé da frente cair", "Bata o tail", "Deixe o nose girar no joelho", "Suba de volta"],
-      },
-      {
-        name: "Powerslide",
-        level: "Controle",
-        categoria: "iniciante",
-        desc: "Freio essencial: atravesse o skate e raspe as rodas.",
-        steps: ["Boa velocidade", "Peso nos calcanhares", "Gire o skate 90°", "Volte a alinhar"],
       },
     ],
   },
@@ -259,13 +231,6 @@ export const sections: Section[] = [
         desc: "Tre flip: 360 shove-it com kickflip. O troféu do skate.",
         steps: ["Pé de trás no bico do tail", "Chute o tail em diagonal", "Raspe o pé da frente", "Espere as duas rotações"],
       },
-      {
-        name: "Kickflip no Meio-fio",
-        level: "Aplicação",
-        categoria: "avancado",
-        desc: "Levar o kickflip para um obstáculo de verdade.",
-        steps: ["Domine no plano primeiro", "Velocidade média", "Flip antes da quina", "Olhe o pouso"],
-      },
     ],
   },
 ];
@@ -282,10 +247,8 @@ export const roadmaps: Record<string, string[]> = {
   "Fakie Ollie": ["Ollie firme", "Andar de fakie", "Bater o tail de fakie"],
   "Ollie North": ["Ollie alto", "Controle no ar", "Extensão da perna"],
   Boneless: ["Equilíbrio em uma perna", "Pegar o shape com a mão", "Boneless parado"],
-  "Ollie no Meio-fio": ["Ollie em movimento", "Ollie por cima de linha no chão", "Ollie sobre obstáculo baixo"],
   "Ollie 180 (Frontside)": ["Ollie em movimento", "Body varial", "180 no chão (pivô)", "FS 180 parado"],
   "Ollie 180 (Backside)": ["Ollie em movimento", "180 no chão (pivô)", "BS 180 parado"],
-  "Ollie na Escada": ["Ollie alto e nivelado", "Ollie no meio-fio", "Ollie de 2 degraus"],
 
   // ---- Variais ----
   "Shove-it": ["Equilíbrio parado", "Pés nas bordas", "Shove-it parado"],
@@ -295,9 +258,7 @@ export const roadmaps: Record<string, string[]> = {
   "Nollie Shove-it": ["Pop shove-it", "Nollie", "Peso no nose"],
   Bigspin: ["Pop shove-it", "360 shove-it", "Body varial 180"],
   "360 Shove-it": ["Pop shove-it", "Empurrada longa", "Pulo alto e paciente"],
-  "Body Varial": ["Equilíbrio no ar", "Pop pequeno", "180 do corpo no chão"],
   "No Comply": ["Bater o tail", "Equilíbrio em uma perna", "No comply parado"],
-  Powerslide: ["Boa velocidade", "Peso nos calcanhares", "Slide de 45°"],
 
   // ---- Flip's ----
   Kickflip: ["Ollie firme e nivelado", "Ollie em movimento", "Raspada do pé (sem pular)", "Kickflip com pé no chão", "Kickflip parado", "Kickflip rolando"],
@@ -309,7 +270,6 @@ export const roadmaps: Record<string, string[]> = {
   "Fakie Kickflip": ["Kickflip", "Fakie ollie", "Kickflip de fakie parado"],
   "Nollie Flip": ["Kickflip", "Nollie", "Raspada com pé de trás"],
   "360 Flip": ["Kickflip", "360 shove-it", "Chute diagonal no tail", "Tre flip parado"],
-  "Kickflip no Meio-fio": ["Kickflip rolando", "Ollie no meio-fio", "Kickflip sobre linha"],
 };
 
 /** Retorna o roadmap da manobra (vazio se não houver). */
