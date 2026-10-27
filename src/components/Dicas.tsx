@@ -152,7 +152,7 @@ export function Dicas() {
               onClick={() => setFiltro(c)}
               aria-pressed={ativo}
               className={cn(
-                "text-display rounded-full border px-4 py-1.5 text-xs uppercase tracking-wider transition-colors",
+                "text-display min-h-11 rounded-full border px-4 py-2 text-xs uppercase tracking-wider transition-colors",
                 ativo
                   ? "border-primary bg-primary text-primary-foreground"
                   : "border-border text-muted-foreground hover:border-primary hover:text-foreground",
