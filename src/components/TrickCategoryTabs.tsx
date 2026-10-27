@@ -166,7 +166,7 @@ export function TrickCategoryTabs({
                       </button>
                     ))}
                   </div>
-  
+
                   {visibleTricks.length === 0 ? (
                     <p className="mt-8 text-sm text-muted-foreground">
                       Nenhuma manobra nessa categoria ainda.
@@ -176,7 +176,7 @@ export function TrickCategoryTabs({
                       {shownTricks.map((trick, index) => renderTrick(trick, index))}
                     </div>
                   )}
-  
+
                   {visibleTricks.length > limit && (
                     <div className="mt-6 flex justify-center">
                       <Button
