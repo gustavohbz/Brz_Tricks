@@ -33,7 +33,7 @@ export function VideosRecomendados() {
           return (
             <article
               key={video.id}
-              className="shadow-street overflow-hidden rounded-lg border border-border bg-card"
+              className="shadow-street min-w-0 overflow-hidden rounded-lg border border-border bg-card"
             >
               {/* --- previewzinha / player --- */}
               <div className="aspect-video w-full bg-secondary">
@@ -68,16 +68,16 @@ export function VideosRecomendados() {
 
               {/* --- texto --- */}
               <div className="p-4">
-                <p className="text-display text-lg leading-tight">{video.title}</p>
-                <p className="mt-1 text-xs text-muted-foreground">{video.author}</p>
-                <p className="mt-2 text-xs text-muted-foreground">{video.desc}</p>
+                <p className="text-display break-words text-lg leading-tight">{video.title}</p>
+                <p className="mt-1 break-words text-xs text-muted-foreground">{video.author}</p>
+                <p className="mt-2 break-words text-xs text-muted-foreground">{video.desc}</p>
 
                 <div className="mt-3 flex flex-wrap items-center gap-4">
                   <a
                     href={video.url}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-display inline-flex items-center gap-1 text-xs text-primary"
+                    className="text-display inline-flex max-w-full flex-wrap items-center gap-1 break-words text-xs text-primary"
                   >
                     Abrir no YouTube <ExternalLink className="size-3" />
                   </a>
