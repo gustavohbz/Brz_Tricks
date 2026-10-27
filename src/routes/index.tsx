@@ -384,14 +384,14 @@ function Index() {
           {/* =================================================
               SEÇÃO 6 — DICAS & CURIOSIDADES
               ================================================= */}
-          <section id="dicas" className="border-t border-border px-6 py-24">
+          <section id="dicas" className="border-t border-border px-4 py-16 sm:px-6 sm:py-24">
             <Dicas />
           </section>
 
           {/* =================================================
               SEÇÃO 7 — VÍDEOS RECOMENDADOS (prévia + player)
               ================================================= */}
-          <section id="videos" className="border-t border-border px-6 py-24">
+          <section id="videos" className="border-t border-border px-4 py-16 sm:px-6 sm:py-24">
             <VideosRecomendados />
           </section>
 
@@ -399,7 +399,7 @@ function Index() {
           {/* =================================================
               SEÇÃO 8 — CRONOGRAMA DE TREINOS
               ================================================= */}
-          <section id="cronograma" className="border-t border-border px-6 py-24">
+          <section id="cronograma" className="border-t border-border px-4 py-16 sm:px-6 sm:py-24">
             {/* Chamada para a área de treinos (cronograma salvo na conta) */}
             <div className="mx-auto max-w-2xl text-center">
               <p className="text-display text-xs tracking-widest text-primary">
