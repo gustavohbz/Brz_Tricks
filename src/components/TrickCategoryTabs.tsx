@@ -30,7 +30,7 @@ export function TrickCategoryTabs({
 
   return (
     <Tabs value={activeSection} onValueChange={setActiveSection}>
-      <section id="trilha" className="border-t border-border px-6 py-24">
+      <section id="trilha" className="border-t border-border px-4 py-16 sm:px-6 sm:py-24">
         <div className="mx-auto max-w-5xl">
           <p className="text-display text-sm text-accent">Trilha iniciante</p>
           <h2 className="text-display mt-2 text-4xl sm:text-5xl">
@@ -66,7 +66,7 @@ export function TrickCategoryTabs({
           <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2">
             <button
               onClick={() => onNavigate("cronograma")}
-              className="text-display text-sm text-accent hover:text-primary"
+              className="text-display inline-flex min-h-11 items-center text-sm text-accent hover:text-primary"
             >
               Ou monte seu cronograma de treinos →
             </button>
@@ -131,7 +131,7 @@ export function TrickCategoryTabs({
                         }))
                       }
                       aria-pressed={filter === category.value}
-                      className={`text-display rounded-full border px-3 py-1 text-xs transition-colors ${
+                      className={`text-display min-h-11 rounded-full border px-3 py-2 text-xs transition-colors ${
                         filter === category.value
                           ? "border-primary bg-primary text-primary-foreground"
                           : "border-border text-muted-foreground hover:border-primary hover:text-primary"
