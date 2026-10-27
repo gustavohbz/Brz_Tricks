@@ -1,7 +1,7 @@
 # Requested changes
-- [ ] Restore package installation and preview startup, then verify the app opens without runtime errors.
+- [x] Restore package installation via the official registry; frozen install succeeds, build OK, all four pages and profile/beginner interactions verified without runtime errors; 16 tests pass.
 - [x] Rename the app to Brauza Skate Co. across pages, announcements, metadata, installable-app name and documentation, preserving existing browser data; six related unit tests pass.
-- [ ] Visually verify the renamed app: preview startup is blocked by package-download DNS failures (Vite unavailable).
+- [x] Visually verify the renamed app: Brauza Skate Co. appears on the home page and in all four page titles after preview recovery.
 - [x] Retire legacy subscription signup automation and billing access; free account setup/schedule save and reload verified, documentation updated. Historical billing schema remains deprecated and inaccessible because destructive schema removal is blocked by platform policy.
 - [x] Add a full-width clickable advertising banner (temporary destination: Plans; advertiser URL not provided).
 - [x] Add a notification bell beside the profile control, with read state.
