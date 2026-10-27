@@ -124,9 +124,9 @@ export function Cronograma({
         ))}
       </div>
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_1.2fr]">
+      <div className="mt-6 grid min-w-0 gap-6 lg:grid-cols-[1fr_1.2fr]">
         {/* --- coluna 1: catálogo de manobras --- */}
-        <div className="rounded-lg border border-border bg-card p-5">
+        <div className="min-w-0 rounded-lg border border-border bg-card p-5">
           <label htmlFor="busca-manobra" className="text-display text-xs text-primary">
             Adicionar manobra
           </label>
@@ -149,11 +149,11 @@ export function Cronograma({
                   <button
                     onClick={() => add(t.name)}
                     disabled={added}
-                    className="flex w-full items-center justify-between gap-3 rounded-md border border-transparent px-3 py-2 text-left transition-colors hover:border-border hover:bg-secondary disabled:opacity-40"
+                    className="flex min-w-0 w-full items-center justify-between gap-3 rounded-md border border-transparent px-3 py-2 text-left transition-colors hover:border-border hover:bg-secondary disabled:opacity-40"
                   >
-                    <span>
-                      <span className="text-sm">{t.name}</span>
-                      <span className="ml-2 text-[10px] uppercase tracking-widest text-muted-foreground">
+                    <span className="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5 break-words">
+                      <span className="min-w-0 break-words text-sm">{t.name}</span>
+                      <span className="max-w-full whitespace-normal break-words text-right text-[10px] uppercase tracking-widest text-muted-foreground">
                         {t.family}
                       </span>
                     </span>
@@ -188,13 +188,13 @@ export function Cronograma({
                     {(plan[d.id] ?? []).map((name) => (
                       <li
                         key={name}
-                        className="flex items-center gap-2 rounded-full border border-border bg-secondary px-3 py-1 text-xs"
+                        className="flex max-w-full min-w-0 flex-wrap items-center gap-2 break-words rounded-full border border-border bg-secondary px-3 py-1 text-xs"
                       >
                         {name}
                         <button
                           onClick={() => remove(d.id, name)}
                           aria-label={`Remover ${name} de ${d.label}`}
-                          className="text-muted-foreground transition-colors hover:text-primary"
+                          className="shrink-0 text-muted-foreground transition-colors hover:text-primary"
                         >
                           <X className="size-3" />
                         </button>
