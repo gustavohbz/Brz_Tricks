@@ -19,6 +19,11 @@ describe("trick category selection", () => {
     strictEqual(filtered.every((trick) => trick.categoria === "amador"), true);
   });
 
+  test("returns an empty list when a section has no tricks at a level", () => {
+    const tricks = sections.find((section) => section.id === "ollies")!.tricks;
+    deepStrictEqual(filterTricksByCategory(tricks, "avancado"), []);
+  });
+
   test("returns all tricks when the all filter is selected", () => {
     const tricks = sections.find((section) => section.id === "ollies")!.tricks;
     deepStrictEqual(filterTricksByCategory(tricks, "todas"), tricks);
