@@ -247,7 +247,7 @@ function PerfilPage() {
       </section>
 
       {/* ---------- SEÇÃO: SETUP (medidas do skate) ---------- */}
-      <section className="mt-10 rounded-lg border border-border bg-card p-5">
+      <section className="mt-10 rounded-lg border border-border bg-card p-4 sm:p-5">
         <h2 className="text-display text-2xl">Setup</h2>
         <p className="mt-1 text-sm text-muted-foreground">
           Anote as medidas do seu skate para não esquecer na hora de repor peças.
