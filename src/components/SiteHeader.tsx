@@ -5,7 +5,7 @@
     • À direita, duas situações possíveis:
       - Usuário ainda SEM nome → botão "Criar meu perfil".
       - Usuário COM nome → menu suspenso com avatar e opções.
-    • A edição acontece num popup (Dialog) com nome + URL do avatar.
+    • A edição acontece num popup (Dialog) que aceita somente o nome.
     • Tudo é salvo só no navegador (src/lib/local-user.ts).
     ========================================================= */
 
@@ -85,7 +85,7 @@ export function SiteHeader() {
     setNome(sanitizeProfileName(user.name));
   }, [user]);
 
-  // Salva nome/avatar digitados na identidade local e fecha o popup
+  // Salva o nome validado na identidade local e fecha o popup
   const salvar = () => {
     update({ name: normalizeProfileName(nome) });
     setOpen(false);
@@ -197,13 +197,13 @@ export function SiteHeader() {
         </div>
       </div>
 
-      {/* ---------- popup de identidade (nome + avatar) ---------- */}
+      {/* ---------- popup de identidade (somente nome) ---------- */}
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="border-border bg-popover">
           <DialogHeader>
             <DialogTitle className="text-display break-words pr-12 text-3xl">Sua identidade</DialogTitle>
             <DialogDescription>
-              Use até 23 letras Unicode e espaços. Outros caracteres são removidos; o nome fica salvo neste navegador.
+              Use até 23 letras Unicode e espaços. O nome fica salvo neste navegador.
             </DialogDescription>
           </DialogHeader>
 
