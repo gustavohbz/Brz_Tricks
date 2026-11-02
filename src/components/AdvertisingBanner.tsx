@@ -5,7 +5,7 @@ export function AdvertisingBanner() {
   const content = (
     <div className="flex min-h-28 w-full min-w-0 flex-wrap items-center justify-between gap-4 border-y border-border bg-secondary px-4 py-5 sm:px-8">
       <div className="flex min-w-0 items-center gap-4">
-        <img src="/icon-192.png" alt="" className="hidden size-16 shrink-0 rounded-md sm:block" />
+        <img src="/icon-192.png" alt="Logo Brauza Skate Co." className="size-16 shrink-0 rounded-md object-contain sm:size-20" />
         <div className="min-w-0">
           <p className="break-words text-xs uppercase text-primary">{advertisingBanner.label}</p>
           <p className="mt-1 break-words font-display text-2xl leading-tight sm:text-3xl">{advertisingBanner.title}</p>
