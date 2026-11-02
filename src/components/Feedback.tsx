@@ -2,16 +2,28 @@ import { useState, type FormEvent } from "react";
 import { Send } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { MAX_FEEDBACK_LENGTH, sanitizeFeedback } from "@/lib/feedback";
+import {
+  hasInvalidFeedbackInput,
+  MAX_FEEDBACK_LENGTH,
+  sanitizeFeedback,
+} from "@/lib/feedback";
 
 export function Feedback() {
   const [message, setMessage] = useState("");
   const [sending, setSending] = useState(false);
   const [status, setStatus] = useState("");
+  const [invalidInput, setInvalidInput] = useState(false);
 
   const submitFeedback = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (sending) return;
+
+    if (invalidInput || hasInvalidFeedbackInput(message)) {
+      setStatus(
+        "Use apenas texto simples, sem marcação ou caracteres de controle, com até 1.000 caracteres.",
+      );
+      return;
+    }
 
     const cleanMessage = sanitizeFeedback(message).trim();
     if (!cleanMessage) {
@@ -27,9 +39,14 @@ export function Feedback() {
         .from("feedback")
         .insert({ message: cleanMessage });
 
+      if (error?.message.toLowerCase().includes("feedback rate limit exceeded")) {
+        setStatus("Você enviou várias sugestões recentemente. Tente novamente em alguns minutos.");
+        return;
+      }
       if (error) throw error;
 
       setMessage("");
+      setInvalidInput(false);
       setStatus("Obrigado! Seu feedback foi enviado.");
     } catch {
       setStatus("Não foi possível enviar agora. Tente novamente mais tarde.");
@@ -60,24 +77,32 @@ export function Feedback() {
           name="message"
           value={message}
           onChange={(event) => {
-            setMessage(sanitizeFeedback(event.currentTarget.value));
-            setStatus("");
+            const rawValue = event.currentTarget.value;
+            const blocked = hasInvalidFeedbackInput(rawValue);
+            setInvalidInput(blocked);
+            setMessage(sanitizeFeedback(rawValue));
+            setStatus(
+              blocked
+                ? "Caracteres não permitidos foram removidos. Revise o texto antes de enviar."
+                : "",
+            );
           }}
           maxLength={MAX_FEEDBACK_LENGTH}
           minLength={1}
           rows={4}
           required
+          aria-invalid={invalidInput}
           aria-describedby="feedback-help feedback-count feedback-status"
           placeholder="O que podemos melhorar no aplicativo?"
           className="mt-2 w-full resize-y rounded-md border border-border bg-background px-3 py-2 text-base leading-relaxed outline-none focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary"
         />
         <div className="mt-2 flex flex-wrap items-center justify-between gap-3">
           <span id="feedback-count" className="text-xs text-muted-foreground">
-            {message.length}/{MAX_FEEDBACK_LENGTH}
+            {Array.from(message).length}/{MAX_FEEDBACK_LENGTH}
           </span>
           <Button
             type="submit"
-            disabled={sending || !message.trim()}
+            disabled={sending || !message.trim() || invalidInput}
             className="text-display min-h-11"
           >
             <Send className="mr-2 size-4" aria-hidden="true" />

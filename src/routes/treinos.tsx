@@ -1,8 +1,8 @@
 /* =========================================================
-    /treinos — área de quem tem conta (cronograma na nuvem)
+    /treinos — cronograma de treinos
     ---------------------------------------------------------
-    • Sem conta → convite para entrar com o Google.
-    • Com conta → cronograma salvo na nuvem (salva automático).
+    • O plano é salvo automaticamente no navegador.
+    • Com conta, também existe cópia na nuvem.
     ========================================================= */
 import { useEffect, useRef, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
@@ -94,16 +94,6 @@ function TreinosPage() {
   if (!user) {
     return (
       <main className="min-h-screen px-2 pt-20">
-        <div className="mx-auto max-w-6xl px-4">
-          <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-card px-4 py-3">
-            <p className="text-sm">
-              Salvo neste navegador. Entre com Google para ter cópia na nuvem.
-            </p>
-            <Button asChild size="sm" className="text-display">
-              <Link to="/entrar">Entrar com Google</Link>
-            </Button>
-          </div>
-        </div>
         <Cronograma
           title="Meus treinos"
           eyebrow="Neste aparelho"
