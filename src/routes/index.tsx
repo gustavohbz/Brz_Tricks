@@ -25,6 +25,7 @@ import { getRoadmap, categoriaLabel, type Trick } from "@/data/tricks";
 import { TrickCategoryTabs } from "@/components/TrickCategoryTabs";
 import { Dicas } from "@/components/Dicas"; // seção de curiosidades e dicas
 import { AdvertisingBanner } from "@/components/AdvertisingBanner";
+import brauzaLogo from "@/assets/brauza-logo.png.asset.json";
 import { Fundamentos } from "@/components/Fundamentos";
 import { Feedback } from "@/components/Feedback";
 import { Pistas } from "@/components/Pistas"; // seção de pistas de skate (mapa + comentários)
