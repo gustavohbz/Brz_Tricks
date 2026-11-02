@@ -16,6 +16,7 @@ import { toast } from "sonner";
 import { ArrowLeft, Save } from "lucide-react";
 import { useAuth } from "@/lib/use-auth";
 import { useLocalUser } from "@/lib/local-user";
+import { normalizeProfileName, sanitizeProfileName } from "@/lib/profile-name";
 import {
   getMyAccount,
   saveMyPlan,
@@ -56,19 +57,25 @@ function Field({
   value,
   onChange,
   placeholder,
+  sanitize,
 }: {
   label: string;
   value: string;
   onChange: (v: string) => void;
   placeholder: string;
+  sanitize?: (value: string) => string;
 }) {
   return (
     <label className="block">
       <span className="text-display text-xs text-primary">{label}</span>
       <input
         value={value}
-        // Limita cada campo a 60 caracteres
-        onChange={(e) => onChange(e.target.value.slice(0, 60))}
+        // Aplica a regra específica do nome ou limita os campos de setup.
+        maxLength={sanitize ? 23 : 60}
+        autoComplete={sanitize ? "name" : "off"}
+        onChange={(e) =>
+          onChange(sanitize ? sanitize(e.target.value) : e.target.value.slice(0, 60))
+        }
         placeholder={placeholder}
         className="mt-2 w-full rounded-md border border-border bg-background px-3 py-2 text-base outline-none focus:border-primary sm:text-sm"
       />
@@ -141,7 +148,7 @@ function PerfilPage() {
       // Visitante: trabalha em cima do que já está neste navegador.
       setSetup(localSetup);
       setPlan(localPlan);
-      setNome(localUser?.name ?? "");
+      setNome(sanitizeProfileName(localUser?.name ?? ""));
       setAvatar(localUser?.avatar ?? "");
       preenchido.current = true;
     }
@@ -176,7 +183,7 @@ function PerfilPage() {
       toast.error("Não foi possível salvar neste navegador.");
       return;
     }
-    update({ name: nome.trim(), avatar: avatar.trim() });
+    update({ name: normalizeProfileName(nome), avatar: avatar.trim() });
     toast.success("Perfil salvo!");
   };
 
@@ -235,7 +242,13 @@ function PerfilPage() {
           </div>
         ) : (
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
-            <Field label="Nome" value={nome} onChange={setNome} placeholder="Ex.: Gustavo" />
+            <Field
+              label="Nome"
+              value={nome}
+              onChange={setNome}
+              sanitize={sanitizeProfileName}
+              placeholder="Ex.: Gustavo"
+            />
             <Field
               label="Avatar (URL)"
               value={avatar}
