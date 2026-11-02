@@ -39,6 +39,10 @@ export function Feedback() {
         .from("feedback")
         .insert({ message: cleanMessage });
 
+      if (error?.message.toLowerCase().includes("feedback rate limit exceeded")) {
+        setStatus("Você enviou várias sugestões recentemente. Tente novamente em alguns minutos.");
+        return;
+      }
       if (error) throw error;
 
       setMessage("");
