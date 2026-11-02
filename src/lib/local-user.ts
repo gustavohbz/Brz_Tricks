@@ -9,6 +9,7 @@
       muda, para todos os componentes atualizarem juntos.
     ========================================================= */
 import { useCallback, useEffect, useState } from "react";
+import { normalizeProfileName } from "@/lib/profile-name";
 
 /* Formato da identidade guardada no navegador */
 export type LocalUser = {
@@ -50,7 +51,7 @@ export function readLocalUser(): LocalUser {
       if (parsed.id) {
         return {
           id: parsed.id,
-          name: parsed.name ?? "",
+          name: normalizeProfileName(parsed.name),
           avatar: parsed.avatar ?? "",
         };
       }
@@ -78,7 +79,7 @@ export function saveLocalUser(patch: Partial<Omit<LocalUser, "id">>) {
   const current = readLocalUser();
   const next: LocalUser = {
     id: current.id, // id nunca é alterado
-    name: (patch.name ?? current.name).slice(0, 40), // nome: até 40 caracteres
+    name: normalizeProfileName(patch.name ?? current.name), // nome: até 23 letras e espaços
     avatar: (patch.avatar ?? current.avatar).slice(0, 500), // URL: até 500
   };
   localStorage.setItem(KEY, JSON.stringify(next));
