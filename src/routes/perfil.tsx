@@ -16,13 +16,14 @@ import { toast } from "sonner";
 import { ArrowLeft, Save } from "lucide-react";
 import { useAuth } from "@/lib/use-auth";
 import { useLocalUser } from "@/lib/local-user";
+import { normalizeProfileName, sanitizeProfileName } from "@/lib/profile-name";
 import {
   getMyAccount,
   saveMyPlan,
   saveMySetup,
   type CloudPlan,
 } from "@/lib/account.functions";
-import { emptySetup, sanitizeSetup, SETUP_KEY, type Setup } from "@/lib/setup";
+import { emptySetup, sanitizeSetup, sanitizeSetupValue, SETUP_KEY, type Setup } from "@/lib/setup";
 import { Cronograma, STORAGE_KEY, emptyPlan, type Plan } from "@/components/Cronograma";
 import { Button } from "@/components/ui/button";
 
@@ -56,19 +57,27 @@ function Field({
   value,
   onChange,
   placeholder,
+  sanitize,
+  maxLength = 60,
+  autoComplete = "off",
 }: {
   label: string;
   value: string;
   onChange: (v: string) => void;
   placeholder: string;
+  sanitize: (value: string) => string;
+  maxLength?: number;
+  autoComplete?: string;
 }) {
   return (
     <label className="block">
       <span className="text-display text-xs text-primary">{label}</span>
       <input
         value={value}
-        // Limita cada campo a 60 caracteres
-        onChange={(e) => onChange(e.target.value.slice(0, 60))}
+        // Aplica a regra específica do nome ou limita os campos de setup.
+        maxLength={maxLength}
+        autoComplete={autoComplete}
+        onChange={(e) => onChange(sanitize(e.target.value))}
         placeholder={placeholder}
         className="mt-2 w-full rounded-md border border-border bg-background px-3 py-2 text-base outline-none focus:border-primary sm:text-sm"
       />
@@ -108,7 +117,6 @@ function PerfilPage() {
   const [setup, setSetup] = useState<Setup>(emptySetup);
   const [plan, setPlan] = useState<Plan>(emptyPlan());
   const [nome, setNome] = useState("");
-  const [avatar, setAvatar] = useState("");
   const preenchido = useRef(false);
 
   /* Lê o que estava guardado neste navegador.
@@ -141,8 +149,7 @@ function PerfilPage() {
       // Visitante: trabalha em cima do que já está neste navegador.
       setSetup(localSetup);
       setPlan(localPlan);
-      setNome(localUser?.name ?? "");
-      setAvatar(localUser?.avatar ?? "");
+      setNome(sanitizeProfileName(localUser?.name ?? ""));
       preenchido.current = true;
     }
   }, [user, loading, conta.data, localUser]);
@@ -176,7 +183,7 @@ function PerfilPage() {
       toast.error("Não foi possível salvar neste navegador.");
       return;
     }
-    update({ name: nome.trim(), avatar: avatar.trim() });
+    update({ name: normalizeProfileName(nome) });
     toast.success("Perfil salvo!");
   };
 
@@ -234,13 +241,15 @@ function PerfilPage() {
             </div>
           </div>
         ) : (
-          <div className="mt-5 grid gap-4 sm:grid-cols-2">
-            <Field label="Nome" value={nome} onChange={setNome} placeholder="Ex.: Gustavo" />
+          <div className="mt-5 grid gap-4">
             <Field
-              label="Avatar (URL)"
-              value={avatar}
-              onChange={setAvatar}
-              placeholder="https://..."
+              label="Nome"
+              value={nome}
+              onChange={setNome}
+              sanitize={sanitizeProfileName}
+              maxLength={23}
+              autoComplete="name"
+              placeholder="Ex.: Gustavo"
             />
           </div>
         )}
@@ -258,24 +267,28 @@ function PerfilPage() {
             label="Truck"
             value={setup.truck}
             onChange={(v) => setSetup((s) => ({ ...s, truck: v }))}
+            sanitize={sanitizeSetupValue}
             placeholder="Ex.: 139mm"
           />
           <Field
             label="Shape"
             value={setup.shape}
             onChange={(v) => setSetup((s) => ({ ...s, shape: v }))}
+            sanitize={sanitizeSetupValue}
             placeholder='Ex.: 8.0"'
           />
           <Field
             label="Roda"
             value={setup.wheel}
             onChange={(v) => setSetup((s) => ({ ...s, wheel: v }))}
+            sanitize={sanitizeSetupValue}
             placeholder="Ex.: 53mm 99A"
           />
           <Field
             label="Rolamento"
             value={setup.bearing}
             onChange={(v) => setSetup((s) => ({ ...s, bearing: v }))}
+            sanitize={sanitizeSetupValue}
             placeholder="Ex.: Abec 7"
           />
         </div>

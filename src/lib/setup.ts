@@ -1,9 +1,9 @@
 /* =========================================================
     setup — as medidas do skate que o usuário anota
     ---------------------------------------------------------
-    • Módulo seguro para o navegador (sem chamadas ao servidor).
-    • Usado pela tela de perfil (localStorage) e pelas funções do
-      servidor (gravação na conta), para as regras serem as mesmas.
+    • Módulo seguro para o navegador e funções do servidor.
+    • O mesmo allowlist é aplicado ao digitar, ler armazenamento
+      local e validar dados recebidos no servidor.
     ========================================================= */
 
 /** As quatro peças que a pessoa anota */
@@ -19,18 +19,28 @@ export const emptySetup: Setup = { truck: "", shape: "", wheel: "", bearing: "" 
 export const SETUP_FIELD_MAX = 60;
 
 /**
+ * Aceita caracteres úteis para medidas e especificações do skate:
+ * letras, números, espaços, ponto, vírgula, aspas, hífen, barra e parênteses.
+ * Remove controles, marcação HTML e qualquer outro caractere.
+ */
+export function sanitizeSetupValue(value: unknown): string {
+  if (typeof value !== "string") return "";
+  return Array.from(
+    value.normalize("NFC").replace(/[^\p{L}\p{N} .,'"/()-]/gu, ""),
+  )
+    .slice(0, SETUP_FIELD_MAX)
+    .join("")
+    .trim();
+}
+
+/**
  * Converte qualquer valor recebido em um Setup válido.
- * Guarda só as quatro peças conhecidas, recorta espaços e limita
- * cada uma ao tamanho do formulário. Valores que não são texto
- * viram campo vazio — nada de números ou objetos escapando.
+ * Guarda só as quatro peças conhecidas e aplica o mesmo allowlist
+ * tanto aos valores locais quanto aos enviados para o servidor.
  */
 export function sanitizeSetup(input: unknown): Setup {
   const src = (input ?? {}) as Record<string, unknown>;
-  const campo = (chave: keyof Setup) => {
-    const valor = src[chave];
-    if (typeof valor !== "string") return "";
-    return valor.trim().slice(0, SETUP_FIELD_MAX);
-  };
+  const campo = (chave: keyof Setup) => sanitizeSetupValue(src[chave]);
   return {
     truck: campo("truck"),
     shape: campo("shape"),

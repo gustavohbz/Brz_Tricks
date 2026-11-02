@@ -5,7 +5,7 @@
     • À direita, duas situações possíveis:
       - Usuário ainda SEM nome → botão "Criar meu perfil".
       - Usuário COM nome → menu suspenso com avatar e opções.
-    • A edição acontece num popup (Dialog) com nome + URL do avatar.
+    • A edição acontece num popup (Dialog) que aceita somente o nome.
     • Tudo é salvo só no navegador (src/lib/local-user.ts).
     ========================================================= */
 
@@ -14,6 +14,7 @@ import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { CalendarDays, LogOut, User } from "lucide-react";
 import { useLocalUser } from "@/lib/local-user";
+import { normalizeProfileName, sanitizeProfileName } from "@/lib/profile-name";
 import { useAuth } from "@/lib/use-auth";
 import { LOGIN_HISTORY_KEY, profileControls } from "@/lib/profile-controls";
 import { NotificationBell } from "@/components/NotificationBell";
@@ -34,12 +35,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-
-function sanitizeName(value: string) {
-  return Array.from(value.normalize("NFC").replace(/[^\p{L} ]/gu, ""))
-    .slice(0, 23)
-    .join("");
-}
 
 export function SiteHeader() {
   // Identidade local reativa (id + nome + avatar)
@@ -87,12 +82,12 @@ export function SiteHeader() {
   // com os valores atuais para o usuário editar em cima deles.
   useEffect(() => {
     if (!user) return;
-    setNome(sanitizeName(user.name));
+    setNome(sanitizeProfileName(user.name));
   }, [user]);
 
-  // Salva nome/avatar digitados na identidade local e fecha o popup
+  // Salva o nome validado na identidade local e fecha o popup
   const salvar = () => {
-    update({ name: sanitizeName(nome).trim() });
+    update({ name: normalizeProfileName(nome) });
     setOpen(false);
     toast.success("Identidade salva neste navegador!");
   };
@@ -202,13 +197,13 @@ export function SiteHeader() {
         </div>
       </div>
 
-      {/* ---------- popup de identidade (nome + avatar) ---------- */}
+      {/* ---------- popup de identidade (somente nome) ---------- */}
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="border-border bg-popover">
           <DialogHeader>
             <DialogTitle className="text-display break-words pr-12 text-3xl">Sua identidade</DialogTitle>
             <DialogDescription>
-              Use até 23 letras e espaços. Seu nome fica salvo neste navegador.
+              Use até 23 letras Unicode e espaços. O nome fica salvo neste navegador.
             </DialogDescription>
           </DialogHeader>
 
@@ -217,7 +212,9 @@ export function SiteHeader() {
             <span className="text-display text-xs text-primary">Nome</span>
             <input
               value={nome}
-              onChange={(e) => setNome(sanitizeName(e.target.value))}
+              maxLength={23}
+              autoComplete="name"
+              onChange={(e) => setNome(sanitizeProfileName(e.target.value))}
               placeholder="Ex.: Gustavo"
               className="mt-2 w-full rounded-md border border-border bg-background px-3 py-2 text-base outline-none focus:border-primary sm:text-sm"
             />
