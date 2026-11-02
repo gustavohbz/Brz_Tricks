@@ -25,6 +25,7 @@ import { getRoadmap, categoriaLabel, type Trick } from "@/data/tricks";
 import { TrickCategoryTabs } from "@/components/TrickCategoryTabs";
 import { Dicas } from "@/components/Dicas"; // seção de curiosidades e dicas
 import { AdvertisingBanner } from "@/components/AdvertisingBanner";
+import brauzaLogo from "@/assets/brauza-logo.png.asset.json";
 import { Fundamentos } from "@/components/Fundamentos";
 import { Feedback } from "@/components/Feedback";
 import { Pistas } from "@/components/Pistas"; // seção de pistas de skate (mapa + comentários)
@@ -318,6 +319,13 @@ function Index() {
           SEÇÃO 1 — WELCOME
           ===================================================== */}
       <section className="surface-asphalt relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 text-center sm:px-6">
+        {/* Logo de fundo: transparente e desfocada atrás do texto de boas-vindas */}
+        <img
+          src={brauzaLogo.url}
+          alt=""
+          aria-hidden="true"
+          className="pointer-events-none absolute left-1/2 top-1/2 w-[min(90vw,720px)] -translate-x-1/2 -translate-y-1/2 opacity-20 blur-sm"
+        />
         <div className="pointer-events-none absolute inset-0 opacity-[0.07] [background-image:repeating-linear-gradient(90deg,transparent_0_38px,currentColor_38px_39px)]" />
         <p className="text-display relative text-sm text-primary">
           Bem-vindo à sua Wiki de Manobras
