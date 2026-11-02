@@ -59,6 +59,7 @@ function Field({
   placeholder,
   sanitize,
   maxLength = 60,
+  autoComplete = "off",
 }: {
   label: string;
   value: string;
@@ -66,6 +67,7 @@ function Field({
   placeholder: string;
   sanitize: (value: string) => string;
   maxLength?: number;
+  autoComplete?: string;
 }) {
   return (
     <label className="block">
@@ -74,10 +76,8 @@ function Field({
         value={value}
         // Aplica a regra específica do nome ou limita os campos de setup.
         maxLength={maxLength}
-        autoComplete={sanitize ? "name" : "off"}
-        onChange={(e) =>
-          onChange(sanitize ? sanitize(e.target.value) : e.target.value.slice(0, 60))
-        }
+        autoComplete={autoComplete}
+        onChange={(e) => onChange(sanitize(e.target.value))}
         placeholder={placeholder}
         className="mt-2 w-full rounded-md border border-border bg-background px-3 py-2 text-base outline-none focus:border-primary sm:text-sm"
       />
@@ -241,13 +241,14 @@ function PerfilPage() {
             </div>
           </div>
         ) : (
-          <div className="mt-5 grid gap-4 sm:grid-cols-2">
+          <div className="mt-5 grid gap-4">
             <Field
               label="Nome"
               value={nome}
               onChange={setNome}
               sanitize={sanitizeProfileName}
               maxLength={23}
+              autoComplete="name"
               placeholder="Ex.: Gustavo"
             />
           </div>
