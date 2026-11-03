@@ -345,7 +345,7 @@ function Index() {
           <Button
             size="lg"
             onClick={() => setStarted(true)}
-            className="text-display ring-glow h-14 px-10 text-lg"
+            className="text-display ring-glow h-14 px-10 text-lg text-primary-foreground"
           >
             Confira
           </Button>
