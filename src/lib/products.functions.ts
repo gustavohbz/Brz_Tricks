@@ -10,7 +10,9 @@ async function withPhotos(client: SupabaseClient<Database>, rows: Tables<"produc
   return Promise.all(rows.map(async row => {
     const { data, error } = await client.storage.from("product-photos").createSignedUrls(row.photos, 3600);
     if (error) throw new Error("Não foi possível carregar as fotos.");
-    return { ...row, photoUrls: data.map(p => p.signedUrl) };
+    const photoUrls = data.map(p => p.signedUrl);
+    if (photoUrls.some(url => !url)) throw new Error("Não foi possível carregar as fotos.");
+    return { ...row, photoUrls: photoUrls.filter((url): url is string => typeof url === "string") };
   }));
 }
 export const listProducts = createServerFn({ method: "GET" }).handler(async () => {
