@@ -15,6 +15,13 @@
       "when": 1793587888687,
       "tag": "0001_add_anonymous_feedback",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793867013242,
+      "tag": "0002_create_products_marketplace",
+      "breakpoints": true
     }
   ]
 }

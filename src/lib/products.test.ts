@@ -1,0 +1,10 @@
+import { test } from "node:test";
+import { strict as assert } from "node:assert";
+import { emptyProductDraft, productFieldsSchema, productInputSchema, parsePrice, sanitizeProductText, mayEditProduct, mayHardDeleteProduct, whatsappLink } from "./products";
+const input = { ...emptyProductDraft, name: "Shape 8,0", price: "150,90", pickup_location: "São Paulo, SP", whatsapp: "11987654321" };
+test("prices accept comma decimals without floating rounding", () => { assert.equal(parsePrice("1.250,90"), 125090); assert.equal(parsePrice("0,01"), 1); assert.throws(() => parsePrice("-10,00")); assert.throws(() => parsePrice("10,123")); });
+test("one photo required and maximum four", () => { const p = { ...input, id: "00000000-0000-4000-8000-000000000000" }; assert.equal(productInputSchema.safeParse({ ...p, photos: [] }).success, false); assert.equal(productInputSchema.safeParse({ ...p, photos: ["a"] }).success, true); assert.equal(productInputSchema.safeParse({ ...p, photos: ["a","b","c","d"] }).success, true); assert.equal(productInputSchema.safeParse({ ...p, photos: ["a","b","c","d","e"] }).success, false); });
+test("text rejects markup and invisible control input", () => { assert.equal(productFieldsSchema.safeParse({ ...input, name: "<script>" }).success, false); assert.equal(productFieldsSchema.safeParse({ ...input, description: "hello\u200b" }).success, false); assert.equal(sanitizeProductText("Shape<script>\u0000"), "Shapescript"); });
+test("only owners edit active products", () => { assert.equal(mayEditProduct("a", "a", null), true); assert.equal(mayEditProduct("a", "b", null), false); assert.equal(mayEditProduct("a", "a", "date"), false); });
+test("hard deletion requires admin and soft-deleted item", () => { assert.equal(mayHardDeleteProduct(false, "date"), false); assert.equal(mayHardDeleteProduct(true, null), false); assert.equal(mayHardDeleteProduct(true, "date"), true); });
+test("WhatsApp requires validated number and encodes message", () => { assert.ok(whatsappLink("5511987654321", "Shape 8,0").startsWith("https://wa.me/5511987654321?text=")); assert.throws(() => whatsappLink("javascript:alert(1)", "Shape")); });

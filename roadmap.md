@@ -1,4 +1,5 @@
 # Requested changes
+- [ ] Create marketplace, product validation, 1–4 photos, WhatsApp contact, owner edits/soft deletion and admin-only deleted list/hard deletion; apply products migration and verify.
 - [x] Restore package installation via the official registry; frozen install succeeds, build OK, all four pages and profile/beginner interactions verified without runtime errors; 16 tests pass.
 - [x] Rename the app to Brauza Skate Co. across pages, announcements, metadata, installable-app name and documentation, preserving existing browser data; six related unit tests pass.
 - [x] Visually verify the renamed app: Brauza Skate Co. appears on the home page and in all four page titles after preview recovery.
