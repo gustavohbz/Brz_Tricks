@@ -65,6 +65,7 @@
 }
 
 :root {
+  color-scheme: dark;
   --radius: 0.25rem;
   --background: oklch(0.08 0 0);
   --foreground: oklch(0.98 0 0);
@@ -173,6 +174,39 @@
     color: var(--color-foreground);
     overflow-wrap: anywhere;
   }
+}
+
+/* The existing dark palette remains the default until the saved choice loads. */
+:root.light {
+  color-scheme: light;
+  --background: oklch(0.99 0 0);
+  --foreground: oklch(0.16 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.16 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.16 0 0);
+  --primary: oklch(0.64 0.14 50);
+  --primary-foreground: oklch(0.08 0 0);
+  --secondary: oklch(0.94 0 0);
+  --secondary-foreground: oklch(0.16 0 0);
+  --muted: oklch(0.95 0 0);
+  --muted-foreground: oklch(0.44 0 0);
+  --accent: oklch(0.9 0.065 55);
+  --accent-foreground: oklch(0.16 0 0);
+  --border: oklch(0.84 0 0);
+  --input: oklch(0.8 0 0);
+  --ring: oklch(0.64 0.14 50);
+  --sidebar: oklch(0.97 0 0);
+  --sidebar-foreground: oklch(0.16 0 0);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: var(--accent);
+  --sidebar-accent-foreground: var(--accent-foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--ring);
+  --gradient-asphalt: linear-gradient(160deg, oklch(0.96 0 0), oklch(0.99 0 0));
+  --shadow-street: 0 18px 45px -20px oklch(0 0 0 / 0.18);
+  --shadow-button: 0 4px 12px -4px oklch(0.8 0.12 55 / 0.3), 0 2px 4px oklch(0 0 0 / 0.12);
 }
 
 @utility shadow-button {
