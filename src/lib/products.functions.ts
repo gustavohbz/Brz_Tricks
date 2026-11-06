@@ -45,7 +45,7 @@ export const saveProduct = createServerFn({ method: "POST" }).middleware([requir
 });
 export const removeProduct = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator((v: unknown) => z.object({ id: z.string().uuid(), permanent: z.boolean() }).strict().parse(v)).handler(async ({ data, context }) => {
   if (!data.permanent) {
-    const { error } = await context.supabase.from("products").update({ deleted_at: new Date().toISOString() }).eq("id", data.id).eq("user_id", context.userId).is("deleted_at", null).select("id").single();
+    const { error } = await context.supabase.rpc("soft_delete_product", { _id: data.id });
     if (error) throw new Error("Não foi possível excluir este anúncio."); return { ok: true };
   }
   const { data: admin } = await context.supabase.rpc("has_role", { _user_id: context.userId, _role: "admin" });
