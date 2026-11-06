@@ -17,7 +17,7 @@
    ========================================================= */
 import { createFileRoute, Link } from "@tanstack/react-router"; // registra o arquivo como rota + links internos
 import { useEffect, useState } from "react"; // hooks usados nesta página
-import { ChevronDown, PlayCircle } from "lucide-react"; // ícones
+import { ArrowUpRight, ChevronDown, PlayCircle } from "lucide-react"; // ícones
 
 
 
@@ -384,6 +384,24 @@ function Index() {
               </HoverCard>
             )}
           />
+
+          <aside aria-label="Marketplace Brauza Skate Co." className="w-full">
+            <Link
+              to="/marketplace"
+              className="flex w-full min-w-0 items-center justify-between gap-4 border-y border-primary/30 bg-secondary px-4 py-6 transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:px-8"
+            >
+              <div className="flex min-w-0 items-center gap-4">
+                <img src="/icon-192.png" alt="" className="size-16 shrink-0 rounded-md object-contain sm:size-20" />
+                <div className="min-w-0">
+                  <p className="text-xs uppercase text-primary">Brauza Skate Co.</p>
+                  <p className="mt-1 break-words font-display text-3xl leading-tight sm:text-4xl">Marketplace</p>
+                  <p className="mt-2 break-words text-sm text-muted-foreground">Compre e anuncie produtos de skate.</p>
+                  <p className="mt-3 text-sm font-medium text-primary">Ir para o marketplace</p>
+                </div>
+              </div>
+              <ArrowUpRight className="size-7 shrink-0 text-primary" aria-hidden="true" />
+            </Link>
+          </aside>
 
           {/* =================================================
               SEÇÃO 5 — CRONOGRAMA DE TREINOS
