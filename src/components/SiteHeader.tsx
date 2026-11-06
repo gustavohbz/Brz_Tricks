@@ -18,6 +18,7 @@ import { normalizeProfileName, sanitizeProfileName } from "@/lib/profile-name";
 import { useAuth } from "@/lib/use-auth";
 import { LOGIN_HISTORY_KEY, profileControls } from "@/lib/profile-controls";
 import { NotificationBell } from "@/components/NotificationBell";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -112,6 +113,7 @@ export function SiteHeader() {
 
         <div className="flex min-w-0 items-center gap-1 sm:gap-2">
         <Button asChild variant="ghost" size="icon" aria-label="Marketplace" title="Marketplace"><Link to="/marketplace"><ShoppingBag className="size-5" /></Link></Button>
+        <ThemeToggle />
         <NotificationBell />
         {temNome ? (
           /* -------- usuário COM nome: menu suspenso -------- */

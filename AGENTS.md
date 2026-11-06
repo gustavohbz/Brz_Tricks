@@ -10,6 +10,7 @@
 <!-- LOVABLE:END -->
 
 ## App rules
+- Theme switching uses root light/dark classes and browser-local persistence after hydration; keep the existing dark palette as the SSR default to avoid hydration mismatches.
 - Marketplace validation is shared with authenticated server functions and reinforced by database constraints/triggers; private photos are re-encoded as JPEG and signed only for readable listings, so removed items stay private.
 - Marketplace roles live in protected user_roles; ordinary writes use caller RLS, owners soft-delete only their own active items, and verified admins alone list removed items and hard-delete them.
 - Use the official npm registry for package installation so an unavailable package-cache mirror cannot prevent preview startup; retain the release-age guard.
