@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { ImagePlus, X } from "lucide-react";
 import { toast } from "sonner";
@@ -18,13 +18,14 @@ export function ProductForm({ product, userId, onClose, onSaved }: { product: Pr
   const [photos, setPhotos] = useState<Photo[]>(product?.photos.map((path, i) => ({ path, url: product.photoUrls[i] ?? "" })) ?? []);
   const [busy, setBusy] = useState(false); const [processing, setProcessing] = useState(false); const [error, setError] = useState("");
   const save = useServerFn(saveProduct);
-  useEffect(() => () => { for (const p of photos) if (p.blob) URL.revokeObjectURL(p.url); }, [photos]);
+  const previewUrls = useRef<string[]>([]);
+  useEffect(() => () => { for (const url of previewUrls.current) URL.revokeObjectURL(url); }, []);
   const update = (key: keyof ProductDraft, value: string) => setDraft(d => ({ ...d, [key]: value }));
   async function addPhotos(files: FileList | null) {
     if (!files) return;
     if (photos.length + files.length > 4) { setError("Máximo de quatro fotos."); return; }
     setProcessing(true); setError("");
-    try { const added: Photo[] = []; for (const file of Array.from(files)) { const blob = await prepareProductPhoto(file); added.push({ blob, url: URL.createObjectURL(blob) }); } setPhotos(p => [...p, ...added]); }
+    try { const added: Photo[] = []; for (const file of Array.from(files)) { const blob = await prepareProductPhoto(file); const url = URL.createObjectURL(blob); previewUrls.current.push(url); added.push({ blob, url }); } setPhotos(p => [...p, ...added]); }
     catch (e) { setError(e instanceof Error ? e.message : "Foto inválida."); } finally { setProcessing(false); }
   }
   async function submit(e: React.FormEvent) {
