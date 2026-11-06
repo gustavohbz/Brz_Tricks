@@ -278,6 +278,8 @@ export type Database = {
         }
         Returns: boolean
       }
+      product_photo_attached: { Args: { _path: string }; Returns: boolean }
+      soft_delete_product: { Args: { _id: string }; Returns: string }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
