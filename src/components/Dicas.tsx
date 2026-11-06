@@ -10,6 +10,7 @@
 import { useMemo, useState } from "react";
 import { Lightbulb, Shield, Wrench, Brain, Sparkles, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 /* ---------- tipos e conteúdo ---------- */
 type Categoria = "Segurança" | "Técnica" | "Equipamento" | "Mentalidade" | "Curiosidade";
@@ -122,6 +123,7 @@ const CATEGORIAS: Categoria[] = ["Segurança", "Técnica", "Equipamento", "Menta
    Componente
    ========================================================= */
 export function Dicas() {
+  const [expandida, setExpandida] = useState(false);
   const [filtro, setFiltro] = useState<Categoria | "Todas">("Todas");
   const [aberta, setAberta] = useState<string | null>(null);
 
@@ -133,14 +135,29 @@ export function Dicas() {
   return (
     <div className="mx-auto max-w-5xl">
       {/* ---------- cabeçalho ---------- */}
-      <p className="text-display text-sm text-accent">Curiosidades &amp; dicas</p>
-      <h2 className="text-display mt-2 text-4xl sm:text-5xl">
-        O que ninguém te conta no começo
-      </h2>
-      <p className="mt-3 max-w-xl text-sm text-muted-foreground">
-        Toque em um card para abrir a explicação completa. Use os filtros para achar o que
-        você precisa agora.
-      </p>
+      <div className="flex min-w-0 items-start justify-between gap-4">
+        <div className="min-w-0">
+          <p className="text-display text-sm text-accent">Curiosidades &amp; dicas</p>
+          <h2 id="dicas-title" className="text-display mt-2 break-words text-4xl sm:text-5xl">
+            O que ninguém te conta no começo
+          </h2>
+        </div>
+        <Button
+          type="button"
+          variant="outline"
+          size="icon"
+          className="size-11 shrink-0 text-primary"
+          aria-expanded={expandida}
+          aria-controls="dicas-content"
+          aria-label={`${expandida ? "Recolher" : "Expandir"} Curiosidades & dicas`}
+          title={`${expandida ? "Recolher" : "Expandir"} Curiosidades & dicas`}
+          onClick={() => setExpandida((atual) => !atual)}
+        >
+          <ChevronDown aria-hidden="true" className={cn("transition-transform motion-reduce:transition-none", expandida && "rotate-180")} />
+        </Button>
+      </div>
+
+      <div id="dicas-content" role="region" aria-labelledby="dicas-title" hidden={!expandida}>
 
       {/* ---------- filtros ---------- */}
       <div className="mt-8 flex flex-wrap gap-2">
@@ -212,6 +229,7 @@ export function Dicas() {
             </button>
           );
         })}
+      </div>
       </div>
     </div>
   );
