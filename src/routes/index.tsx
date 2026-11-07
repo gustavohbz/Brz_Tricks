@@ -398,7 +398,8 @@ function Index() {
                 <TrickHoverPreview trick={t} videoUrl={videos[t.name]} />
               </HoverCard>
             )}
-          />
+            />
+          </section>
 
           <aside aria-label="Marketplace Brauza Skate Co." className="w-full">
             <Link
