@@ -8,7 +8,8 @@
       id gerado no navegador (src/lib/local-user.ts).
     ========================================================= */
 import { useEffect, useMemo, useState } from "react";
-import { MapPin, Ruler, Star, Loader2, MessageSquare } from "lucide-react";
+import { MapPin, Ruler, Star, Loader2, MessageSquare, ChevronDown } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { GoogleMapView } from "@/components/GoogleMapView";
