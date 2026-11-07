@@ -6,10 +6,7 @@ import {
   type Categoria,
   type Trick,
 } from "@/data/tricks";
-import {
-  DEFAULT_TRICK_SECTION_ID,
-  filterTricksByCategory,
-} from "@/data/trick-categories";
+import { filterTricksByCategory } from "@/data/trick-categories";
 import { Button } from "@/components/ui/button";
 import {
   Tabs,
@@ -25,7 +22,7 @@ export function TrickCategoryTabs({
   renderTrick: (trick: Trick, index: number) => ReactNode;
   onNavigate: (id: string) => void;
 }) {
-  const [activeSection, setActiveSection] = useState<string>(DEFAULT_TRICK_SECTION_ID);
+  const [activeSection, setActiveSection] = useState<string>(""); // nenhuma categoria pré-selecionada: o usuário escolhe
   const [filters, setFilters] = useState<Record<string, Categoria | "todas">>({});
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({});
   const [olliesCollapsed, setOlliesCollapsed] = useState(false);

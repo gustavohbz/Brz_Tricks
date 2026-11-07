@@ -312,6 +312,8 @@ function Index() {
 
 
 
+  const [manobrasAbertas, setManobrasAbertas] = useState(false);
+
   return (
     <main className="min-h-screen bg-background pt-14 font-sans text-foreground">
       <AdvertisingBanner />
@@ -364,17 +366,35 @@ function Index() {
               Agrupa os Fundamentos e a trilha de manobras
               (Ollies, Variais e Flip's) em uma seção só.
               ================================================= */}
-          <section id="tricks-fundamentos" aria-labelledby="tricks-fundamentos-title" className="border-t border-border">
-            <div className="mx-auto max-w-5xl px-4 pt-16 sm:px-6 sm:pt-20">
-              <p className="text-display text-sm text-accent">Aprenda do zero</p>
-              <h2 id="tricks-fundamentos-title" className="text-display mt-2 text-4xl sm:text-5xl">
-                Tricks e fundamentos
-              </h2>
-              <p className="mt-2 max-w-lg text-sm text-muted-foreground">
-                Comece pela base e siga a trilha de manobras no seu ritmo.
-              </p>
-            </div>
+          {/* Seção dedicada e expansível de Fundamentos */}
+          <section id="secao-fundamentos" className="border-t border-border">
             <Fundamentos />
+          </section>
+
+          {/* Seção dedicada e expansível de Manobras (Ollies, Variais, Flip's) */}
+          <section id="manobras" aria-labelledby="manobras-title" className="border-t border-border">
+            <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-20">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-display text-sm text-accent">Trilha de manobras</p>
+                  <h2 id="manobras-title" className="text-display mt-2 text-4xl sm:text-5xl">Manobras</h2>
+                  <p className="mt-2 max-w-lg text-sm text-muted-foreground">
+                    Ollies, Variais e Flip's — escolha a categoria que quiser ver.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  aria-expanded={manobrasAbertas}
+                  aria-controls="manobras-content"
+                  aria-label={`${manobrasAbertas ? "Recolher" : "Expandir"} Manobras`}
+                  onClick={() => setManobrasAbertas((v) => !v)}
+                  className="inline-flex size-11 shrink-0 items-center justify-center rounded-md border border-border text-accent hover:border-primary hover:text-primary"
+                >
+                  <ChevronDown className={`size-5 transition-transform ${manobrasAbertas ? "rotate-180" : ""}`} />
+                </button>
+              </div>
+            </div>
+            <div id="manobras-content" hidden={!manobrasAbertas}>
             <TrickCategoryTabs
             onNavigate={go}
             renderTrick={(t, i) => (
@@ -399,6 +419,7 @@ function Index() {
               </HoverCard>
             )}
             />
+            </div>
           </section>
 
           <aside aria-label="Marketplace Brauza Skate Co." className="w-full">
