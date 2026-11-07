@@ -359,8 +359,23 @@ function Index() {
 
       {started && (
         <>
-          <Fundamentos />
-          <TrickCategoryTabs
+          {/* =================================================
+              SEÇÃO 2 — TRICKS E FUNDAMENTOS
+              Agrupa os Fundamentos e a trilha de manobras
+              (Ollies, Variais e Flip's) em uma seção só.
+              ================================================= */}
+          <section id="tricks-fundamentos" aria-labelledby="tricks-fundamentos-title" className="border-t border-border">
+            <div className="mx-auto max-w-5xl px-4 pt-16 sm:px-6 sm:pt-20">
+              <p className="text-display text-sm text-accent">Aprenda do zero</p>
+              <h2 id="tricks-fundamentos-title" className="text-display mt-2 text-4xl sm:text-5xl">
+                Tricks e fundamentos
+              </h2>
+              <p className="mt-2 max-w-lg text-sm text-muted-foreground">
+                Comece pela base e siga a trilha de manobras no seu ritmo.
+              </p>
+            </div>
+            <Fundamentos />
+            <TrickCategoryTabs
             onNavigate={go}
             renderTrick={(t, i) => (
               <HoverCard key={t.name} openDelay={120} closeDelay={80}>
