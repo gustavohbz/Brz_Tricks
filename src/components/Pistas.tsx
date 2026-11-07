@@ -282,6 +282,8 @@ function Comentarios({ pista }: { pista: Pista }) {
 export function Pistas() {
   const [pistas, setPistas] = useState<Pista[]>([]);
   const [loading, setLoading] = useState(true);
+  // Seção começa recolhida para não poluir a página; abre no botão de seta
+  const [expandida, setExpandida] = useState(false);
 
   // Filtros selecionados pelo usuário
   const [filtro, setFiltro] = useState<Nivel | "todos">("todos");
