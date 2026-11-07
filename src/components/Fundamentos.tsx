@@ -56,7 +56,7 @@ export function Fundamentos() {
     <section
       id="fundamentos"
       aria-labelledby="fundamentos-title"
-      className="scroll-mt-14 border-t border-border px-4 py-16 sm:px-6 sm:py-20"
+      className="scroll-mt-14 px-4 py-16 sm:px-6 sm:py-20"
     >
       <div className="mx-auto max-w-5xl">
         <h2 id="fundamentos-title" className="sr-only">

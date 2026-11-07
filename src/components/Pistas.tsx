@@ -8,7 +8,8 @@
       id gerado no navegador (src/lib/local-user.ts).
     ========================================================= */
 import { useEffect, useMemo, useState } from "react";
-import { MapPin, Ruler, Star, Loader2, MessageSquare } from "lucide-react";
+import { MapPin, Ruler, Star, Loader2, MessageSquare, ChevronDown } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { GoogleMapView } from "@/components/GoogleMapView";
@@ -281,6 +282,8 @@ function Comentarios({ pista }: { pista: Pista }) {
 export function Pistas() {
   const [pistas, setPistas] = useState<Pista[]>([]);
   const [loading, setLoading] = useState(true);
+  // Seção começa recolhida para não poluir a página; abre no botão de seta
+  const [expandida, setExpandida] = useState(false);
 
   // Filtros selecionados pelo usuário
   const [filtro, setFiltro] = useState<Nivel | "todos">("todos");
@@ -321,14 +324,32 @@ export function Pistas() {
 
   return (
     <div className="mx-auto max-w-5xl">
-      {/* Cabeçalho da seção */}
-      <p className="text-display text-sm text-accent">Onde andar</p>
-      <h2 className="text-display mt-2 text-4xl sm:text-5xl">Pistas</h2>
-      <p className="mt-2 max-w-lg text-sm text-muted-foreground">
-        Tamanho, piso, nível e localização no mapa. Clique numa pista para ver o mapa e
-        os comentários de quem já andou lá.
-      </p>
+      {/* Cabeçalho da seção com botão de expandir/recolher */}
+      <div className="flex min-w-0 items-start justify-between gap-4">
+        <div className="min-w-0">
+          <p className="text-display text-sm text-accent">Onde andar</p>
+          <h2 id="pistas-title" className="text-display mt-2 break-words text-4xl sm:text-5xl">Pistas</h2>
+          <p className="mt-2 max-w-lg text-sm text-muted-foreground">
+            Tamanho, piso, nível e localização no mapa. Clique numa pista para ver o mapa e
+            os comentários de quem já andou lá.
+          </p>
+        </div>
+        <Button
+          type="button"
+          variant="outline"
+          size="icon"
+          className="size-11 shrink-0 text-primary"
+          aria-expanded={expandida}
+          aria-controls="pistas-content"
+          aria-label={`${expandida ? "Recolher" : "Expandir"} Pistas`}
+          title={`${expandida ? "Recolher" : "Expandir"} Pistas`}
+          onClick={() => setExpandida((atual) => !atual)}
+        >
+          <ChevronDown aria-hidden="true" className={cn("transition-transform motion-reduce:transition-none", expandida && "rotate-180")} />
+        </Button>
+      </div>
 
+      <div id="pistas-content" role="region" aria-labelledby="pistas-title" hidden={!expandida}>
       {/* ---------- filtro por nível ---------- */}
       <div className="mt-6 flex flex-wrap items-center gap-2">
         <span className="text-display text-xs text-muted-foreground">Nível:</span>
@@ -490,6 +511,7 @@ export function Pistas() {
           )}
         </DialogContent>
       </Dialog>
+      </div>
     </div>
   );
 }
