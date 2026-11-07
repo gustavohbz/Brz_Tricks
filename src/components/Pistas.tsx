@@ -511,6 +511,7 @@ export function Pistas() {
           )}
         </DialogContent>
       </Dialog>
+      </div>
     </div>
   );
 }
