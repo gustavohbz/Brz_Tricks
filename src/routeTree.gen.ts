@@ -14,6 +14,8 @@ import { Route as EntrarRouteImport } from './routes/entrar'
 import { Route as MarketplaceRouteImport } from './routes/marketplace'
 import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as TreinosRouteImport } from './routes/treinos'
+import { Route as SkatistasIndexRouteImport } from './routes/skatistas.index'
+import { Route as SkatistasIdRouteImport } from './routes/skatistas.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -40,6 +42,16 @@ const TreinosRoute = TreinosRouteImport.update({
   path: '/treinos',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SkatistasIndexRoute = SkatistasIndexRouteImport.update({
+  id: '/skatistas/',
+  path: '/skatistas/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SkatistasIdRoute = SkatistasIdRouteImport.update({
+  id: '/skatistas/$id',
+  path: '/skatistas/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -47,6 +59,8 @@ export interface FileRoutesByFullPath {
   '/marketplace': typeof MarketplaceRoute
   '/perfil': typeof PerfilRoute
   '/treinos': typeof TreinosRoute
+  '/skatistas/$id': typeof SkatistasIdRoute
+  '/skatistas/': typeof SkatistasIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +68,8 @@ export interface FileRoutesByTo {
   '/marketplace': typeof MarketplaceRoute
   '/perfil': typeof PerfilRoute
   '/treinos': typeof TreinosRoute
+  '/skatistas/$id': typeof SkatistasIdRoute
+  '/skatistas': typeof SkatistasIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,13 +78,37 @@ export interface FileRoutesById {
   '/marketplace': typeof MarketplaceRoute
   '/perfil': typeof PerfilRoute
   '/treinos': typeof TreinosRoute
+  '/skatistas/$id': typeof SkatistasIdRoute
+  '/skatistas/': typeof SkatistasIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/entrar' | '/marketplace' | '/perfil' | '/treinos'
+  fullPaths:
+    | '/'
+    | '/entrar'
+    | '/marketplace'
+    | '/perfil'
+    | '/treinos'
+    | '/skatistas/$id'
+    | '/skatistas/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/entrar' | '/marketplace' | '/perfil' | '/treinos'
-  id: '__root__' | '/' | '/entrar' | '/marketplace' | '/perfil' | '/treinos'
+  to:
+    | '/'
+    | '/entrar'
+    | '/marketplace'
+    | '/perfil'
+    | '/treinos'
+    | '/skatistas/$id'
+    | '/skatistas'
+  id:
+    | '__root__'
+    | '/'
+    | '/entrar'
+    | '/marketplace'
+    | '/perfil'
+    | '/treinos'
+    | '/skatistas/$id'
+    | '/skatistas/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -77,6 +117,8 @@ export interface RootRouteChildren {
   MarketplaceRoute: typeof MarketplaceRoute
   PerfilRoute: typeof PerfilRoute
   TreinosRoute: typeof TreinosRoute
+  SkatistasIdRoute: typeof SkatistasIdRoute
+  SkatistasIndexRoute: typeof SkatistasIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -116,6 +158,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TreinosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/skatistas/': {
+      id: '/skatistas/'
+      path: '/skatistas'
+      fullPath: '/skatistas/'
+      preLoaderRoute: typeof SkatistasIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/skatistas/$id': {
+      id: '/skatistas/$id'
+      path: '/skatistas/$id'
+      fullPath: '/skatistas/$id'
+      preLoaderRoute: typeof SkatistasIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -125,6 +181,8 @@ const rootRouteChildren: RootRouteChildren = {
   MarketplaceRoute: MarketplaceRoute,
   PerfilRoute: PerfilRoute,
   TreinosRoute: TreinosRoute,
+  SkatistasIdRoute: SkatistasIdRoute,
+  SkatistasIndexRoute: SkatistasIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
