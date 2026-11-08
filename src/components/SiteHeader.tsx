@@ -113,6 +113,7 @@ export function SiteHeader() {
 
         <div className="flex min-w-0 items-center gap-1 sm:gap-2">
         <Button asChild variant="ghost" size="icon" aria-label="Marketplace" title="Marketplace"><Link to="/marketplace"><ShoppingBag className="size-5" /></Link></Button>
+        <Button asChild variant="ghost" size="icon" aria-label="Skatistas" title="Skatistas"><Link to="/skatistas"><Users className="size-5" /></Link></Button>
         <ThemeToggle />
         <NotificationBell />
         {temNome ? (
