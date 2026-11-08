@@ -12,7 +12,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { CalendarDays, LogOut, User, ShoppingBag } from "lucide-react";
+import { CalendarDays, LogOut, User, ShoppingBag, Users } from "lucide-react";
 import { useLocalUser } from "@/lib/local-user";
 import { normalizeProfileName, sanitizeProfileName } from "@/lib/profile-name";
 import { useAuth } from "@/lib/use-auth";
@@ -113,6 +113,7 @@ export function SiteHeader() {
 
         <div className="flex min-w-0 items-center gap-1 sm:gap-2">
         <Button asChild variant="ghost" size="icon" aria-label="Marketplace" title="Marketplace"><Link to="/marketplace"><ShoppingBag className="size-5" /></Link></Button>
+        <Button asChild variant="ghost" size="icon" aria-label="Skatistas" title="Skatistas"><Link to="/skatistas"><Users className="size-5" /></Link></Button>
         <ThemeToggle />
         <NotificationBell />
         {temNome ? (

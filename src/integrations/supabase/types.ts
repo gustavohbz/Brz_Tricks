@@ -208,6 +208,39 @@ export type Database = {
         }
         Relationships: []
       }
+      skaters: {
+        Row: {
+          bio: string
+          created_at: string
+          home_park: string
+          id: string
+          instagram: string
+          name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          bio?: string
+          created_at?: string
+          home_park: string
+          id?: string
+          instagram?: string
+          name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          bio?: string
+          created_at?: string
+          home_park?: string
+          id?: string
+          instagram?: string
+          name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       subscriptions: {
         Row: {
           created_at: string
