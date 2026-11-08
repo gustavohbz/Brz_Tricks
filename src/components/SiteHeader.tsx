@@ -12,7 +12,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { CalendarDays, LogOut, User, ShoppingBag } from "lucide-react";
+import { CalendarDays, LogOut, User, ShoppingBag, Users } from "lucide-react";
 import { useLocalUser } from "@/lib/local-user";
 import { normalizeProfileName, sanitizeProfileName } from "@/lib/profile-name";
 import { useAuth } from "@/lib/use-auth";
