@@ -24,7 +24,7 @@ function Skatistas() {
 
   async function submit(e: React.FormEvent) {
     e.preventDefault(); if (!user) return;
-    if (form.name.trim().length < 2 || form.home_park.trim().length < 2) return toast.error("Preencha nome e pista.");
+    if (form.name.trim().length < 2 || form.home_park.trim().length < 2) { toast.error("Preencha nome e pista."); return; }
     setBusy(true);
     try { await saveSkater(user.id, form); toast.success("Perfil de skatista salvo!"); await q.refetch(); }
     catch { toast.error("Não foi possível salvar."); } finally { setBusy(false); }
