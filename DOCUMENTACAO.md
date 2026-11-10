@@ -71,7 +71,7 @@ Estado e funções:
 
 | Nome | Tipo | Papel |
 | --- | --- | --- |
-| `started` | `useState<boolean>` | `false` = só o welcome aparece. Vira `true` no clique em "Confira" e libera trilha + seções + footer. |
+| `started` | `useState<boolean>` | `false` = só o welcome aparece. Agora começa `true`: tudo aparece sem clique; "Confira" só rola até os fundamentos. |
 | `trick` | `useState<Trick \| null>` | manobra selecionada. `null` = modal fechado; qualquer objeto = modal aberto com aquela manobra. |
 | `go(id)` | função | `document.getElementById(id).scrollIntoView({ behavior: "smooth" })` — rolagem suave até uma seção. |
 | `expandidos` | `useState<Record<string, boolean>>` | controle do "Ver mais" de cada seção de manobras. Ausente/`false` = só a 1ª linha (5 manobras); `true` = lista completa. |

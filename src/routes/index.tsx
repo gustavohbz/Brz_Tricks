@@ -280,15 +280,15 @@ function TrickVideoField({
    5) PÁGINA
    ---------------------------------------------------------
    ESTADO (hooks):
-   • started → false = só o hero aparece. Vira true no clique em
-     "Confira" e libera fundamentos + trilha + seções + footer.
+   • started → sempre true: todo o conteúdo aparece direto.
+     "Confira" apenas rola até os fundamentos.
    • trick   → manobra selecionada. null = modal fechado;
      objeto = modal aberto com aquela manobra.
    FUNÇÃO:
    • go(id)  → rolagem suave até a <section> com aquele id.
    ========================================================= */
 function Index() {
-  const [started, setStarted] = useState(false);
+  const started = true;
   const [trick, setTrick] = useState<Trick | null>(null);
   // mapa { manobra: link } salvo no navegador, editado dentro do popup
   const { videos, setVideo, removeVideo } = useTrickVideos();
@@ -304,11 +304,7 @@ function Index() {
   };
 
   // ao liberar a trilha, espera a renderização antes de rolar
-  useEffect(() => {
-    if (!started) return;
-    const id = requestAnimationFrame(() => go("fundamentos"));
-    return () => cancelAnimationFrame(id);
-  }, [started]);
+
 
 
 
@@ -346,7 +342,7 @@ function Index() {
         <div className="relative mt-10 flex flex-col items-center gap-3">
           <Button
             size="lg"
-            onClick={() => setStarted(true)}
+            onClick={() => go("secao-fundamentos")}
             className="text-display ring-glow h-14 px-10 text-lg"
           >
             Confira
