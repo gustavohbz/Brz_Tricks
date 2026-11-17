@@ -87,6 +87,7 @@ export type Database = {
           nome: string
           piso: string | null
           tamanho_m2: number | null
+          verificado: boolean
         }
         Insert: {
           cidade: string
@@ -101,6 +102,7 @@ export type Database = {
           nome: string
           piso?: string | null
           tamanho_m2?: number | null
+          verificado?: boolean
         }
         Update: {
           cidade?: string
@@ -115,6 +117,7 @@ export type Database = {
           nome?: string
           piso?: string | null
           tamanho_m2?: number | null
+          verificado?: boolean
         }
         Relationships: []
       }
