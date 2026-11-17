@@ -174,6 +174,11 @@
     color: var(--color-foreground);
     overflow-wrap: anywhere;
   }
+
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
 }
 
 /* The existing dark palette remains the default until the saved choice loads. */
