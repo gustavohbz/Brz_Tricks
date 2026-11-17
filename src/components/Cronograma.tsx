@@ -109,8 +109,10 @@ export function Cronograma({
         {DAYS.map((d) => (
           <button
             key={d.id}
+            type="button"
             onClick={() => setDay(d.id)}
-            className={`text-display min-h-11 rounded-full border px-4 py-2 text-sm transition-colors ${
+            aria-pressed={day === d.id}
+            className={`text-display min-h-11 rounded-full border px-4 py-2 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
               day === d.id
                 ? "border-primary bg-primary text-primary-foreground"
                 : "border-border bg-card text-muted-foreground hover:border-primary"
@@ -135,10 +137,11 @@ export function Cronograma({
             value={query}
             onChange={(e) => setQuery(e.target.value.slice(0, 60))}
             placeholder="Buscar manobra..."
-            className="mt-2 w-full rounded-md border border-border bg-background px-3 py-2 text-base outline-none focus:border-primary sm:text-sm"
+            className="mt-2 w-full rounded-md border border-border bg-background px-3 py-2 text-base outline-none focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary sm:text-sm"
           />
 
           <ul
+            aria-label="Manobras disponíveis para adicionar"
             className="mt-4 max-h-[22rem] space-y-1 overflow-y-auto overscroll-contain pr-2 [scrollbar-color:hsl(var(--primary))_transparent] [scrollbar-width:thin] [-webkit-overflow-scrolling:touch]"
             tabIndex={0}
           >
@@ -147,9 +150,10 @@ export function Cronograma({
               return (
                 <li key={t.name}>
                   <button
+                    type="button"
                     onClick={() => add(t.name)}
                     disabled={added}
-                    className="flex min-h-11 min-w-0 w-full items-center justify-between gap-3 rounded-md border border-transparent px-3 py-2 text-left transition-colors hover:border-border hover:bg-secondary disabled:opacity-40"
+                    className="flex min-h-11 min-w-0 w-full items-center justify-between gap-3 rounded-md border border-transparent px-3 py-2 text-left transition-colors hover:border-border hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-60"
                   >
                     <span className="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 break-words">
                       <span className="min-w-0 break-words text-sm">{t.name}</span>
@@ -174,7 +178,9 @@ export function Cronograma({
         <div className="rounded-lg border border-border bg-card p-5">
           <div className="flex min-w-0 flex-wrap items-center justify-between gap-2">
             <span className="text-display text-xs text-primary">Sua semana</span>
-            <span className="text-xs text-muted-foreground">{total} manobras</span>
+            <span aria-live="polite" aria-atomic="true" className="text-xs text-muted-foreground">
+              {total} {total === 1 ? "manobra" : "manobras"}
+            </span>
           </div>
 
           <div className="mt-4 space-y-4">
@@ -192,9 +198,10 @@ export function Cronograma({
                       >
                         {name}
                         <button
+                          type="button"
                           onClick={() => remove(d.id, name)}
                           aria-label={`Remover ${name} de ${d.label}`}
-                          className="shrink-0 text-muted-foreground transition-colors hover:text-primary"
+                          className="inline-flex size-11 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                         >
                           <X className="size-3" />
                         </button>
@@ -207,8 +214,9 @@ export function Cronograma({
           </div>
 
           <Button
+            type="button"
             variant="outline"
-            className="mt-5 w-full"
+            className="mt-5 min-h-11 w-full focus-visible:ring-2 focus-visible:ring-primary"
             onClick={() => setPlan(() => emptyPlan())}
             disabled={total === 0}
           >
