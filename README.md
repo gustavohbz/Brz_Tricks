@@ -2,6 +2,8 @@
 
 A Brauza Skate Co. é um guia gratuito para quem está começando no skate. Reúne instruções de manobras, um cronograma de treinos, dicas e um mapa de pistas.
 
+Para entender a estrutura, os fluxos de dados, a configuração local e as integrações, consulte o [guia técnico do projeto](./DOCUMENTACAO.md).
+
 ## Modelo do produto
 
 O aplicativo será **gratuito**: não haverá cobrança nem plano pago. A divulgação será feita por um banner que levará ao grupo do projeto no WhatsApp.
