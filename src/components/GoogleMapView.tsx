@@ -17,6 +17,23 @@ const LOAD_TIMEOUT_MS = 15_000;
 
 let mapsPromise: Promise<void> | null = null;
 
+type MapsApi = {
+  Map: new (
+    element: HTMLElement,
+    options: {
+      center: { lat: number; lng: number };
+      zoom: number;
+      mapTypeControl: boolean;
+      streetViewControl: boolean;
+    },
+  ) => unknown;
+  Marker: new (options: {
+    position: { lat: number; lng: number };
+    map: unknown;
+    title: string;
+  }) => unknown;
+};
+
 function hasMapsApi(): boolean {
   const google = (window as unknown as { google?: { maps?: { Map?: unknown } } }).google;
   return typeof google?.maps?.Map === "function";
@@ -50,6 +67,10 @@ function loadMaps(): Promise<void> {
     };
 
     w[CALLBACK_NAME] = () => {
+      if (!hasMapsApi()) {
+        fail(new Error("Google Maps não inicializou corretamente."));
+        return;
+      }
       cleanup();
       resolve();
     };
@@ -112,10 +133,8 @@ export function GoogleMapView({
     loadMaps()
       .then(() => {
         if (cancelled || !ref.current) return;
-        const google = (window as unknown as { google?: { maps?: any } }).google;
-        if (typeof google?.maps?.Map !== "function" || typeof google?.maps?.Marker !== "function") {
-          throw new Error("Google Maps não inicializou corretamente.");
-        }
+        const google = (window as unknown as { google?: { maps?: MapsApi } }).google;
+        if (!google?.maps) throw new Error("Google Maps não inicializou corretamente.");
         const map = new google.maps.Map(ref.current, {
           center: { lat, lng },
           zoom,
