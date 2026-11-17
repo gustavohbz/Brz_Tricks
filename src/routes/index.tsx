@@ -333,10 +333,10 @@ function Index() {
           <br />
           <span className="text-primary">Skate Co.</span>
         </h1>
-        <p className="relative mt-6 max-w-md text-base text-muted-foreground">
-          Seu Aplicativo de Skatista para Skatista!
-          <br />
-          Aqui tem tudo que você precisa.
+        <p className="relative mt-6 max-w-xl text-base leading-relaxed text-muted-foreground">
+          Aprenda skate no seu ritmo: explore fundamentos e manobras passo a passo,
+          organize seus treinos, encontre pistas no mapa e confira dicas e vídeos
+          para evoluir com mais confiança.
         </p>
 
         <div className="relative mt-10 flex flex-col items-center gap-3">
