@@ -450,23 +450,6 @@ function Index() {
             </div>
           </section>
 
-          <aside aria-label="Marketplace Brauza Skate Co." className="w-full">
-            <Link
-              to="/marketplace"
-              className="flex w-full min-w-0 items-center justify-between gap-4 border-y border-primary/30 bg-secondary px-4 py-6 transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:px-8"
-            >
-              <div className="flex min-w-0 items-center gap-4">
-                <img src="/icon-192.png" alt="" className="size-16 shrink-0 rounded-md object-contain sm:size-20" />
-                <div className="min-w-0">
-                  <p className="text-xs uppercase text-primary">Brauza Skate Co.</p>
-                  <p className="mt-1 break-words font-display text-3xl leading-tight sm:text-4xl">Marketplace</p>
-                  <p className="mt-2 break-words text-sm text-muted-foreground">Compre e anuncie produtos de skate.</p>
-                  <p className="mt-3 text-sm font-medium text-primary">Ir para o marketplace</p>
-                </div>
-              </div>
-              <ArrowUpRight className="size-7 shrink-0 text-primary" aria-hidden="true" />
-            </Link>
-          </aside>
 
           {/* =================================================
               SEÇÃO 5 — CRONOGRAMA DE TREINOS
@@ -514,6 +497,30 @@ function Index() {
 
 
 
+
+          <section
+            aria-labelledby="feedback-cta-title"
+            className="border-t border-border px-4 py-14 sm:px-6 sm:py-16"
+          >
+            <div className="mx-auto max-w-2xl text-center">
+              <p className="text-display text-xs tracking-widest text-primary">
+                Sua voz importa
+              </p>
+              <h2 id="feedback-cta-title" className="text-display mt-2 text-3xl sm:text-4xl">
+                O BRZ Tricks também é seu.
+              </h2>
+              <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+                Tem uma ideia, encontrou um problema ou sente falta de algo? Seu feedback ajuda
+                a construir uma plataforma cada vez melhor para a comunidade do skate.
+              </p>
+              <a
+                href="#feedback"
+                className="text-display mt-6 inline-flex min-h-11 items-center justify-center rounded-md bg-primary px-5 py-3 text-sm text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                Enviar meu feedback
+              </a>
+            </div>
+          </section>
 
           {/* =================================================
               FOOTER
