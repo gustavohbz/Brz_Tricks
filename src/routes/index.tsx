@@ -58,13 +58,13 @@ export const Route = createFileRoute("/")({
 
   head: () => ({
     meta: [
-      { title: "Brauza Skate Co. — Ollies, Variais e Flip's" },
+      { title: "Brauza Skate Co. — Manobras e fundamentos de skate" },
       {
         name: "description",
         content:
-          "Comece no skate pelo caminho certo: 30 manobras explicadas passo a passo em Ollies, Variais e Flip's.",
+          "Aprenda fundamentos e explore 25 manobras de skate explicadas passo a passo.",
       },
-      { property: "og:title", content: "Brauza Skate Co. — Ollies, Variais e Flip's" },
+      { property: "og:title", content: "Brauza Skate Co. — Manobras e fundamentos de skate" },
       {
         property: "og:description",
         content: "Guia iniciante de skate com 30 manobras explicadas passo a passo.",
