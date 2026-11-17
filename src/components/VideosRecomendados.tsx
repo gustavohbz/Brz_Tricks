@@ -49,7 +49,7 @@ export function VideosRecomendados() {
                     type="button"
                     onClick={() => setPlaying(video.id)}
                     aria-label={`Assistir ${video.title}`}
-                    className="group relative block size-full"
+                    className="group relative block size-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
                   >
                     {thumb ? (
                       <img
@@ -85,7 +85,7 @@ export function VideosRecomendados() {
                     <button
                       type="button"
                       onClick={() => setPlaying(null)}
-                      className="text-display text-xs text-muted-foreground hover:text-primary"
+                      className="text-display inline-flex min-h-11 items-center rounded-md text-xs text-muted-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                     >
                       Voltar à prévia
                     </button>
