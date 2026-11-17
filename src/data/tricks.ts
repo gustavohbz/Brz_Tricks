@@ -165,7 +165,7 @@ export const sections: Section[] = [
   },
   {
     id: "flips",
-    title: "Flip's",
+    title: "Flips",
     tagline: "O shape gira no próprio eixo. Aqui começa a mágica.",
     tricks: [
       {

@@ -21,7 +21,7 @@ import { ArrowUpRight, ChevronDown, PlayCircle } from "lucide-react"; // ícones
 
 
 
-import { getRoadmap, categoriaLabel, type Trick } from "@/data/tricks";
+import { getRoadmap, categoriaLabel, sections, type Trick } from "@/data/tricks";
 import { TrickCategoryTabs } from "@/components/TrickCategoryTabs";
 import { Dicas } from "@/components/Dicas"; // seção de curiosidades e dicas
 import { AdvertisingBanner } from "@/components/AdvertisingBanner";
@@ -58,13 +58,13 @@ export const Route = createFileRoute("/")({
 
   head: () => ({
     meta: [
-      { title: "Brauza Skate Co. — Ollies, Variais e Flip's" },
+      { title: "Brauza Skate Co. — Manobras e fundamentos de skate" },
       {
         name: "description",
         content:
-          "Comece no skate pelo caminho certo: 30 manobras explicadas passo a passo em Ollies, Variais e Flip's.",
+          "Aprenda fundamentos e explore 25 manobras de skate explicadas passo a passo.",
       },
-      { property: "og:title", content: "Brauza Skate Co. — Ollies, Variais e Flip's" },
+      { property: "og:title", content: "Brauza Skate Co. — Manobras e fundamentos de skate" },
       {
         property: "og:description",
         content: "Guia iniciante de skate com 30 manobras explicadas passo a passo.",
@@ -131,9 +131,30 @@ function TrickHoverPreview({ trick, videoUrl }: { trick: Trick; videoUrl?: strin
    Sem roadmap cadastrado => não renderiza nada (return null).
    O último ponto é destacado: é a manobra alvo.
    ========================================================= */
-function TrickRoadmap({ name }: { name: string }) {
+function TrickRoadmap({
+  name,
+  onSelect,
+}: {
+  name: string;
+  onSelect: (trick: Trick) => void;
+}) {
   const steps = getRoadmap(name); // ex.: Kickflip => ["Ollie firme", ...]
   if (steps.length === 0) return null;
+
+  const findPrerequisite = (step: string) => {
+    const aliases: Record<string, string> = {
+      "ollie firme": "Ollie",
+      "ollie em movimento": "Ollie",
+      "ollie nivelado": "Ollie",
+      "fakie ollie": "Fakie Ollie",
+      "pop shove-it": "Pop Shove-it",
+      "360 shove-it": "360 Shove-it",
+    };
+    const name = aliases[step.toLocaleLowerCase("pt-BR")] ?? step;
+    return sections.flatMap((section) => section.tricks).find(
+      (trick) => trick.name.toLocaleLowerCase("pt-BR") === name.toLocaleLowerCase("pt-BR"),
+    );
+  };
 
 
   return (
@@ -155,7 +176,18 @@ function TrickRoadmap({ name }: { name: string }) {
             <span className="text-xs text-muted-foreground">
               {String(i + 1).padStart(2, "0")}
             </span>
-            <span className="text-sm">{step}</span>
+            {findPrerequisite(step) ? (
+              <button
+                type="button"
+                onClick={() => onSelect(findPrerequisite(step)!)}
+                className="min-h-11 rounded-sm text-left text-sm text-primary underline decoration-primary/50 underline-offset-4 hover:decoration-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                aria-label={`Ver pré-requisito: ${findPrerequisite(step)!.name}`}
+              >
+                {step}
+              </button>
+            ) : (
+              <span className="text-sm">{step}</span>
+            )}
           </li>
         ))}
       </ol>
@@ -529,7 +561,7 @@ function Index() {
               </ol>
 
               {/* --- roadmap --- */}
-              <TrickRoadmap name={trick.name} />
+              <TrickRoadmap name={trick.name} onSelect={setTrick} />
             </>
           )}
         </DialogContent>
