@@ -13,10 +13,35 @@ import { CONDITIONS, formatPrice, sanitizeProductText, whatsappLink, mayEditProd
 import { listProducts, marketplaceAccount, deletedProducts, removeProduct, type Product } from "@/lib/products.functions";
 
 const productsQuery = queryOptions({ queryKey: ["products"], queryFn: () => listProducts(), staleTime: 60000 });
+const MARKETPLACE_ENABLED = false;
+
 export const Route = createFileRoute("/marketplace")({
-  head: () => ({ meta: [{ title: "Marketplace — Brauza Skate Co." }, { name: "description", content: "Produtos de skate, preços, retirada local e contato direto com anunciantes." }, { property: "og:title", content: "Marketplace — Brauza Skate Co." }, { property: "og:description", content: "Encontre produtos de skate e fale com o anunciante pelo WhatsApp." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }] }),
-  loader: ({ context }) => context.queryClient.ensureQueryData(productsQuery), component: Marketplace,
+  head: () => ({ meta: [{ title: "Marketplace — Brauza Skate Co." }, { name: "description", content: "Marketplace temporariamente indisponível." }, { property: "og:title", content: "Marketplace — Brauza Skate Co." }, { property: "og:description", content: "Marketplace temporariamente indisponível." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }] }),
+  loader: ({ context }) =>
+    MARKETPLACE_ENABLED ? context.queryClient.ensureQueryData(productsQuery) : null,
+  component: MarketplaceRoute,
 });
+
+function MarketplaceRoute() {
+  if (MARKETPLACE_ENABLED) return <Marketplace />;
+
+  return (
+    <main className="mx-auto flex min-h-[70vh] max-w-2xl flex-col items-center justify-center px-4 py-16 text-center">
+      <ShoppingBag aria-hidden="true" className="size-10 text-primary" />
+      <h1 className="text-display mt-5 text-3xl sm:text-4xl">
+        Marketplace temporariamente indisponível
+      </h1>
+      <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+        Estamos preparando esta área. Enquanto isso, você pode continuar explorando os guias,
+        treinos e pistas.
+      </p>
+      <Button asChild className="mt-6">
+        <Link to="/">Voltar para a página inicial</Link>
+      </Button>
+    </main>
+  );
+}
+
 function Marketplace() {
   const { user, loading } = useAuth(); const { data: products, refetch } = useSuspenseQuery(productsQuery);
   const accountFn = useServerFn(marketplaceAccount); const deletedFn = useServerFn(deletedProducts); const remove = useServerFn(removeProduct);
