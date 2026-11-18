@@ -97,11 +97,9 @@ As regras de acesso ao banco ficam nas migrations. Não altere uma tabela direta
    npm install
    ```
 
-3. Inicie o servidor de desenvolvimento:
+3. Escreva isso no terminal (win)
 
-   ```bash
-   npm run dev
-   ```
+ npm.cmd run dev 
 
 4. Abra o endereço indicado no terminal, normalmente `http://localhost:5173`.
 
