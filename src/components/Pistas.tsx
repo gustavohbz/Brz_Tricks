@@ -123,6 +123,7 @@ function Comentarios({ pista }: { pista: Pista }) {
 
   const [lista, setLista] = useState<Comentario[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
 
   // Campos do formulário de novo comentário
   const [texto, setTexto] = useState("");
@@ -292,16 +293,27 @@ export function Pistas() {
   // Pista aberta no popup (null = popup fechado)
   const [aberta, setAberta] = useState<Pista | null>(null);
 
-  /* Busca todas as pistas do banco uma única vez, ao montar */
-  useEffect(() => {
-    supabase
+  /* Busca somente locais aprovados; falhas podem ser repetidas pelo usuário. */
+  const carregarPistas = async () => {
+    setLoading(true);
+    setLoadError(false);
+    const { data, error } = await supabase
       .from("pistas")
       .select("*")
-      .order("cidade", { ascending: true })
-      .then(({ data }) => {
-        setPistas((data ?? []) as Pista[]);
-        setLoading(false);
-      });
+      .eq("verificado", true)
+      .order("cidade", { ascending: true });
+
+    if (error) {
+      setPistas([]);
+      setLoadError(true);
+    } else {
+      setPistas((data ?? []) as Pista[]);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    void carregarPistas();
   }, []);
 
   /* Lista de cidades únicas (ordenadas) para os botões de filtro.
@@ -391,11 +403,20 @@ export function Pistas() {
       {/* ---------- grade de cards de pistas ---------- */}
       {loading ? (
         <p className="mt-8 text-sm text-muted-foreground">Carregando pistas...</p>
+      ) : loadError ? (
+        <div role="alert" className="mt-8 space-y-3">
+          <p className="text-sm text-muted-foreground">
+            Não foi possível carregar as pistas verificadas.
+          </p>
+          <Button type="button" variant="outline" onClick={() => void carregarPistas()}>
+            Tentar novamente
+          </Button>
+        </div>
       ) : visiveis.length === 0 ? (
-        /* Nenhum resultado: oferece botão para limpar os filtros */
+        /* Nenhum resultado verificado */
         <div className="mt-8 space-y-3">
           <p className="text-sm text-muted-foreground">
-            Nenhuma pista encontrada com os filtros selecionados.
+            Ainda não há pistas verificadas para exibir. Novos locais serão publicados após conferirmos sua existência e localização.
           </p>
           <button
             onClick={() => {
