@@ -357,9 +357,6 @@ function Index() {
           className="pointer-events-none absolute left-1/2 top-1/2 w-[min(90vw,720px)] -translate-x-1/2 -translate-y-1/2 opacity-20 blur-sm"
         />
         <div className="pointer-events-none absolute inset-0 opacity-[0.07] [background-image:repeating-linear-gradient(90deg,transparent_0_38px,currentColor_38px_39px)]" />
-        <p className="text-display relative text-sm text-primary">
-          Bem-vindo à sua Wiki de Manobras
-        </p>
         <h1 className="text-display relative mt-4 text-5xl leading-[0.95] sm:text-8xl md:text-9xl">
           Brauza
           <br />
@@ -379,12 +376,9 @@ function Index() {
           >
             Confira
           </Button>
-          <span className="text-xs uppercase tracking-widest text-muted-foreground">
-            Outros níveis em breve
-          </span>
         </div>
 
-        <ChevronDown className="relative mt-16 size-6 animate-bounce text-primary" />
+        <ChevronDown className="relative mt-08 size-6 animate-bounce text-primary" />
       </section>
 
       {started && (
